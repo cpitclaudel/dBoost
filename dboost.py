@@ -118,8 +118,14 @@ def first_discrepancy(X, gaussian):
 def discrepancies(X, gaussian):
     ret = []
     for field_id, (x, m) in enumerate(zip(X, gaussian)):
-        if not all(test_one(xi, mi) for xi, mi in zip(x, m)):
-            ret.append(field_id)
+        failed_tests = []
+        test_pos = 0
+        for xi,mi in zip(x, m):
+            if not test_one(xi,mi):
+        	    failed_tests.append(test_pos)
+            test_pos+=1
+        if not len(failed_tests) == 0:
+            ret.append((field_id, failed_tests))
     return ret
     
 def test(X, gaussian):
@@ -145,5 +151,5 @@ def outliers_streaming(generator):
             yield (x, X, _discrepancies)
 
 def print_outliers(dataset):
-    outliers, _, highlights = zip(*outliers_static(dataset))
-    utils.print_rows(outliers, highlights)
+    outliers, _, outlier_fields = zip(*outliers_static(dataset))
+    utils.print_rows(outliers, outlier_fields)

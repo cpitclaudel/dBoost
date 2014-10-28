@@ -11,7 +11,7 @@ def iter_db(path, query):
 def read_db(path, query):
     return list(iter_db(path, query))
 
-def print_rows(rows, highlights, max_w = 40, header = "   "):
+def print_rows(rows, outlier_fields, max_w = 40, header = "   "):
     SPACE = 2
     rows = [tuple(map(str, row)) for row in rows] 
 
@@ -25,12 +25,22 @@ def print_rows(rows, highlights, max_w = 40, header = "   "):
         widths = tuple(max(w, min(max_w, len(s))) 
                        for w, s in zip(widths, row))
 
-    for row, highlight in zip(rows, highlights):
+    for row, _outlier_fields in zip(rows, outlier_fields):
+        highlight = [x[0] for x in _outlier_fields]
+        error_traces = []
+        for (hi, failed) in _outlier_fields:
+            error_traces.append((row[hi], ', '.join([str(x) for x in failed])))
         row = (f[:w].ljust(w + SPACE) 
                for f,w in zip(row, widths))
+               
         sys.stdout.write(header + 
                          "".join(colorize(row, highlight)) + 
                          "\n")
+                         
+        for i in range(len(error_traces)):
+            field, tests = error_traces[i]
+            sys.stdout.write(header + "\t" + str(type(field)) + " \"" + field + "\" failed tests " + tests + "\n")
+        sys.stdout.write('\n')
 
 def colorize(row, indices):
     row = [str(f) for f in row]
