@@ -1,49 +1,16 @@
 #! /usr/bin/env python3
-import unicodedata
-import time
 from math import sqrt
 import sys
 import utils
+import features
 
 UPPERCASE, LOWERCASE, TITLECASE = 1, 2, 3
 NUM = 1
 
-def string_normalize(s): # http://stackoverflow.com/questions/517923/
-   return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
-
-def string_case(s):
-    return (s.isupper(), s.islower(), s.istitle())
-
-def string_domain(s):
-    return (s.isdigit(),)
-
-def bits(*positions):
-    def rule(i):
-        return ((i >> pos) & 1 for pos in positions)
-    return rule
-
-def mod(*mods):
-    def rule(i):
-        return (i % mod for mod in mods)
-    return rule
-
-DATE_PROPS = "tm_year", "tm_mon", "tm_mday", "tm_hour", "tm_min", "tm_sec", "tm_wday", "tm_yday"
-def unix2date(timestamp):
-    t = time.gmtime(timestamp)
-    return map(lambda a: getattr(t, a), DATE_PROPS)
-
-def length(o):
-    return (len(o),)
-
-rules = {
-    str: (string_case, string_domain, length),
-    int: (bits(0, 1, 2, 3, 4, 5), mod(10), unix2date)
-}
-
 from itertools import chain
 
-def expand_field(f):
-    rls = rules.get(type(f), [])
+def expand_field(f): # TODO: Should features be kept grouped by rule?
+    rls = features.rules[type(f)]
     return tuple(chain.from_iterable(rule(f) for rule in rls))
 
 def expand(x):
@@ -142,13 +109,11 @@ def first_discrepancy(X, gaussian):
 def discrepancies(X, gaussian):
     ret = []
     for field_id, (x, m) in enumerate(zip(X, gaussian)):
-        failed_tests = []
-        test_pos = 0
-        for xi,mi in zip(x, m):
-            if not test_one(xi,mi):
-        	    failed_tests.append(test_pos)
-            test_pos+=1
-        if not len(failed_tests) == 0:
+        failed_tests = [test_id for (test_id, (xi, mi))
+                                in enumerate(zip(x, m))
+                                if not test_one(xi, mi)]
+        if len(failed_tests) != 0:
+            #print(x, m, field_id, failed_tests)
             ret.append((field_id, failed_tests))
     return ret
     
@@ -179,5 +144,5 @@ def outliers_streaming(generator):
             yield (x, X, _discrepancies)
 
 def print_outliers(dataset):
-    outliers, _, outlier_fields = zip(*outliers_static(dataset))
-    utils.print_rows(outliers, outlier_fields)
+    outliers, _, failed_tests = zip(*outliers_static(dataset))
+    utils.print_rows(outliers, failed_tests, features.rules)

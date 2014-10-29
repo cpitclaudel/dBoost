@@ -3,6 +3,7 @@
 import dboost
 import sys
 import utils
+import features
 
 dataset = []
 row_length = None
@@ -28,5 +29,5 @@ outliers = dboost.outliers_static(dataset)
 if len(outliers) == 0:
     print("   All clean!")
 else:
-    rows, _, outlier_fields = zip(*outliers)
-    utils.print_rows(rows, outlier_fields)
+    rows, _, failed_tests = zip(*outliers)
+    utils.print_rows(rows, failed_tests, features.rules)

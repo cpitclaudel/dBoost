@@ -2,6 +2,7 @@
 import sqlite3
 import datetime
 import sys
+import features
 
 def iter_db(path, query):
     with sqlite3.connect(path, detect_types = sqlite3.PARSE_COLNAMES) as connection:
@@ -11,9 +12,8 @@ def iter_db(path, query):
 def read_db(path, query):
     return list(iter_db(path, query))
 
-def print_rows(rows, outlier_fields, max_w = 40, header = "   "):
+def print_rows(rows, failed_tests, rules, max_w = 40, header = "   "):
     SPACE = 2
-    rows = [tuple(map(str, row)) for row in rows] 
 
     if len(rows) == 0:
         return
@@ -21,27 +21,31 @@ def print_rows(rows, outlier_fields, max_w = 40, header = "   "):
     nb_fields = len(rows[0])
     widths = (0,) * nb_fields
 
+    # Compute the ideal column width for each column 
     for row in rows:
-        widths = tuple(max(w, min(max_w, len(s))) 
-                       for w, s in zip(widths, row))
+        widths = tuple(max(w, min(max_w, len(str(f))))
+                       for w, f in zip(widths, row))
 
-    for row, _outlier_fields in zip(rows, outlier_fields):
-        highlight = [x[0] for x in _outlier_fields]
-        error_traces = []
-        for (hi, failed) in _outlier_fields:
-            error_traces.append((row[hi], ', '.join([str(x) for x in failed])))
-        row = (f[:w].ljust(w + SPACE) 
-               for f,w in zip(row, widths))
-               
+    descriptions = features.descriptions(rules)
+    for row, row_failed_tests in zip(rows, failed_tests):
+        highlight = tuple(x[0] for x in row_failed_tests)
+        
+        truncated_row = tuple(str(f)[:w].ljust(w + SPACE)
+                              for f, w in zip(row, widths))
+        
         sys.stdout.write(header + 
-                         "".join(colorize(row, highlight)) + 
+                         "".join(colorize(truncated_row, highlight)) + 
                          "\n")
-                         
-        for i in range(len(error_traces)):
-            field, tests = error_traces[i]
-            sys.stdout.write(header + "\t" + str(type(field)) + " \"" + field + "\" failed tests " + tests + "\n")
-        sys.stdout.write('\n')
+        
+        for field_id, _failed_tests in row_failed_tests:
+            field_descs = descriptions[type(row[field_id])]
+            failed_tests_descriptions = ",".join("'" + field_descs[test_id] + "'"
+                                                 for test_id in _failed_tests)
+            sys.stdout.write("   > Value {}: '{}' doesn't match feature(s) {}\n".format(
+                                   field_id, row[field_id], failed_tests_descriptions))
 
+        sys.stdout.write("\n")
+            
 def colorize(row, indices):
     row = [str(f) for f in row]
     for index in indices:

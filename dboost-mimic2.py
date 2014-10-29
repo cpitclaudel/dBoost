@@ -3,6 +3,7 @@ import sqlite3
 import sys
 import utils
 import dboost
+import features
 
 TABLES = [line.strip() for line in """
 db_schema
@@ -59,12 +60,12 @@ for table in TABLES:
         print("Processing {} ({} rows)".format(table, row_count))
 
         query = QUERY.format(table)
-        db = lambda: utils.iter_db("/afs/csail.mit.edu/group/db/6830/mimic2.db", query)
+        db = lambda: utils.iter_db(PATH, query)
         outliers = list(dboost.outliers_streaming(db))
 
         if 0 < len(outliers) < 50:
             rows, _, discrepancies = zip(*outliers)
-            utils.print_rows(rows, discrepancies)
+            utils.print_rows(rows, discrepancies, features.rules)
             print("... {} found".format(len(outliers)))
 
     print()
