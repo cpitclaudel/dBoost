@@ -105,6 +105,25 @@ def gaussian_model(Xs):
 
     return merge(SAVG, SIGMA, id, tuplify)
 
+# pearson correlation coefficient
+# http://stackoverflow.com/questions/3949226/calculating-pearson-correlation-and-significance-in-python
+def pearson_r(x,y):
+	assert len(x) == len(y)
+	n = len(x)
+	assert n > 0
+	avg_x = float(sum(x)) / n 
+	avg_y = float(sum(y)) / n
+	diffprod = 0
+	xdiff2 = 0
+	ydiff2 = 0
+	for idx in range(n):
+		xdiff = x[idx] - avg_x
+		ydiff = y[idx] - avg_y
+		diffprod += xdiff * ydiff
+		xdiff2 += xdiff * xdiff
+		ydiff2 += ydiff * ydiff
+	return diffprod / sqrt(xdiff2 * ydiff2)
+
 def test_one(xi, gaussian):
     avg, sigma = gaussian
     return abs(xi - avg) <= 3 * sigma
