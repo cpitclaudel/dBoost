@@ -9,7 +9,7 @@ NUM = 1
 
 from itertools import chain
 
-def expand_field(f):
+def expand_field(f): # TODO: Should features be kept grouped by rule?
     rls = features.rules[type(f)]
     return tuple(chain.from_iterable(rule(f) for rule in rls))
 
@@ -85,13 +85,11 @@ def first_discrepancy(X, gaussian):
 def discrepancies(X, gaussian):
     ret = []
     for field_id, (x, m) in enumerate(zip(X, gaussian)):
-        failed_tests = []
-        test_pos = 0
-        for xi,mi in zip(x, m):
-            if not test_one(xi,mi):
-        	    failed_tests.append(test_pos)
-            test_pos+=1
-        if not len(failed_tests) == 0:
+        failed_tests = [test_id for (test_id, (xi, mi))
+                                in enumerate(zip(x, m))
+                                if not test_one(xi, mi)]
+        if len(failed_tests) != 0:
+            #print(x, m, field_id, failed_tests)
             ret.append((field_id, failed_tests))
     return ret
     
@@ -118,5 +116,5 @@ def outliers_streaming(generator):
             yield (x, X, _discrepancies)
 
 def print_outliers(dataset):
-    outliers, _, outlier_fields = zip(*outliers_static(dataset))
-    utils.print_rows(outliers, outlier_fields)
+    outliers, _, failed_tests = zip(*outliers_static(dataset))
+    utils.print_rows(outliers, failed_tests, features.rules)

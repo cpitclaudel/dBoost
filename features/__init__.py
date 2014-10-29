@@ -21,6 +21,16 @@ def rule(rule):
     rules[input_type].append(rule)
     return rule
 
+def descriptions(ruleset):
+    descriptions = {}
+
+    for type in ruleset:
+        descriptions[type] = []
+        for rule in ruleset[type]:
+            descriptions[type].extend(inspect.signature(rule).return_annotation)
+            
+    return descriptions
+
 @rule
 def string_case(s: str) -> ("upper case", "lower case", "title case"):
     return (s.isupper(), s.islower(), s.istitle())
