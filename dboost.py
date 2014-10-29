@@ -105,6 +105,11 @@ def gaussian_model(Xs):
 
     return merge(SAVG, SIGMA, id, tuplify)
 
+def find_correlation(Xs):
+
+    for (nb, X) in enumerate(Xs):
+			print X
+
 # pearson correlation coefficient
 # http://stackoverflow.com/questions/3949226/calculating-pearson-correlation-and-significance-in-python
 def pearson_r(x,y):
@@ -154,6 +159,10 @@ def expand_stream(generator, keep_x):
     for x in generator():
         X = expand(x)
         yield (x, X) if keep_x else X 
+
+def correlation(dataset):
+	dataset = list(dataset)
+	find_correlation(expand_stream((lambda: dataset), False))
 
 def outliers_static(dataset):
     dataset = list(dataset)
