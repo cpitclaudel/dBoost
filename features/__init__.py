@@ -22,31 +22,31 @@ def rule(rule):
     return rule
 
 @rule
-def string_case(s: str):
+def string_case(s: str) -> ("upper case", "lower case", "title case"):
     return (s.isupper(), s.islower(), s.istitle())
 
 @rule
-def string_domain(s: str):
+def string_is_digit(s: str) -> ("is digit",):
     return (s.isdigit(),)
 
 @rule
-def length(s: str):
+def length(s: str) -> ("length",):
     return (len(s),)
 
 def bits(*positions):
-    def _bits(i: int):
+    def _bits(i: int) -> tuple("bit {}".format(pos) for pos in positions):
         return ((i >> pos) & 1 for pos in positions)
     return _bits
 
 def mod(*mods):
-    def _mod(i: int):
+    def _mod(i: int) -> tuple("mod {}".format(mod) for mod in mods):
         return (i % mod for mod in mods)
     return _mod
 
 DATE_PROPS = "tm_year", "tm_mon", "tm_mday", "tm_hour", "tm_min", "tm_sec", "tm_wday", "tm_yday"
 
 @rule
-def unix2date(timestamp: int):
+def unix2date(timestamp: int) -> DATE_PROPS:
     t = time.gmtime(timestamp)
     return map(lambda a: getattr(t, a), DATE_PROPS)
 
