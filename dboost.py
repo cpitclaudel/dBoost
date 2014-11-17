@@ -73,6 +73,7 @@ def gaussian_model(Xs):
 
     return merge(SAVG, SIGMA, id, tuplify)
 
+# TODO: percentile
 def gaussian_mixture(Xs):
     Xs = list(Xs)
     flattened = []
@@ -119,12 +120,13 @@ def outliers_static(dataset):
     dataset = list(dataset)
     return list(outliers_streaming(lambda: dataset))
 
+#TODO: detect which field is wrong using gradient estimation: calculate gradient of prob function at outlier point, find dimension with largest gradient value
 def outliers_streaming(generator, use_gaussian_model = False):
     print(">> Building model...")
     if use_gaussian_model:
         model = gaussian_model(expand_stream(generator, False))
     else:
-       model = gaussian_mixture(expand_stream(generator, False))
+        model = gaussian_mixture(expand_stream(generator, False))
 
     print(">> Finding outliers...")
     if use_gaussian_model:
