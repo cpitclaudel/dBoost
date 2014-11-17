@@ -3,6 +3,7 @@ from math import sqrt
 import sys
 import utils
 import features
+from sklearn import mixture
 
 UPPERCASE, LOWERCASE, TITLECASE = 1, 2, 3
 NUM = 1
@@ -95,6 +96,19 @@ def pearson_r(x,y):
 		ydiff2 += ydiff * ydiff
 	return diffprod / sqrt(xdiff2 * ydiff2)
 
+def gaussian_mixture(Xs):
+    Xs = list(Xs)
+    flattened = []
+    for x in Xs:
+        flattened.append([element for tupl in x for element in tupl])
+    g = mixture.GMM(n_components=2)
+    g.fit(flattened)
+    log_prob, responsabilities = g.score_samples(flattened)
+    best_prob = max(log_prob)
+
+    keep = [True if lp >= best_prob / 2 else False for lp in log_prob]
+    return keep
+
 def test_one(xi, gaussian):
     avg, sigma = gaussian
     return abs(xi - avg) <= 3 * sigma
@@ -107,15 +121,15 @@ def first_discrepancy(X, gaussian):
 
 def discrepancies(X, gaussian):
     ret = []
+ 
     for field_id, (x, m) in enumerate(zip(X, gaussian)):
         failed_tests = [test_id for (test_id, (xi, mi))
                                 in enumerate(zip(x, m))
                                 if not test_one(xi, mi)]
         if len(failed_tests) != 0:
-            #print(x, m, field_id, failed_tests)
             ret.append((field_id, failed_tests))
     return ret
-    
+
 def test(X, gaussian):
     return (first_discrepancy(X, gaussian) != None)
 
@@ -132,16 +146,25 @@ def outliers_static(dataset):
     dataset = list(dataset)
     return list(outliers_streaming(lambda: dataset))
 
-def outliers_streaming(generator):
+def outliers_streaming(generator, use_gaussian_model = False):
     print(">> Building model...")
-    model = gaussian_model(expand_stream(generator, False))
+    if use_gaussian_model:
+        model = gaussian_model(expand_stream(generator, False))
+    else:
+       model = gaussian_mixture(expand_stream(generator, False))
 
     print(">> Finding outliers...")
-    for x, X in expand_stream(generator, True):
-        _discrepancies = discrepancies(X, model)
-        if len(_discrepancies) > 0:
-            yield (x, X, _discrepancies)
+    if use_gaussian_model:
+        for x, X in expand_stream(generator, True):
+            _discrepancies = discrepancies(X, model)
+            if len(_discrepancies) > 0:
+                yield (x, X, _discrepancies)
 
+    else:
+        for (x, X), keep in zip(expand_stream(generator, True), model):
+            if not keep:
+                yield(x, X, [])
+ 
 def print_outliers(dataset):
     outliers, _, failed_tests = zip(*outliers_static(dataset))
     utils.print_rows(outliers, failed_tests, features.rules)
