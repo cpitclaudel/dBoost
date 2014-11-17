@@ -15,7 +15,7 @@ def autoconv(field):
     return field
 
 for line in sys.stdin:
-    line = line.strip().split("\t")
+    line = line.strip().split(" ")
     
     if row_length != None and len(line) != row_length:
         print("Discarding", line)
