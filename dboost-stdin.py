@@ -3,6 +3,7 @@ import dboost
 import sys
 import utils
 import features
+from models import gaussian
 
 dataset = []
 row_length = None
@@ -15,7 +16,7 @@ def autoconv(field):
     return field
 
 for line in sys.stdin:
-    line = line.strip().split(" ")
+    line = line.strip().split("\t")
     
     if row_length != None and len(line) != row_length:
         print("Discarding", line)
@@ -23,7 +24,8 @@ for line in sys.stdin:
     row_length = len(line)
     dataset.append(tuple(autoconv(field) for field in line))
 
-outliers = dboost.outliers_static(dataset)
+model = gaussian.Mixture(2)
+outliers = dboost.outliers_static(dataset, model)
 
 if len(outliers) == 0:
     print("   All clean!")

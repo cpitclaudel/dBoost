@@ -1,77 +1,19 @@
 #! /usr/bin/env python3
-from math import sqrt
 import sys
 import utils
 import features
-from sklearn import mixture
 
 UPPERCASE, LOWERCASE, TITLECASE = 1, 2, 3
 NUM = 1
 
 from itertools import chain
 
-def expand_field(f): # TODO: Should features be kept grouped by rule?
+def expand_field(f): # TODO: Should features be kept grouped by rule? # C: I'd say yes probably, even if they get flattened in certain models
     rls = features.rules[type(f)]
     return tuple(chain.from_iterable(rule(f) for rule in rls))
 
 def expand(x):
     return tuple(expand_field(f) for f in x)
-
-def zeroif(S, X):
-    return S if S != None else tuple(tuple(0 for _ in x) for x in X)
-
-def root(X):
-    return tuple(tuple(sqrt(xi) for xi in x) for x in X)
-
-def merge(S, X, f, phi):
-    return tuple(tuple(phi(si, f(xi)) for si, xi in zip(s, x)) for s, x in zip(S, X))
-
-def id(x):
-    return x
-
-def sqr(x):
-    return x * x if x != None else None
-
-def not_null(x):
-    return x != None
-
-def plus(a, b):
-    return a + b if b != None else a
-
-def minus(a, b):
-    return a - b if b != None else a
-
-def mul(a, b):
-    return a * b if b != None else a
-
-def div0(a, b):
-    return a / b if a != None and b != 0 else 0
-
-def tuplify(a, b):
-    return (a, b)
-
-def report_progress(nb):
-    if nb % 1000 == 0:
-        sys.stderr.write(str(nb) + "\r")
-
-def gaussian_model(Xs):
-    S, S2, C = None, None, None
-
-    for (nb, X) in enumerate(Xs):
-        report_progress(nb)
-        S, S2, C = zeroif(S, X), zeroif(S2, X), zeroif(C, X)
-        S = merge(S, X, id, plus)
-        S2 = merge(S2, X, sqr, plus)
-        C = merge(C, X, not_null, plus)
-    
-    SAVG = merge(S, C, id, div0)
-    SAVG2 = merge(SAVG, SAVG, id, mul)
-    S2AVG = merge(S2, C, id, div0)
-    
-    VAR = merge(S2AVG, SAVG2, id, minus)
-    SIGMA = root(VAR)
-
-    return merge(SAVG, SIGMA, id, tuplify)
 
 def find_correlation(Xs):
 	for (nb, X) in enumerate(Xs):
@@ -96,44 +38,6 @@ def pearson_r(x,y):
 		ydiff2 += ydiff * ydiff
 	return diffprod / sqrt(xdiff2 * ydiff2)
 
-# TODO: percentile
-def gaussian_mixture(Xs):
-    Xs = list(Xs)
-    flattened = []
-    for x in Xs:
-        flattened.append([element for tupl in x for element in tupl])
-    g = mixture.GMM(n_components=2)
-    g.fit(flattened)
-    log_prob, responsabilities = g.score_samples(flattened)
-    best_prob = max(log_prob)
-
-    keep = [True if lp >= best_prob / 2 else False for lp in log_prob]
-    return keep
-
-def test_one(xi, gaussian):
-    avg, sigma = gaussian
-    return abs(xi - avg) <= 3 * sigma
-
-def first_discrepancy(X, gaussian):
-    for field_id, (x, m) in enumerate(zip(X, gaussian)):
-        if not all(test_one(xi, mi) for xi, mi in zip(x, m)):
-            return field_id
-    return None
-
-def discrepancies(X, gaussian):
-    ret = []
- 
-    for field_id, (x, m) in enumerate(zip(X, gaussian)):
-        failed_tests = [test_id for (test_id, (xi, mi))
-                                in enumerate(zip(x, m))
-                                if not test_one(xi, mi)]
-        if len(failed_tests) != 0:
-            ret.append((field_id, failed_tests))
-    return ret
-
-def test(X, gaussian):
-    return (first_discrepancy(X, gaussian) != None)
-
 def expand_stream(generator, keep_x):
     for x in generator():
         X = expand(x)
@@ -143,30 +47,22 @@ def correlation(dataset):
 	dataset = list(dataset)
 	find_correlation(expand_stream((lambda: dataset), False))
 
-def outliers_static(dataset):
+def outliers_static(dataset, model):
     dataset = list(dataset)
-    return list(outliers_streaming(lambda: dataset))
+    return list(outliers_streaming(lambda: dataset, model))
 
-#TODO: detect which field is wrong using gradient estimation: calculate gradient of prob function at outlier point, find dimension with largest gradient value
-def outliers_streaming(generator, use_gaussian_model = False):
+def outliers_streaming(generator, model):
     print(">> Building model...")
-    if use_gaussian_model:
-        model = gaussian_model(expand_stream(generator, False))
-    else:
-        model = gaussian_mixture(expand_stream(generator, False))
+    model.fit(expand_stream(generator, False))
 
     print(">> Finding outliers...")
-    if use_gaussian_model:
-        for x, X in expand_stream(generator, True):
-            _discrepancies = discrepancies(X, model)
-            if len(_discrepancies) > 0:
-                yield (x, X, _discrepancies)
-
-    else:
-        for (x, X), keep in zip(expand_stream(generator, True), model):
-            if not keep:
-                yield(x, X, [])
+    for index, (x, X) in enumerate(expand_stream(generator, True)):
+        _discrepancies = model.find_discrepancies(X, index)
+        if len(_discrepancies) > 0:
+            yield (x, X, _discrepancies)
  
 def print_outliers(dataset):
-    outliers, _, failed_tests = zip(*outliers_static(dataset))
+    from models import gaussian
+    model = gaussian.mixture(2)
+    outliers, _, failed_tests = zip(*outliers_static(dataset, model))
     utils.print_rows(outliers, failed_tests, features.rules)
