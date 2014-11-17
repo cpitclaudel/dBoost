@@ -73,9 +73,8 @@ def gaussian_model(Xs):
     return merge(SAVG, SIGMA, id, tuplify)
 
 def find_correlation(Xs):
-
-    for (nb, X) in enumerate(Xs):
-			print X
+	for (nb, X) in enumerate(Xs):
+		print(X)
 
 # pearson correlation coefficient
 # http://stackoverflow.com/questions/3949226/calculating-pearson-correlation-and-significance-in-python
