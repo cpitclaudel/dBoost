@@ -57,7 +57,7 @@ class Mixture:
         log_prob, responsabilities = self.gmm.score_samples(flattened)
         best_prob = max(log_prob)
 
-        self.keep = [True if lp >= best_prob / 2 else False for lp in log_prob]
+        self.keep = [lp >= best_prob / 2 for lp in log_prob]
 
     def find_discrepancies(self, X, index):
         #TODO: move score_samples here.
