@@ -2,10 +2,6 @@
 import sys
 import utils
 import features
-
-UPPERCASE, LOWERCASE, TITLECASE = 1, 2, 3
-NUM = 1
-
 from itertools import chain
 
 def expand_field(f): # TODO: Should features be kept grouped by rule? # C: I'd say yes probably, even if they get flattened in certain models
@@ -18,25 +14,6 @@ def expand(x):
 def find_correlation(Xs):
 	for (nb, X) in enumerate(Xs):
 		print(X)
-
-# pearson correlation coefficient
-# http://stackoverflow.com/questions/3949226/calculating-pearson-correlation-and-significance-in-python
-def pearson_r(x,y):
-	assert len(x) == len(y)
-	n = len(x)
-	assert n > 0
-	avg_x = float(sum(x)) / n 
-	avg_y = float(sum(y)) / n
-	diffprod = 0
-	xdiff2 = 0
-	ydiff2 = 0
-	for idx in range(n):
-		xdiff = x[idx] - avg_x
-		ydiff = y[idx] - avg_y
-		diffprod += xdiff * ydiff
-		xdiff2 += xdiff * xdiff
-		ydiff2 += ydiff * ydiff
-	return diffprod / sqrt(xdiff2 * ydiff2)
 
 def expand_stream(generator, keep_x):
     for x in generator():
