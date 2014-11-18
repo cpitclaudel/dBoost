@@ -17,6 +17,9 @@ def autoconv(field):
 
 for line in sys.stdin:
     line = line.strip().split("\t")
+    if len(line) == 1:
+        # In the absence of tabs, fall back to any blank character
+        line = line.split()
     
     if row_length != None and len(line) != row_length:
         print("Discarding", line)
