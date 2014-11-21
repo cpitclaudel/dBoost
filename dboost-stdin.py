@@ -30,7 +30,7 @@ for line in sys.stdin:
     dataset.append(tuple(autoconv(field) for field in line))
 
 #model = gaussian.Mixture(2)
-model = statistical.Pearson(.5) 
+model = statistical.Pearson(.001) 
 outliers = dboost.outliers_static_stats(dataset, model)
 
 if len(outliers) == 0:
