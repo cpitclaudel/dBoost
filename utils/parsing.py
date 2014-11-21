@@ -2,5 +2,8 @@ def autoconv(field):
     try:
         field = int(field)
     except:
-        pass
+        try:
+            field = float(field)
+        except:
+            pass
     return field
