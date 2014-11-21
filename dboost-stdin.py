@@ -3,35 +3,36 @@ import dboost
 import sys
 import utils
 import features
-from models import gaussian
+import argparse
+import cli
+from utils.parsing import autoconv
+from utils.print import print_rows
 
 dataset = []
 row_length = None
 
-def autoconv(field):
-    try:
-        field = int(field)
-    except:
-        pass
-    return field
+parser = argparse.ArgumentParser(parents = [cli.get_base_parser()],
+                                 description="Loads a database from a text file, and reports outliers")
+parser.add_argument("input", nargs='?', default = "-", type=argparse.FileType('r'))
 
-for line in sys.stdin:
-    line = line.strip().split("\t")
-    if len(line) == 1:
-        # In the absence of tabs, fall back to any blank character
-        line = line.split()
+args = parser.parse_args()
+
+for line in args.input:
+    line = line.strip().split(args.fs)
     
     if row_length != None and len(line) != row_length:
-        print("Discarding", line)
+        sys.stderr.write("Discarding {}\n".format(line))
 
     row_length = len(line)
     dataset.append(tuple(autoconv(field) for field in line))
 
-model = gaussian.Mixture(2)
-outliers = dboost.outliers_static(dataset, model)
+print(args)
+models = cli.load_models(args)
 
-if len(outliers) == 0:
-    print("   All clean!")
-else:
-    rows, _, failed_tests = zip(*outliers)
-    utils.print_rows(rows, failed_tests, features.rules)
+for model in models:
+    outliers = dboost.outliers_static(dataset, model)
+
+    if len(outliers) == 0:
+        print("   All clean!")
+    else:
+        print_rows(outliers, model, features.descriptions(features.rules), args.verbosity)
