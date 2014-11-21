@@ -1,5 +1,6 @@
 import sys
 from math import sqrt
+from itertools import chain
 
 def zeroif(S, X):
     return S if S != None else tuple(tuple(0 for _ in x) for x in X)
@@ -33,6 +34,9 @@ def div0(a, b):
 
 def tuplify(a, b):
     return (a, b)
+
+def flatten(tup):
+    return list(chain(*tup))
 
 def report_progress(nb):
     if nb % 1000 == 0:

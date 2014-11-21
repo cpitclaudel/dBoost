@@ -1,5 +1,6 @@
 from .utils import *
 from sklearn import mixture
+from numpy import array, percentile
 
 class Simple:
     def __init__(self):
@@ -46,20 +47,20 @@ class Mixture:
         self.n_components = n_components
         pass
 
-    # TODO: percentile
+    def score(self, X):
+        X = flatten(X)
+        lp, _ = self.gmm.score_samples([X])
+        return lp[0]
+        
     def fit(self, Xs):
-        Xs = list(Xs)
-        flattened = []
-        for x in Xs:
-            flattened.append([element for tupl in x for element in tupl])
+        Xs = [flatten(x) for x in list(Xs)]
         self.gmm = mixture.GMM(n_components = self.n_components)
-        self.gmm.fit(flattened)
-        log_prob, responsabilities = self.gmm.score_samples(flattened)
-        best_prob = max(log_prob)
+        self.gmm.fit(Xs)
 
-        self.keep = [lp >= best_prob / 2 for lp in log_prob]
+        #TODO: find non-data dependent value
+        log_prob, _ = self.gmm.score_samples(Xs)
+        self.cutoff = percentile(array(log_prob),10)
 
     def find_discrepancies(self, X, index):
-        #TODO: move score_samples here.
-        #TODO: detect which field is wrong using gradient estimation: calculate gradient of prob function at outlier point, find dimension with largest gradient value
-        return [] if self.keep[index] else [(0,[])]
+        log_prob = self.score(X)
+        return [] if log_prob > self.cutoff else [(0,[])]
