@@ -34,12 +34,8 @@ def outliers_streaming(generator, model):
 
     print(">> Finding outliers...")
     for index, (x, X) in enumerate(expand_stream(generator, True)):
+        #print(x)
+        #print(X)
         _discrepancies = model.find_discrepancies(X, index)
         if len(_discrepancies) > 0:
             yield (x, X, _discrepancies)
- 
-def print_outliers(dataset):
-    from models import gaussian
-    model = gaussian.mixture(2)
-    outliers, _, failed_tests = zip(*outliers_static(dataset, model))
-    utils.print_rows(outliers, failed_tests, features.rules)
