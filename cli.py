@@ -12,7 +12,7 @@ def get_base_parser():
 
     base_parser.add_argument("-vv", "--debug", dest = "verbosity",
                              action = "store_const", const = 2,
-                             help = "Print advanced debugging information")
+                             help = "Print advanced debugging information.")
 
     base_parser.add_argument("-d", "--disable-rule", dest = "disabled_rules",
                              action = "append", metavar = 'rule',
@@ -40,7 +40,7 @@ def get_sdtin_parser():
 def get_mimic_parser():
     parser = argparse.ArgumentParser(parents = [get_base_parser()],
                                      description="Loads the mimic2 database using sqlite3, and reports outliers")
-    parser.add_argument("path")
+    parser.add_argument("db", help = "Read data from sqlite3 database file db.")
     return parser
 
 def load_models(namespace):
