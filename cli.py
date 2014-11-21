@@ -45,3 +45,5 @@ def parsewith(parser):
     if len(models) == 0:
         parser.error("No model specified!")
     return args, models
+
+#TODO add a flag to disable rules

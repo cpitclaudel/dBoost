@@ -48,6 +48,12 @@ def length(s: str) -> ("length",):
 def signature(s: str) -> ("signature",):
     return (",".join(map(unicodedata.category, s)),)
 
+@rule
+def id(s: str) -> ("id",):
+    return (s,)
+
+# TODO add rule to parse dates from strings
+
 def bits(*positions):
     def _bits(i: int) -> tuple("bit {}".format(pos) for pos in positions):
         return ((i >> pos) & 1 for pos in positions)
