@@ -1,5 +1,9 @@
 import sys
 from math import sqrt
+from numbers import Number
+
+def defaultif(S, X, default):
+    return S if S != None else tuple(tuple(default() for _ in x) for x in X)
 
 def zeroif(S, X):
     return S if S != None else tuple(tuple(0 for _ in x) for x in X)
@@ -19,6 +23,9 @@ def sqr(x):
 def not_null(x):
     return x != None
 
+def keep_if(a, b):
+    return a if b else None
+    
 def plus(a, b):
     return a + b if b != None else a
 
@@ -33,6 +40,9 @@ def div0(a, b):
 
 def tuplify(a, b):
     return (a, b)
+
+def filter_abc(X, abc):
+    return tuple(tuple(xi for xi in x if isinstance(xi, abc)) for x in X)
 
 def report_progress(nb):
     if nb % 1000 == 0:
