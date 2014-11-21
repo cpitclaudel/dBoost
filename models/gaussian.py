@@ -7,9 +7,12 @@ class Simple:
     ID = "gaussian"
     
     def __init__(self, tolerance):
-        self.model = None
         self.tolerance = tolerance
-
+        self.reset()
+        
+    def reset(self):
+        self.model = None        
+        
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Simple.ID, nargs = 1, metavar = "Nstdev")
@@ -68,6 +71,10 @@ class Mixture:
     def __init__(self, n_components):
         self.n_components = n_components
 
+    def reset(self):
+        self.gmm = None
+        self.keep = None
+        
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Mixture.ID, nargs = 1, metavar = "Ncomponents")

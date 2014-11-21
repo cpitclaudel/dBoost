@@ -66,11 +66,12 @@ for table in TABLES:
 
         query = QUERY.format(table)
         for model in models:
+            model.reset()
             data = lambda: db.iter_db(args.path, query)
             outliers = list(dboost.outliers_streaming(data, model))
 
             print("... {} found".format(len(outliers)))
-            if 0 < len(outliers) < 50:
+            if 0 < len(outliers) < 200:
                 print_rows(outliers, model, features.rules, args.verbosity)
 
     print()

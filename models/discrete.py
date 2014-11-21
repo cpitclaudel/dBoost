@@ -61,10 +61,14 @@ class Histogram:
     ID = "histogram"
     
     def __init__(self, peak_threshold, outlier_threshold):
-        self.counters = None
-        self.sizes = None
         self.peak_threshold = peak_threshold
         self.outlier_threshold = outlier_threshold
+        self.reset()
+
+    def reset(self):
+        self.all_counters = None
+        self.counters = None
+        self.sizes = None        
         
     @staticmethod
     def register(parser):
