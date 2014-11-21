@@ -1,4 +1,5 @@
 import argparse
+import features
 from models import gaussian, discrete
 
 REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram)
@@ -13,6 +14,11 @@ def get_base_parser():
 
     base_parser.add_argument("-vv", "--debug", dest = "verbosity",
                              action = "store_const", const = 2)
+
+    base_parser.add_argument("-d", "--disable-rule", dest = "disabled_rules",
+                             action = "append")
+
+    base_parser.set_defaults(disabled_rules = [])
     
     for model in REGISTERED_MODELS:
         model.register(base_parser)
@@ -44,6 +50,13 @@ def parsewith(parser):
     models = load_models(args)
     if len(models) == 0:
         parser.error("No model specified!")
-    return args, models
 
-#TODO add a flag to disable rules
+    disabled_rules = set(args.disabled_rules)
+    available_rules = set(r.__name__ for rs in features.rules.values() for r in rs)
+    invalid_rules = disabled_rules - available_rules
+    if len(invalid_rules) > 0:
+        parser.error("Unknown rule(s) {}".format(", ".join(sorted(invalid_rules))))
+    rules = {t: [r for r in rs if r.__name__ not in disabled_rules]
+             for t, rs in features.rules.items()}
+
+    return args, models, rules

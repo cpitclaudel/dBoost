@@ -11,7 +11,8 @@ from utils.print import print_rows
 dataset = []
 row_length = None
 
-args, models = cli.parsewith(cli.get_sdtin_parser())
+parser = cli.get_sdtin_parser()
+args, models, rules = cli.parsewith(parser)
 
 for line in args.input:
     line = line.strip().split(args.fs)
@@ -23,9 +24,9 @@ for line in args.input:
     dataset.append(tuple(autoconv(field) for field in line))
 
 for model in models:
-    outliers = dboost.outliers_static(dataset, model)
+    outliers = dboost.outliers_static(dataset, model, rules)
 
     if len(outliers) == 0:
         print("   All clean!")
     else:
-        print_rows(outliers, model, features.descriptions(features.rules), args.verbosity)
+        print_rows(outliers, model, features.descriptions(rules), args.verbosity)

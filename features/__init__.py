@@ -54,15 +54,15 @@ def id(s: str) -> ("id",):
 
 # TODO add rule to parse dates from strings
 
-def bits(*positions):
-    def _bits(i: int) -> tuple("bit {}".format(pos) for pos in positions):
+def _bits(*positions):
+    def bits(i: int) -> tuple("bit {}".format(pos) for pos in positions):
         return ((i >> pos) & 1 for pos in positions)
-    return _bits
+    return bits
 
-def mod(*mods):
-    def _mod(i: int) -> tuple("mod {}".format(mod) for mod in mods):
+def _mod(*mods):
+    def mod(i: int) -> tuple("mod {}".format(mod) for mod in mods):
         return (i % mod for mod in mods)
-    return _mod
+    return mod
 
 DATE_PROPS = "tm_year", "tm_mon", "tm_mday", "tm_hour", "tm_min", "tm_sec", "tm_wday", "tm_yday"
 
@@ -71,5 +71,5 @@ def unix2date(timestamp: int) -> DATE_PROPS:
     t = time.gmtime(timestamp)
     return map(lambda a: getattr(t, a), DATE_PROPS)
 
-rule(bits(0, 1, 2, 3, 4, 5))
-rule(mod(10))
+rule(_bits(0, 1, 2, 3, 4, 5))
+rule(_mod(10))

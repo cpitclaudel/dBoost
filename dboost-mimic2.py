@@ -53,7 +53,7 @@ QUERY = "SELECT * FROM {}"
 #PATH = "/afs/csail.mit.edu/group/db/6830/mimic2.db"
 
 parser = cli.get_mimic_parser()
-args, models = cli.parsewith(parser)
+args, models, rules = cli.parsewith(parser)
 
 for table in TABLES:
     count_query = COUNT.format(table)
@@ -68,11 +68,11 @@ for table in TABLES:
         for model in models:
             model.reset()
             data = lambda: db.iter_db(args.path, query)
-            outliers = list(dboost.outliers_streaming(data, model))
+            outliers = list(dboost.outliers_streaming(data, model, rules))
 
             print("... {} found".format(len(outliers)))
             if 0 < len(outliers) < 200:
-                print_rows(outliers, model, features.descriptions(features.rules), args.verbosity)
+                print_rows(outliers, model, features.descriptions(rules), args.verbosity)
 
     print()
 
