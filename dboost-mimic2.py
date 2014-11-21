@@ -72,7 +72,7 @@ for table in TABLES:
 
             print("... {} found".format(len(outliers)))
             if 0 < len(outliers) < 200:
-                print_rows(outliers, model, features.rules, args.verbosity)
+                print_rows(outliers, model, features.descriptions(features.rules), args.verbosity)
 
     print()
 

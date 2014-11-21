@@ -11,7 +11,7 @@ from utils.print import print_rows
 dataset = []
 row_length = None
 
-args, models = cli.parsewith(parser)
+args, models = cli.parsewith(cli.get_sdtin_parser())
 
 for line in args.input:
     line = line.strip().split(args.fs)
