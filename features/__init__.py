@@ -3,6 +3,7 @@ import inspect
 import time
 import utils
 import sys
+import unicodedata
 
 # Rules are functions that take a value (field), and return a tuple of features
 # derived from that value. 
@@ -42,6 +43,10 @@ def string_is_digit(s: str) -> ("is digit",):
 @rule
 def length(s: str) -> ("length",):
     return (len(s),)
+
+@rule
+def signature(s: str) -> ("signature",):
+    return (",".join(map(unicodedata.category, s)),)
 
 def bits(*positions):
     def _bits(i: int) -> tuple("bit {}".format(pos) for pos in positions):
