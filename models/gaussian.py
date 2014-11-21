@@ -1,5 +1,6 @@
 import numbers
 from .utils import *
+from utils.autoconv import autoconv
 from sklearn import mixture
 
 class Simple:
@@ -15,7 +16,7 @@ class Simple:
         
     @staticmethod
     def from_parse(params):
-        return Simple(*map(float, params))
+        return Simple(*map(autoconv, params))
         
     def fit(self, Xs):
         S, S2, C = None, None, None
@@ -73,10 +74,11 @@ class Mixture:
         
     @staticmethod
     def from_parse(params):
-        return Mixture(*map(float, params))
+        return Mixture(*map(autoconv, params))
         
     # TODO: percentile
     def fit(self, Xs):
+        Xs = list(map(lambda X: filter_abc(X, numbers.Number), Xs))
         Xs = list(Xs)
         flattened = []
         for x in Xs:

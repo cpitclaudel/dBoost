@@ -19,6 +19,18 @@ def get_base_parser():
 
     return base_parser
 
+def get_sdtin_parser():
+    parser = argparse.ArgumentParser(parents = [get_base_parser()],
+                                     description="Loads a database from a text file, and reports outliers")
+    parser.add_argument("input", nargs='?', default = "-", type=argparse.FileType('r'))
+    return parser
+
+def get_mimic_parser():
+    parser = argparse.ArgumentParser(parents = [get_base_parser()],
+                                     description="Loads the mimic2 database using sqlite3, and reports outliers")
+    parser.add_argument("path")
+    return parser
+
 def load_models(namespace):
     models = []
     for model in REGISTERED_MODELS:
@@ -26,3 +38,10 @@ def load_models(namespace):
         if params != None:
             models.append(model.from_parse(params))
     return models
+
+def parsewith(parser):
+    args = parser.parse_args()
+    models = load_models(args)
+    if len(models) == 0:
+        parser.error("No model specified!")
+    return args, models
