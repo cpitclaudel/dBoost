@@ -6,4 +6,5 @@ def autoconv(field):
             field = float(field)
         except:
             pass
+
     return field
