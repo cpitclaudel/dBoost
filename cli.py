@@ -6,17 +6,17 @@ REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram)
 
 def get_base_parser():
     base_parser = argparse.ArgumentParser(add_help = False)
-    base_parser.add_argument("-F", "--field-separator", nargs = 1, dest = "fs",
-                             action = "store", default = "\t")
-
     base_parser.add_argument("-v", "--verbose", dest = "verbosity",
-                             action = "store_const", const = 1, default = 0)
+                             action = "store_const", const = 1, default = 0,
+                             help = "Print basic debugging information.")
 
     base_parser.add_argument("-vv", "--debug", dest = "verbosity",
-                             action = "store_const", const = 2)
+                             action = "store_const", const = 2,
+                             help = "Print advanced debugging information")
 
     base_parser.add_argument("-d", "--disable-rule", dest = "disabled_rules",
-                             action = "append")
+                             action = "append", metavar = 'rule',
+                             help = "Disable a rule.")
 
     base_parser.set_defaults(disabled_rules = [])
     
@@ -28,7 +28,13 @@ def get_base_parser():
 def get_sdtin_parser():
     parser = argparse.ArgumentParser(parents = [get_base_parser()],
                                      description="Loads a database from a text file, and reports outliers")
-    parser.add_argument("input", nargs='?', default = "-", type=argparse.FileType('r'))
+    parser.add_argument("input", nargs='?', default = "-", type = argparse.FileType('r'),
+                        help = "Read data from file input. If omitted or '-', read from standard input.")
+    
+    parser.add_argument("-F", "--field-separator", nargs = 1, dest = "fs",
+                        action = "store", default = "\t", metavar = "fs",
+                        help = "Use fs as the input field separator (default: tab).")
+
     return parser
 
 def get_mimic_parser():

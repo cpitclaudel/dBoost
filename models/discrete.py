@@ -73,7 +73,11 @@ class Histogram:
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Histogram.ID, nargs = 2,
-                            metavar = ("peak_thresold", "outlier_threshold"))
+                            metavar = ("peak_s", "outlier_s"),
+                            help = "Use a discrete histogram-based model, identifying fields that" +
+                            "have a peaked distribution (peakiness is determined using the peak_s " +
+                            "parameter), and reporting values that fall in classes totaling less than "
+                            "outlier_s of the corresponding histogram. Suggested values: 0.8 0.2.")
         
     @staticmethod
     def from_parse(params):

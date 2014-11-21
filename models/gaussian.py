@@ -15,7 +15,9 @@ class Simple:
         
     @staticmethod
     def register(parser):
-        parser.add_argument("--" + Simple.ID, nargs = 1, metavar = "Nstdev")
+        parser.add_argument("--" + Simple.ID, nargs = 1, metavar = "n_stdev",
+                            help = "Use a gaussian model, reporting values that fall more than " +
+                            "n_stdev standard deviations away from the mean. Suggested value: 3.")
         
     @staticmethod
     def from_parse(params):
@@ -77,7 +79,10 @@ class Mixture:
         
     @staticmethod
     def register(parser):
-        parser.add_argument("--" + Mixture.ID, nargs = 1, metavar = "Ncomponents")
+        parser.add_argument("--" + Mixture.ID, nargs = 1, metavar = "n_subpops",
+                            help = "Use a gaussian mixture model, reporting values whose probability is " +
+                            "below ??, as predicted by a model of the data comprised of n_subpops "+
+                            "gaussians. Suggested value: 2.")
         
     @staticmethod
     def from_parse(params):
