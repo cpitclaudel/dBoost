@@ -90,7 +90,13 @@ class Histogram:
 
     def is_peaked(self, distribution):
         import heapq
-        return sum(heapq.nlargest(2, distribution.values())) > self.peak_threshold * sum(distribution.values())
+        if len(distribution) > 16: # TODO
+            return False
+        else:
+            nb_peaks = max(1, min(3, len(distribution) // 2)) # TODO
+            total_weight = sum(distribution.values())
+            peaks_weight = sum(heapq.nlargest(nb_peaks, distribution.values()))
+            return peaks_weight > self.peak_threshold * total_weight
     
     def fit(self, Xs):
         for X in Xs:
