@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 from TwitterSearch import *
 from credentials import *
 from config import *
