@@ -1,9 +1,11 @@
 #! /usr/bin/env python3
 import sqlite3
 import sys
-import utils
+from utils import db
+from utils.print import print_rows
 import dboost
 import features
+import cli
 
 TABLES = [line.strip() for line in """
 db_schema
@@ -48,11 +50,14 @@ chartevents
 
 COUNT = "SELECT COUNT(*) FROM {}"
 QUERY = "SELECT * FROM {}"
-PATH = "/afs/csail.mit.edu/group/db/6830/mimic2.db"
+#PATH = "/afs/csail.mit.edu/group/db/6830/mimic2.db"
+
+parser = cli.get_mimic_parser()
+args, models, rules = cli.parsewith(parser)
 
 for table in TABLES:
     count_query = COUNT.format(table)
-    row_count = utils.read_db(PATH, count_query)[0][0]
+    row_count = db.read_db(args.path, count_query)[0][0]
 
     if row_count == 0:
         print("Skipping {} ({} rows)".format(table, row_count))
@@ -60,13 +65,14 @@ for table in TABLES:
         print("Processing {} ({} rows)".format(table, row_count))
 
         query = QUERY.format(table)
-        db = lambda: utils.iter_db(PATH, query)
-        outliers = list(dboost.outliers_streaming(db))
+        for model in models:
+            model.reset()
+            data = lambda: db.iter_db(args.path, query)
+            outliers = list(dboost.outliers_streaming(data, model, rules))
 
-        if 0 < len(outliers) < 50:
-            rows, _, discrepancies = zip(*outliers)
-            utils.print_rows(rows, discrepancies, features.rules)
             print("... {} found".format(len(outliers)))
+            if 0 < len(outliers) < 200:
+                print_rows(outliers, model, features.descriptions(rules), args.verbosity)
 
     print()
 

@@ -3,38 +3,30 @@ import dboost
 import sys
 import utils
 import features
-#from models import gaussian
-from models import statistical 
+import argparse
+import cli
+from utils.autoconv import autoconv
+from utils.print import print_rows
 
 dataset = []
 row_length = None
 
-def autoconv(field):
-    try:
-        field = int(field)
-    except:
-        pass
-    return field
+parser = cli.get_sdtin_parser()
+args, models, rules = cli.parsewith(parser)
 
-for line in sys.stdin:
-    line_stripped = line.strip().split("\t")
-    if len(line_stripped) == 1:
-        # In the absence of tabs, fall back to any blank character
-        line_stripped = line.split()
-    line = line_stripped
+for line in args.input:
+    line = line.strip().split(args.fs)
     
     if row_length != None and len(line) != row_length:
-        print("Discarding", line)
+        sys.stderr.write("Discarding {}\n".format(line))
 
     row_length = len(line)
     dataset.append(tuple(autoconv(field) for field in line))
 
-#model = gaussian.Mixture(2)
-model = statistical.Pearson(.001) 
-outliers = dboost.outliers_static_stats(dataset, model)
+for model in models:
+    outliers = dboost.outliers_static(dataset, model, rules)
 
-if len(outliers) == 0:
-    print("   All clean!")
-else:
-    rows, _, failed_tests = zip(*outliers)
-    utils.print_rows(rows, failed_tests, features.rules)
+    if len(outliers) == 0:
+        print("   All clean!")
+    else:
+        print_rows(outliers, model, features.descriptions(rules), args.verbosity)

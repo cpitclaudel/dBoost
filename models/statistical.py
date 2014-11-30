@@ -56,8 +56,9 @@ class Pearson:
         if σ2x == 0 or σ2y == 0:
           self.pearson = float('nan') 
         else:
-          print(X,Y)
+          #print(X,Y)
           self.pearson = σ2xy / math.sqrt(σ2x * σ2y)
+        #print(n,sum_x,sum_y,sum_x2,sum_y2,sum_xy)
         return self.pearson
 
     def ppmcc_check(self, x, y, idx0, idx1):
@@ -67,6 +68,8 @@ class Pearson:
         sum_x2 = self.sum_xy[idx0][idx1]
         sum_y2 = self.sum_x2[idx0][idx1]
         sum_xy = self.sum_y2[idx0][idx1]
+        #print(x,y)
+        #print(n,sum_x,sum_y,sum_x2,sum_y2,sum_xy)
 
         n = n - 1
         sum_x = sum_x - x
@@ -89,7 +92,8 @@ class Pearson:
 
         if σ2x == 0 or σ2y == 0:
           return False
-        print(σ2xy,σ2x,σ2y)
+        #print(n,sum_x,sum_y,sum_x2,sum_y2,sum_xy)
+        #print(σ2xy,σ2x,σ2y)
         pr = σ2xy / math.sqrt(σ2x * σ2y)
         if(math.abs(self.model[idx0][idx1] - pr) > self.eps):
           return True
@@ -112,6 +116,7 @@ class Pearson:
       self.sum_xy =[self.sum_xy[i:i+len1] for i in range(0, len(self.sum_xy), len1)] 
       self.sum_x2 =[self.sum_x2[i:i+len1] for i in range(0, len(self.sum_x2), len1)] 
       self.sum_y2 =[self.sum_y2[i:i+len1] for i in range(0, len(self.sum_y2), len1)] 
+      print(self.model)
 
     def find_discrepancies(self, X,index):
       ret = []
