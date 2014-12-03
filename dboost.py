@@ -24,7 +24,28 @@ def correlation(dataset): # TODO
 	dataset = list(dataset)
 	find_correlation(expand_stream((lambda: dataset), False))
 
+<<<<<<< HEAD
+def outliers_static_stats(dataset, model):
+    dataset = list(dataset)
+    datasetc = list(zip(*dataset))
+    outliers_streaming_stats_bm(lambda: datasetc, model)
+    return list(outliers_streaming_stats_fo(lambda: dataset, model))
+
+def outliers_streaming_stats_bm(generator, model):
+    print(">> Building model...")
+    model.fit(expand_stream(generator, False),expand_stream(generator, False))
+
+def outliers_streaming_stats_fo(generator, model):
+    print(">> Finding outliers...")
+    for index, (x, X) in enumerate(expand_stream(generator, True)):
+        _discrepancies = model.find_discrepancies(X, index)
+        if len(_discrepancies) > 0:
+            yield (x, X, _discrepancies)
+ 
+def outliers_static(dataset, model):
+=======
 def outliers_static(dataset, model, rules):
+>>>>>>> 6208414dc6fe4ba508429ed15ce5640f4eb643c8
     dataset = list(dataset)
     return list(outliers_streaming(lambda: dataset, model, rules))
 
