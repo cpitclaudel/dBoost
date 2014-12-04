@@ -3,6 +3,7 @@ import sys
 import utils
 import features
 from itertools import chain
+from models import statistical
 
 def expand_field(f, rules): # TODO: Should features be kept grouped by rule? # C: I'd say yes probably, even if they get flattened in certain models
     rls = rules[type(f)]
@@ -24,11 +25,21 @@ def correlation(dataset): # TODO
 	dataset = list(dataset)
 	find_correlation(expand_stream((lambda: dataset), False))
 
-def outliers_static(dataset, model, rules):
+def outliers_static_stats(dataset, model,rules):
+    print("hello world")
     dataset = list(dataset)
-    return list(outliers_streaming(lambda: dataset, model, rules))
+    datasetc = list(zip(*dataset))
+    return list(outliers_streaming(lambda: datasetc, model, rules))
 
-def outliers_streaming(generator, model, rules):
+def outliers_static(dataset, preproc, model, rules):
+    dataset = list(dataset)
+    datasetc = list(zip(*dataset))
+    # Collect stats
+    preproc.fit(expand_stream(lambda: datasetc, rules, False))
+    print(preproc.hints)
+    return list(outliers_streaming(lambda: dataset, preproc, model, rules))
+
+def outliers_streaming(generator, preproc, model, rules):
     print(">> Building model...")
     model.fit(expand_stream(generator, rules, False))
 

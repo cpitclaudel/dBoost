@@ -5,6 +5,7 @@ import utils
 import features
 import argparse
 import cli
+import itertools 
 from utils.autoconv import autoconv
 from utils.print import print_rows
 
@@ -12,7 +13,7 @@ dataset = []
 row_length = None
 
 parser = cli.get_sdtin_parser()
-args, models, rules = cli.parsewith(parser)
+args, models, preprocs, rules = cli.parsewith(parser)
 
 for line in args.input:
     line = line.strip().split(args.fs)
@@ -23,8 +24,8 @@ for line in args.input:
     row_length = len(line)
     dataset.append(tuple(autoconv(field) for field in line))
 
-for model in models:
-    outliers = dboost.outliers_static(dataset, model, rules)
+for preproc,model in itertools.product(preprocs,models):
+    outliers = dboost.outliers_static(dataset, preproc, model, rules)
 
     if len(outliers) == 0:
         print("   All clean!")
