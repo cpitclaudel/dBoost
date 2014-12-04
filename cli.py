@@ -31,7 +31,7 @@ def get_sdtin_parser():
     parser.add_argument("input", nargs='?', default = "-", type = argparse.FileType('r'),
                         help = "Read data from file input. If omitted or '-', read from standard input.")
     
-    parser.add_argument("-F", "--field-separator", nargs = 1, dest = "fs",
+    parser.add_argument("-F", "--field-separator", dest = "fs",
                         action = "store", default = "\t", metavar = "fs",
                         help = "Use fs as the input field separator (default: tab).")
 
