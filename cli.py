@@ -1,8 +1,8 @@
 import argparse
 import features
-from models import gaussian, discrete
+from models import gaussian, discrete, statistical
 
-REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram)
+REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram, statistical.Pearson)
 
 def get_base_parser():
     base_parser = argparse.ArgumentParser(add_help = False)
