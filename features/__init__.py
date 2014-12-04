@@ -52,6 +52,14 @@ def signature(s: str) -> ("signature",):
 def id(s: str) -> ("id",):
     return (s,)
 
+@rule
+def float_length(f: float) -> ("length",):
+  return(len(str(f)),)
+
+@rule
+def float_id(f: float) -> ("id",):
+    return (f,)
+
 # TODO add rule to parse dates from strings
 
 def _bits(*positions):

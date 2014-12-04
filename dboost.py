@@ -12,29 +12,15 @@ def expand_field(f, rules): # TODO: Should features be kept grouped by rule? # C
 def expand(x, rules):
     return tuple(expand_field(f, rules) for f in x)
 
-def find_correlation(Xs): # TODO
-	for (nb, X) in enumerate(Xs):
-		print(X)
-
 def expand_stream(generator, rules, keep_x):
     for x in generator():
         X = expand(x, rules)
         yield (x, X) if keep_x else X 
 
-def correlation(dataset): # TODO
-	dataset = list(dataset)
-	find_correlation(expand_stream((lambda: dataset), False))
-
-def outliers_static_stats(dataset, model,rules):
-    print("hello world")
-    dataset = list(dataset)
-    datasetc = list(zip(*dataset))
-    return list(outliers_streaming(lambda: datasetc, model, rules))
-
 def outliers_static(dataset, preproc, model, rules):
     dataset = list(dataset)
     datasetc = list(zip(*dataset))
-    # Collect stats
+    # Collect stats in preprocessor
     preproc.fit(expand_stream(lambda: datasetc, rules, False))
     print(preproc.hints)
     return list(outliers_streaming(lambda: dataset, preproc, model, rules))

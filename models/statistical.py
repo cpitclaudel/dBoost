@@ -147,7 +147,11 @@ class Pearson:
 
     def fit(self, Xs):
       Xs_ = list(Xs)
-      self.new_row(len(Xs_[0][0]),len(Xs_[0]))
+      #print(len(Xs_))# Number of columns
+      #print(len(Xs_[0])) # Number of values in each col
+      #print(len(Xs_[0][0])) # Number of sub-columns
+      #print(max([len(Xs_[0][i]) for i in range(len(Xs_))]))
+      self.new_row(max([len(Xs_[i][0]) for i in range(len(Xs_))]),len(Xs_))
       #print(Xs_)
       for ((X,Y),(nx,ny)) in zip(itertools.combinations(Xs_,2),itertools.combinations(range(len(Xs_)),2)):
         #print(X[0][len(X[0])-1])
