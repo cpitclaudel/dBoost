@@ -70,6 +70,8 @@ def parsewith(parser):
     preprocs = load_preprocs(args)
     if len(models) == 0:
         parser.error("No model specified!")
+    if len(preprocs) == 0:
+        parser.error("No preprocessors specified!")
 
     disabled_rules = set(args.disabled_rules)
     available_rules = set(r.__name__ for rs in features.rules.values() for r in rs)
