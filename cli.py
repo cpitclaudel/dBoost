@@ -2,7 +2,8 @@ import argparse
 import features
 from models import gaussian, discrete, statistical
 
-REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram, statistical.Pearson)
+REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram)
+REGISTERED_PREPROCS = (statistical.Pearson,)
 
 def get_base_parser():
     base_parser = argparse.ArgumentParser(add_help = False)
@@ -22,6 +23,10 @@ def get_base_parser():
     
     for model in REGISTERED_MODELS:
         model.register(base_parser)
+
+    for preproc in REGISTERED_PREPROCS:
+        preproc.register(base_parser)
+
 
     return base_parser
 
@@ -51,9 +56,18 @@ def load_models(namespace):
             models.append(model.from_parse(params))
     return models
 
+def load_preprocs(namespace):
+    preprocs = []
+    for preproc in REGISTERED_PREPROCS:
+        params = getattr(namespace, preproc.ID)
+        if params != None:
+            preprocs.append(preproc.from_parse(params))
+    return preprocs
+
 def parsewith(parser):
     args = parser.parse_args()
     models = load_models(args)
+    preprocs = load_preprocs(args)
     if len(models) == 0:
         parser.error("No model specified!")
 
@@ -65,4 +79,4 @@ def parsewith(parser):
     rules = {t: [r for r in rs if r.__name__ not in disabled_rules]
              for t, rs in features.rules.items()}
 
-    return args, models, rules
+    return args, models, preprocs, rules

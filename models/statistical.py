@@ -1,16 +1,28 @@
 import math,itertools
 
+# Preprocessor that collects dataset statistics over columns for use by other models.
+#   It also detects correlations between columns using the Pearson R coefficient. 
+#   If the absolute value of the R value is greater than epsilon, the coordinates of
+#   the two columns are added as pairs to hints in the format
+#   ( (x-index, x-subcolumn-index), (y-index, y-subcolumn-index))
+# Collects the following stats:
+#   avg -- average value of the column
+#   cnt -- total number of value in the column
+#   maxm -- maximum value in the column
+#   minm -- minimum value in the column
+#   ttl -- sum of values in the column
+#   var -- variance
+# 
+
 class Pearson:
     ID = "statistical"
     #def __init__(self, proj1, proj2):
-    def __init__(self,eps,stdev):
+    def __init__(self,eps):
         self.eps = eps
         self.reset()
 
     def reset(self):
-      self.model = [] 
-      self.hints_ = []
-      self.hints = []
+      self.hints = [] 
       self.avg = []
       self.var = []
       self.cnt = []
@@ -21,9 +33,9 @@ class Pearson:
 
     @staticmethod
     def register(parser):
-        parser.add_argument("--" + Pearson.ID, nargs = 2, metavar = ("epsilon","n_stdev"),
-                            help = "Use a statistical model, reporting correlated values over epsilon that fall more than " +
-                            "n_stdev standard deviations away from the mean. Suggested value: 3.")
+        parser.add_argument("--" + Pearson.ID, nargs = 1, metavar = "epsilon",
+                            help = "Use a statistical model preprocessor, reporting correlated values " +
+                            "with a pearson r value greater than epsilon.") 
  
     @staticmethod
     def from_parse(params):
@@ -129,7 +141,7 @@ class Pearson:
         #print(n,sum_x,sum_y,sum_x2,sum_y2,sum_xy)
         if not math.isnan(pearson) and math.fabs(pearson) > self.eps:
           self.hints.append(((nx,nnx),(ny,nny)))
-          print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + " " + str(pearson))
+          #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + " " + str(pearson))
 
         return pearson
 
@@ -143,9 +155,5 @@ class Pearson:
         for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*X),zip(*Y)),itertools.product(range(len(X[0])),range(len(Y[0])))):
           pearson = self.ppmcc(x,y,nx,nnx,ny,nny)
 
-      print(self.hints)
+    #print(self.hints)
 
-
-    def find_discrepancies(self, X,index):
-      ret = []
-      return ret

@@ -31,16 +31,15 @@ def outliers_static_stats(dataset, model,rules):
     datasetc = list(zip(*dataset))
     return list(outliers_streaming(lambda: datasetc, model, rules))
 
-def outliers_static(dataset, model, rules):
+def outliers_static(dataset, preproc, model, rules):
     dataset = list(dataset)
     datasetc = list(zip(*dataset))
     # Collect stats
-    stats = statistical.Pearson(0.2,3)
-    stats.fit(expand_stream(lambda: datasetc, rules, False))
-    return []
-    #return list(outliers_streaming(lambda: dataset, model, rules))
+    preproc.fit(expand_stream(lambda: datasetc, rules, False))
+    print(preproc.hints)
+    return list(outliers_streaming(lambda: dataset, preproc, model, rules))
 
-def outliers_streaming(generator, model, rules):
+def outliers_streaming(generator, preproc, model, rules):
     print(">> Building model...")
     model.fit(expand_stream(generator, rules, False))
 
