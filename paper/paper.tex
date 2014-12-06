@@ -117,19 +117,69 @@ The relatively low computation required by these algorithms makes them more amen
 
 \section{Framework}
 We built a tool that analyzes datasets for outliers.
-The tool uses a pipeline framework with three stages:
+The tool is a three-pass process with the following stages:
 \begin{enumerate}
-\item Tuple Expansion -- Tuples are expanded based on type.
+%\item Tuple Expansion -- Tuples are expanded based on type.
 \item Preprocessing -- Statistics are collected on data which can be used in future pipeline stages. The preprocessor also determines whether columns of expanded tuples are correlated.
-\item Model building -- 
+\item Model Creation -- We use a variety of probabilistic models. 
+\item Outlier Detection -- Using the models built on the existing dataset, we can detect outliers outside of specified parameters.
 \end{enumerate}
+
 \subsection{Tuple Expansion}
-We 
+We expand tuples in order to harness isolated information about the data that may not be easy to see when looking at the data in its original form.
+For example, the day of the week may be relevant information from a date, but unless the database stores this information in a separate column, the information is lost on most analyzers.
+In order to capture this kind of information, we break down tuples into a series of sub-tuples based on the type of each column, along with the original value.
+We determined these breakdowns based on our own intuition and the datasets we worked with.
+
+\begin{itemize}
+\item Strings
+\begin{itemize}
+\item Case: All upper or lower case, or title case.
+\item Digits: Are there digits in the string?
+\item Length: The length of the string in characters.
+\end{itemize}
+\item Dates
+\begin{itemize}
+\item Year, month, day
+\item Hour, minute, seconds
+\item Day of the week
+\end{itemize}
+\item Integers
+\begin{itemize}
+\item Bit position: What bits are activated?
+\item Modulo: What is the value modulo some other value?
+\end{itemize}
+\item Floating Point
+\begin{itemize}
+\item Length: What is the significance of the number?
+\end{itemize}
+\end{itemize}
+
 \subsection{Preprocessor}
-\subsubsection{Pearson R Coefficient}
-\subsection{Outlier models}
+After expanding each tuple by type, we feed the sub-tuples into a preprocessor which collect statistics on the dataset.
+These statistics are used by the outlier models to improve performance.
+We collect statistics by sub-tuple.
+The statistics we collect include the average value of the column, its variance, and the maximum and minimum values. 
+
+In addition to collecting statistics, we also run statistical analysis to determine whether there are correlations between different columns in the sub-tuples.
+We use the Pearson R coefficient to do this correlation analysis, which we describe below.
+If a sufficient correlation or inverse correlation is found, we pass the information about the tuples and subtuples that are correlated as hints to the outlier models.
+
+\subsubsection{Pearson Product-Moment Correlation}
+The Pearson product-moment correlation coefficient measures linear correlation between two vectors.
+This simple, statistical method is commonly used to find correlation between multiple sets on values.
+The formula to determine the coefficient, often represented as $R$, is the following.
+
+$$
+R = \frac{Covar(X,Y)}{Var(X)Var(Y)}
+$$
+
+The formula returns a value between -1 and 1, where a value close to 0 indicates no correlation, and the closer the value is to 1, the more correlated the columns are.
+
+\subsection{Create Models}
 \subsubsection{Gaussian Model}
 \subsubsection{Gaussian Mixture Model}
+\subsection{Outlier Detection}
 
 \section{Evaluation}
 \subsection{CSAIL Directory}
