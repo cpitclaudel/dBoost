@@ -94,6 +94,15 @@ class Mixture:
         X = flatten(X)
         lp, _ = self.gmm.score_samples([X])
         return lp[0]
+
+    def new_score(self, X):
+        X = filter_abc(X, numbers.Number)
+        sum_lp = 0
+        for i in range(len(X)):
+            x = list(X[i])
+            lp, _ = self.gmms[i].score_samples([x])
+            sum_lp += lp[0]
+        return sum_lp
         
     def fit(self, Xs):
         Xs = list(map(lambda X: filter_abc(X, numbers.Number), Xs))
@@ -103,6 +112,24 @@ class Mixture:
         #TODO: find non-data dependent value
         log_prob, _ = self.gmm.score_samples(Xs)
         self.cutoff = percentile(array(log_prob),10)
+
+    def new_fit(self, Xs):
+        Xs = list(map(lambda X: filter_abc(X, numbers.Number), Xs))
+        n = len(Xs[0]) #number of tuples representing correlations
+        self.gmms = []
+
+        log_probs = map(lambda _: 0, Xs)
+        for correlation in range(0, n):
+            to_fit = map(lambda X: list(X[correlation]), Xs)
+            self.gmms[correlation] = mixture.GMM(n_components = len(correlation))
+            self.fit(to_fit)
+
+            #TODO: find non-data dependent value
+            log_prob, _ = self.gmms[correlation].score_samples(to_fit)
+            log_probs = [sum(x) for x in zip(log_probs, log_prob)]
+        
+        self.cutoff = percentile(array(log_prob), 10)
+        
 
     def find_discrepancies(self, X, index):
         log_prob = self.score(X)
