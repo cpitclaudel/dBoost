@@ -1,0 +1,24 @@
+% STATISTICAL ANALYSIS
+
+After expanding each tuple by type, we feed the sub-tuples into a preprocessor which collect statistics on the dataset.
+These statistics are used by the outlier models to improve performance.
+We collect statistics by sub-tuple.
+The statistics we collect include the average value of the column, its variance, and the maximum and minimum values. 
+
+
+\subsubsection{Finding Correlations}
+In addition to collecting statistics, if there is more than one column in the original dataset, we also run statistical analysis to determine whether there are correlations between different columns in the sub-tuples.
+We use the Pearson R coefficient to do this correlation analysis, which we describe below.
+If a sufficient correlation or inverse correlation is found, we pass the information about the tuples and subtuples that are correlated as hints to the outlier models.
+
+The Pearson product-moment correlation coefficient measures linear correlation between two vectors.
+This simple, statistical method is commonly used to find correlation between multiple sets on values.
+The formula to determine the coefficient, often represented as $R$, is the following.
+
+$$
+R = \frac{Covar(X,Y)}{Var(X)Var(Y)}
+$$
+
+The formula returns a value between -1 and 1, where a value close to 0 indicates no correlation, and the closer the value is to 1, the more closely correlated the columns are.
+
+

@@ -1,0 +1,33 @@
+% PREPROCESSOR
+
+\subsubsection{Tuple Expansion}
+We expand tuples in order to harness isolated information about the data that may not be easy to see when looking at the data in its original form.
+For example, the day of the week may be relevant information from a date, but unless the database stores this information in a separate column, the information is lost on most analyzers.
+In order to capture this kind of information, we break down tuples into a series of sub-tuples based on the type of each column along with the original value.
+We determined these breakdowns based on our own intuition and the datasets we worked with.
+
+\begin{itemize}
+\item Strings
+\begin{itemize}
+\item Case: All upper or lower case, or title case.
+\item Digits: Are there digits in the string?
+\item Length: The length of the string in characters.
+\end{itemize}
+\item Dates
+\begin{itemize}
+\item Year, month, day
+\item Hour, minute, seconds
+\item Day of the week
+\end{itemize}
+\item Integers
+\begin{itemize}
+\item Bit position: What bits are activated?
+\item Modulo: What is the value modulo some other value?
+\end{itemize}
+\item Floating Point
+\begin{itemize}
+\item Length: What is the significance of the number?
+\end{itemize}
+\end{itemize}
+
+

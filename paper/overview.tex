@@ -1,0 +1,10 @@
+We built a tool that analyzes datasets for outliers.
+The tool is a three-pass process with the following stages:
+\begin{enumerate}
+%\item Tuple Expansion -- Tuples are expanded based on type.
+\item Preprocessing -- Statistics are collected on data which can be used in future pipeline stages. The preprocessor also determines whether columns of expanded tuples are correlated.
+\item Model Creation -- We use a variety of probabilistic models. 
+\item Outlier Detection -- Using the models built on the existing dataset, we can detect outliers outside of specified parameters.
+\end{enumerate}
+
+

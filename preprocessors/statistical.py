@@ -1,3 +1,6 @@
+import numbers
+from utils.tupleops import *
+from utils.autoconv import autoconv
 import math,itertools
 
 # Preprocessor that collects dataset statistics over columns for use by other models.
@@ -23,6 +26,7 @@ class Pearson:
 
     def reset(self):
       self.hints = [] 
+      self.sum = []
       self.avg = []
       self.var = []
       self.cnt = []
@@ -145,11 +149,60 @@ class Pearson:
         return pearson
 
     def fit(self, Xs):
+        S,S2,C,SXY = None, None, None,None
+        for (nb, X) in enumerate(Xs):
+            print("=====")
+            print(X)
+            X = filter_abc(X, numbers.Number)
+            S, S2, C = zeroif(S, X), zeroif(S2, X), zeroif(C, X)
+            S = merge(S, X, id, plus)
+            S2 = merge(S2, X, sqr, plus)
+            C = merge(C, X, not_null, plus)
+            print(S)
+            XY_ = () 
+            for ((X,Y),(nx,ny)) in zip(itertools.combinations(X,2),itertools.combinations(range(len(X)),2)):
+              for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
+                XY_ = XY_ + ((x[0]*y[0],),)
+            SXY = zeroif(SXY,XY_)
+            SXY = merge(SXY, XY_, id, plus)
+        print("=*=*=*=*=")
+        print(S)
+        print(S2)
+        print(C)
+        print(SXY)
+        AVGX = merge(S,C,id,div0)
+        AVGSQX = merge(S2,C,id,div0)
+        VARX = merge(AVGSQX,AVGX,sqr,minus)
+        print(AVGX)
+        print(AVGSQX)
+        print(VARX)
+        self.cnt = C
+        self.sum = S 
+        self.sum2 = S2 
+        self.avg = AVGX 
+        self.avg2 = AVGSQX 
+        self.var = VARX 
+        #x̄ȳ = sum_xy / n
+        idx = -1 
+        for ((X,Y),(nx,ny)) in zip(itertools.combinations(X,2),itertools.combinations(range(len(X)),2)):
+          for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
+            idx = idx + 1
+            XY_ = SXY[idx]
+            VARXY = SXY[idx] - AVGX[nnx] * AVGX[nny]
+            PR = PR + ((VARXY[idx] / math.sqrt(VARX[nnx] * VARX[nny]),),)
+            if not math.isnan(PR[idx]) and math.fabs(PR[idx]) > self.eps:
+              self.hints.append(((nx,nnx),(ny,nny)))
+
+        print(PR)
+
+
+
+    def fit_orig(self, Xs):
       Xs_ = list(Xs)
-      #print(len(Xs_))# Number of columns
-      #print(len(Xs_[0])) # Number of values in each col
-      #print(len(Xs_[0][0])) # Number of sub-columns
-      #print(max([len(Xs_[0][i]) for i in range(len(Xs_))]))
+      print(len(Xs_))# Number of columns
+      print(len(Xs_[0])) # Number of values in each col
+      print(len(Xs_[0][0])) # Number of sub-columns
+      print(max([len(Xs_[0][i]) for i in range(len(Xs_))]))
       self.new_row(max([len(Xs_[i][0]) for i in range(len(Xs_))]),len(Xs_))
       #print(Xs_)
       for ((X,Y),(nx,ny)) in zip(itertools.combinations(Xs_,2),itertools.combinations(range(len(Xs_)),2)):
