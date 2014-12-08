@@ -3,9 +3,8 @@ import sys
 import utils
 import features
 from itertools import chain
-from models import statistical
 
-def expand_field(f, rules): # TODO: Should features be kept grouped by rule? # C: I'd say yes probably, even if they get flattened in certain models
+def expand_field(f, rules):
     rls = rules[type(f)]
     return tuple(chain.from_iterable(rule(f) for rule in rls))
 

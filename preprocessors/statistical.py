@@ -30,7 +30,6 @@ class Pearson:
       self.minm = []
       self.ttl = []
 
-
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Pearson.ID, nargs = 1, metavar = "epsilon",

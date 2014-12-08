@@ -1,9 +1,14 @@
 import argparse
 import features
-from models import gaussian, discrete, statistical
+from preprocessors import statistical
+from models import gaussian, discrete 
 
 REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram)
-REGISTERED_PREPROCS = (statistical.Pearson,)
+REGISTERED_PREPROCESSORS = (statistical.Pearson,)
+
+def register_modules(parser, modules):
+    for module in modules:
+        module.register(parser)
 
 def get_base_parser():
     base_parser = argparse.ArgumentParser(add_help = False)
@@ -20,14 +25,10 @@ def get_base_parser():
                              help = "Disable a rule.")
 
     base_parser.set_defaults(disabled_rules = [])
+
+    register_modules(base_parser, REGISTERED_MODELS)
+    register_modules(base_parser, REGISTERED_PREPROCESSORS)
     
-    for model in REGISTERED_MODELS:
-        model.register(base_parser)
-
-    for preproc in REGISTERED_PREPROCS:
-        preproc.register(base_parser)
-
-
     return base_parser
 
 def get_sdtin_parser():
@@ -48,31 +49,26 @@ def get_mimic_parser():
     parser.add_argument("db", help = "Read data from sqlite3 database file db.")
     return parser
 
-def load_models(namespace):
-    models = []
-    for model in REGISTERED_MODELS:
-        params = getattr(namespace, model.ID)
-        if params != None:
-            models.append(model.from_parse(params))
-    return models
+def load_modules(namespace, parser, registered_modules):
+    modules = []
 
-def load_preprocs(namespace):
-    preprocs = []
-    for preproc in REGISTERED_PREPROCS:
-        params = getattr(namespace, preproc.ID)
+    for module in registered_modules:
+        params = getattr(namespace, module.ID)
         if params != None:
-            preprocs.append(preproc.from_parse(params))
-    return preprocs
+            modules.append(module.from_parse(params))
+            
+    if len(modules) == 0:
+        args = ["'--" + module.ID + "'" for module in registered_modules]
+        parser.error("Please specify one of [{}]".format(", ".join(args)))
+            
+    return modules
 
 def parsewith(parser):
     args = parser.parse_args()
-    models = load_models(args)
-    preprocs = load_preprocs(args)
-    if len(models) == 0:
-        parser.error("No model specified!")
-    if len(preprocs) == 0:
-        parser.error("No preprocessors specified!")
-
+    
+    models = load_modules(args, parser, REGISTERED_MODELS)
+    preprocessors = load_modules(args, parser, REGISTERED_PREPROCESSORS)
+    
     disabled_rules = set(args.disabled_rules)
     available_rules = set(r.__name__ for rs in features.rules.values() for r in rs)
     invalid_rules = disabled_rules - available_rules
@@ -81,4 +77,4 @@ def parsewith(parser):
     rules = {t: [r for r in rs if r.__name__ not in disabled_rules]
              for t, rs in features.rules.items()}
 
-    return args, models, preprocs, rules
+    return args, models, preprocessors, rules

@@ -1,5 +1,5 @@
 import numbers
-from .utils import *
+from utils.tupleops import *
 from utils.autoconv import autoconv
 from sklearn import mixture
 from numpy import array, percentile

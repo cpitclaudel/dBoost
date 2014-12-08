@@ -1,4 +1,4 @@
-from . import utils
+from utils import tupleops
 from utils.color import term, highlight
 import collections
 import sys
@@ -100,13 +100,13 @@ class Histogram:
     
     def fit(self, Xs):
         for X in Xs:
-            self.counters = utils.defaultif(self.counters, X, collections.Counter)
-            self.sizes = utils.zeroif(self.sizes, X)
-            self.counters = utils.merge(self.counters, X, utils.id, Histogram.add)
-            self.sizes = utils.merge(self.sizes, X, utils.not_null, utils.plus)
+            self.counters = tupleops.defaultif(self.counters, X, collections.Counter)
+            self.sizes = tupleops.zeroif(self.sizes, X)
+            self.counters = tupleops.merge(self.counters, X, tupleops.id, Histogram.add)
+            self.sizes = tupleops.merge(self.sizes, X, tupleops.not_null, tupleops.plus)
 
         self.all_counters = self.counters
-        self.counters = utils.merge(self.counters, self.counters, self.is_peaked, utils.keep_if)
+        self.counters = tupleops.merge(self.counters, self.counters, self.is_peaked, tupleops.keep_if)
         
     def find_discrepancies(self, X, index):
         discrepancies = []
