@@ -1,1 +1,14 @@
-Add rationale to each of the extraction filters
+*  Poster stuff (see picture) [RCZ]
+*  Mixture model thresholds [C]
+*  Correlation detection issues [R]
+*  Paper writing tasks
+   *   Diagrams:
+       - CSAIL evaluation [C]
+       - Pipeline diagram (edits) [Z]
+       - Tuple expansion diagram [C]
+   *   Conclusion / previous work [later]
+   *   A pass on section 3 [R tonight, CZ tomorrow morning]
+   *   Pass through section 1 and 2 [CZ tonight, R tomorrow afternoon]
+   *   Fill in section 3 [Z]
+* Evaluation [R]
+* Fix href parameters [C]
