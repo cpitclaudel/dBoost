@@ -137,11 +137,10 @@ class Mixture:
             log_probs = [sum(x) for x in zip(log_probs, log_prob)]
         
         self.cutoff = percentile(array(log_prob), 10)
-        
 
     def find_discrepancies(self, X, index):
         log_prob = self.score(X)
         return [] if log_prob > self.cutoff else [(0,[])]
 
-    def more_info(self, identifiers, highlighted = None, indent = "", pipe = sys.stdout):
-        pass
+    def more_info(self, discrepancy, description, X, indent = "", pipe = sys.stdout):
+        pass #TODO
