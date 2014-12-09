@@ -12,6 +12,9 @@ def zeroif(S, X):
 def root(X):
     return tuple(tuple(sqrt(xi) for xi in x) for x in X)
 
+def deepmap(f, X):
+    return tuple(tuple(f(xi) for xi in x) for x in X)
+
 def merge(S, X, f, phi):
     return tuple(tuple(phi(si, f(xi)) for si, xi in zip(s, x)) for s, x in zip(S, X))
 

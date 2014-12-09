@@ -5,6 +5,7 @@ import sys
 
 BLOCK = "█"
 
+#TODO: Use or get rid of.
 def histplot(counter, height = None):
     import os, sys
     W, H = os.get_terminal_size()
@@ -123,9 +124,11 @@ class Histogram:
 
         return discrepancies
 
-    def more_info(self, field_id, feature_id, feature_name, X, indent = "", pipe = sys.stdout):
+    def more_info(self, discrepancy, description, X, indent = "", pipe = sys.stdout):
+        assert(len(discrepancy) == 1)
+        field_id, feature_id = discrepancy[0]
         highlighted = X[field_id][feature_id]
         counter = self.all_counters[field_id][feature_id]
-        pipe.write(indent + "• histogram for {}/{}:\n".format(field_id, feature_name))
+        pipe.write(indent + "• histogram for {}:\n".format(description))
         hhistplot(counter, highlighted, indent + "  ", pipe)
 

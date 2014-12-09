@@ -13,7 +13,7 @@ dataset = []
 row_length = None
 
 parser = cli.get_sdtin_parser()
-args, models, preprocs, rules = cli.parsewith(parser)
+args, models, preprocessors, rules = cli.parsewith(parser)
 
 for line in args.input:
     line = line.strip().split(args.fs)
@@ -24,10 +24,11 @@ for line in args.input:
     row_length = len(line)
     dataset.append(tuple(autoconv(field) for field in line))
 
-for preproc,model in itertools.product(preprocs,models):
-    outliers = dboost.outliers_static(dataset, preproc, model, rules)
+for preprocessor, model in itertools.product(preprocessors, models):
+    outliers = dboost.outliers_static(dataset, preprocessor, model, rules)
 
     if len(outliers) == 0:
         print("   All clean!")
     else:
-        print_rows(outliers, model, features.descriptions(rules), args.verbosity)
+        print_rows(outliers, model, preprocessor.hints,
+                   features.descriptions(rules), args.verbosity)

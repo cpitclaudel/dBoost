@@ -27,6 +27,7 @@ class Simple:
     def fit(self, Xs):
         S, S2, C = None, None, None
 
+        # TODO: Adjust this to use values from the statistical analysis
         for (nb, X) in enumerate(Xs):
             report_progress(nb)
             X = filter_abc(X, numbers.Number)
@@ -60,13 +61,20 @@ class Simple:
 
         return ret
 
-    def more_info(self, field_id, feature_id, feature_name, X, indent = "", pipe = sys.stdout):
-        FMT = "{feature_name}: {xi:.2g} falls out of range [{lo:.2f}, {hi:.2f}] = [{mu:.2f} - {t} * {sigma:.2f}, {mu:.2f} + {t} * {sigma:.2f}]\n"
-        xi = X[field_id][feature_id]
+    INFO_FMT = "{feature_name}: {xi:.2g} falls out of range [{lo:.2f}, {hi:.2f}] = [{mu:.2f} - {t} * {sigma:.2f}, {mu:.2f} + {t} * {sigma:.2f}]\n"
+
+    def more_info(self, discrepancy, description, X, indent = "", pipe = sys.stdout):
+        assert(len(discrepancy) == 1)
+
+        field_id, feature_id = discrepancy[0]
+        feature_name = description[0]
+
         t = self.tolerance
+        xi = X[field_id][feature_id]
         mu, sigma = self.model[field_id][feature_id]
         lo, hi = mu - t * sigma, mu + t * sigma
-        pipe.write(indent + FMT.format(**locals()))
+
+        pipe.write(indent + Simple.INFO_FMT.format(**locals()))
 
 class Mixture:
     ID = "mixture"
@@ -79,7 +87,7 @@ class Mixture:
         self.keep = None
         
     @staticmethod
-    def register(parser):
+    def register(parser): #TODO (Z): fix the doc. Add an extra arg?
         parser.add_argument("--" + Mixture.ID, nargs = 1, metavar = "n_subpops",
                             help = "Use a gaussian mixture model, reporting values whose probability is " +
                             "below ??, as predicted by a model of the data comprised of n_subpops "+
