@@ -1,0 +1,29 @@
+% Evaluation
+
+We evaluated our framework by implementing a tool in python3.
+We have approximately TODO lines of code.
+Our code is publicly available on GitHub under a GNU Public License~\cite{github}.
+The program loads data from a text file (column separators can be specified on the command line, so many formats are possible), does computation, and reports outliers on the command line.
+Table~\ref{table:flags} shows some of the usage of our code.
+
+\begin{table*}
+\label{table:flags}
+\caption{Tool usage.}
+\centering
+\begin{tabular} {| l | l | p{10cm} |}
+\hline
+\multicolumn{3}{|c|}{./dboost-stdin.py input-file} \\
+\hline
+Flag & Options & Explanation \\
+\hline
+--gaussian & n\_stdev & Report outliers that fall more than n\_stdev standard deviations away from the mean of the data \\
+--mixture & n\_subpops & Use a model of n\_subpops gaussians \\
+--histogram & peak\_s & Consider only fields with a peaked distribution with peakiness peak\_s \\
+  & outlier\_s & Report values that fall in classes with less than outlier\_s percent \\
+--statistical & epsilon & Give hints to the model for correlations with Pearson R coefficient greater than epsilon \\
+\hline
+\end{tabular}
+\end{table*}
+
+We ran our tool on several real-world data sets with varying schemas and properties.
+We analyze each data set separately in the following sections.
