@@ -18,10 +18,9 @@ def expand_stream(generator, rules, keep_x):
 
 def outliers_static(dataset, preproc, model, rules):
     dataset = list(dataset)
-    #datasetc = list(zip(*dataset))
     # Collect stats in preprocessor
     preproc.fit(expand_stream(lambda: dataset, rules, False))
-    print(preproc.hints)
+    #print(preproc.hints)
     return list(outliers_streaming(lambda: dataset, preproc, model, rules))
 
 def outliers_streaming(generator, preproc, model, rules):
