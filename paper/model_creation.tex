@@ -2,4 +2,17 @@
 
 \subsubsection{Histogram Model}
 \subsubsection{Gaussian Model}
-\subsubsection{Gaussian Mixture Model}
+The Gaussian model assumes that each expanded column is independent from the others, and that all values in a column $c$ are independent values drawn from a normal distribution $\mathcal N(\mu_c, \sigma_c)$.
+
+The model's parameters (a pair $(\mu, \sigma)$ for each numerical column) are obtained with one pass over the data, without loading the tuples in memory.
+
+\subsubsection{Mixture Model}
+
+The Mixture Model (MM) assigns a Gaussian Mixture Model (GMM) to each correlation between numerical valued-columns that has been detected during the statistical analysis. These GMMs model the probability distribution of the correlated values.
+
+For example, if the preprocessor detects that field 2 of expanded column 1 and field 1 of expanded column 3 are correlated, the model will learn a GMM to model this correlation: the probability of obtaining $(X_1, X_2)$ as values for the two correlated fields is given by
+\[\Pr(X_1, X_2) = \sum_{j=1}^{n} \pi_j \mathcal N(\mu_j, \Sigma_j)(X_1, X_2)\]
+where $n$ is the number of components chosen for the GMM (we set $n=2$, as learning this parameter would severely increase the time necessary for learning the mixture model), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM. 
+
+The Mixture Model learns all  $\pi_j, \mu_j$ and $\Sigma_j$ parameters for each correlation detected during the preprocessing phase. This was implemented using python's \texttt{scikit-learn} library; the process loads all correlations to memory. We expect that on average, the set of correlations will be much smaller than the set of rows themselves, thus limiting memory usage.
+
