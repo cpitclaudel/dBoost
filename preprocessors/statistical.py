@@ -48,6 +48,8 @@ class Pearson:
         S,S2,C,SXY = None, None, None,None
 
         for (nb, X_) in enumerate(Xs):
+            # discard first tuple, since this is empty hints tuple
+            X_ = X_[1:len(X_)]
             X_ = filter_abc(X_, numbers.Number)
             S, S2, C = zeroif(S, X_), zeroif(S2, X_), zeroif(C, X_)
             S = merge(S, X_, id, plus)
@@ -69,7 +71,7 @@ class Pearson:
         VARXY = ()
 
         for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
-          for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
+          for (nnx,nny) in itertools.product(range(len(X)),range(len(Y))):
             idx = idx + 1
             VARXY = VARXY + ((SXY[idx][0]/C[nx][nnx] - (AVGX[nx][nnx] * AVGX[ny][nny])),)
             if VARX[nx][nnx] == 0 or VARX[ny][nny] == 0:

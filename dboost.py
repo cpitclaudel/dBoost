@@ -14,11 +14,14 @@ def expand(x, rules):
 
 def expand_hints(X, hints):
     expanded_hints = tupleops.deepmap(lambda h: X[h[0]][h[1]], hints)
+    #if not expanded_hints:
+    #  return X
     return (expanded_hints,) + X
 
 def expand_stream(generator, rules, keep_x, hints = ()):
     for x in generator():
         X = expand(x, rules)
+        #if hints:
         X = expand_hints(X, hints)
         yield (x, X) if keep_x else X 
 
