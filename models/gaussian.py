@@ -95,7 +95,7 @@ class Mixture:
         parser.add_argument("--" + Mixture.ID, nargs = 2, metavar = ("n_subpops", "threshold"),
                             help = "Use a gaussian mixture model, reporting values whose probability is " +
                             "below the threshold percentile, as predicted by a model of the data comprised of n_subpops "+
-                            "gaussians. Suggested value: 2, TODO.")
+                            "gaussians. Suggested values: 2, TODO.")
         
     @staticmethod
     def from_parse(params):
