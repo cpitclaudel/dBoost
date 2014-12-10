@@ -2,27 +2,38 @@
 
 We evaluated our outlier detection framework on sensor data from the publicly available Intel Lab Data set \cite{IntelLabData}.
 The Intel Lab Data contains data collected from 54 sensors spread throughout the Intel Berkeley Research Lab.
-Each data entry is timestamped and contains information including humidity, temperature, light and voltage taken from a Micro2dot sensor and weatherboard.
-%The dataset contains a total of approximately 2.3 million measurements.
-Because the data is numerical, the histogram model does not operate well on this data.
+Each data entry contains information including humidity, temperature, light and voltage taken from a Micro2dot sensor and weatherboard.
+The dataset contains a total of approximately 2.3 million measurements.
+The Intel lab dataset has known outliers from faulty sensor readings due to periods of critically low voltage.
+During these periods 
+
+Because the data is numerical, the Histogram Model does not operate well on this data.
 The Gaussian and Mixture Models do, however.
 
-The Intel lab dataset has known outliers from faulty sensor readings due to periods of critically low voltage.
-Most notably, sensor 15 fails, its voltage drops, and the temperature rises to over 120 degrees Celsius while the humidity readings fail. 
-For this experiment, we analyzed only the humidity, temperature, light and voltage readings from sensor 15.  
-Our outlier detector captures the lowest voltage readings when running a Gaussian model with a tolerance of 3.
-As we reduce the tolerance, we also capture the bad humidity readings and the the high temperature readings.
+% Random Sample 1000 data points
+We analyze a sample of 1000 data points selected at random from the data set.
+Figure~\ref{fig:sensors_1k_gm} shows the results from the GM comparing voltage to temperature.
+We parameterized the GM with a tolerance of 2.
+Since the GM does not use correlation hints, the threshold for the statistical analyzer does not matter.
+We observe that while the GM is able to detect the high and low voltage outliers, it also identifies points within the main cluster of the data between 20 and 30 Celsius.
+These outliers are primarily due to light measurements whose measurements fall above 2 standard deviations above the norm.
+When only outliers from temperature and voltage are taken into account, the outliers fall on the highest and lowest temperatures, as we expect.
 
-Another rogue sensor is sensor 18.
-For this experiment, we used only the humidity, temperature, light and voltage readings from sensor 18 as our input dataset.
-So much of the data is off in this data set that when we only analyze data from sensor 18, the model identifies the readings when the sensor is functioning correctly as outliers.
+Figure~\ref{fig:sensors_1k_mm} shows the MM results for the same 1000 randomly-selected data points.
+We use 0.75 as the threshold to determine correlation, 3 Gaussians to populate our model, and return 17\% of the data as outliers.
+The statistical analyzer produces two correlations: between temperature and voltage with an $R$ coefficient of -.75 and between temperature and humidity with an $R$ of -.8.
+The resulting MM produces outliers that register temperatures of over 120 degrees.
+The points in the main cluster are the result of points that deviate from the correlation between temperature and humidity.
 
-In a third experiment, we do statistical analysis and create models using a separate training data made of 1000 data points selected randomly from the approximately 2.3 million data points in the Intel lab data set.
-When using the data from sensor 15 as the test set, the Gaussian model captures high light measurements as outliers at a tolerance around 2.5.
-When the tolerance is reduced to 2, the Gaussian model outputs the bad humidity and high temperature readings as outliers.
-When using the data from sensor 18 as the test set, the Gaussian model outputs the low voltage readings as outliers.
-
-%Gaussian Mixture Model?
-We find that the sensor data is tightly correlated.
-The statistical analyzer finds high corrleation between humidity and voltage and inverse correlations between temperature and humidity, temperature and voltage.
-When we use the Mixture Model to model these correlations, 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/sensors_gm.pdf}
+\caption{Outliers from sensor data detected by a Gaussian model.}
+\label{fig:sensors_1k_gm}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/sensors_mm.pdf}
+\caption{Outliers from sensor data detected by a Mixture model.}
+\label{fig:sensors_1k_gm}
+\end{figure}
