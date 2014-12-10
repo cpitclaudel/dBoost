@@ -1,3 +1,5 @@
+TEXFILES=$(wildcard *.tex)
+
 all: master.pdf
 
 ../graphics/models-plots.pdf:
@@ -6,5 +8,5 @@ all: master.pdf
 ../graphics/models-plots-crop.pdf: ../graphics/models-plots.pdf
 	cd ../graphics/ && pdfcrop models-plots.pdf
 
-master.pdf: master.tex ../graphics/models-plots-crop.pdf
+master.pdf: $(TEXFILES) ../graphics/models-plots-crop.pdf
 	pdflatex master.tex
