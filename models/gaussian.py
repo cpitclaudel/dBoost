@@ -79,12 +79,15 @@ class Simple:
 class Mixture:
     ID = "mixture"
     
-    def __init__(self, n_components):
-        self.n_components = n_components
+    def __init__(self, cutoff):
+        #FIXME: currently unused, using self.cutoffs instead
+        self.cutoff = cutoff
         
     def reset(self):
-        self.gmm = None
-        self.keep = None
+        self.gmms    = None
+        self.cutoffs = None
+        self.cutoff  = None
+        self.keep    = None
         
     @staticmethod
     def register(parser): #TODO (Z): fix the doc. Add an extra arg?
@@ -97,52 +100,37 @@ class Mixture:
     def from_parse(params):
         return Mixture(*map(autoconv, params))
 
-    def old_score(self, X):
-        X = filter_abc(X, numbers.Number)
-        X = flatten(X)
-        lp, _ = self.gmm.score_samples([X])
-        return lp[0]
+    def fit(self, Xs):
+        self.gmms = []
+        self.cutoffs = []
 
-    def score(self, X):
-        X = X[0]
-        sum_lp = 0
-        for i in range(len(X)):
-            x = list(X[i])
-            lp, _ = self.gmms[i].score_samples([x])
-            sum_lp += lp[0]
-        return sum_lp
-        
-    def old_fit(self, Xs):
-        Xs = list(map(lambda X: filter_abc(X, numbers.Number), Xs))
-        Xs = [flatten(x) for x in Xs]
-        self.gmm = mixture.GMM(n_components = self.n_components)
-        self.gmm.fit(Xs)
-        #TODO: find non-data dependent value
-        log_prob, _ = self.gmm.score_samples(Xs)
-        self.cutoff = percentile(array(log_prob),10)
-
-    def fit(self, Xs, cutoff=None):
-        if cutoff == None:
-            self.cutoff = 1
         correlations = []
         for X in Xs:
-            print(X[0])
-            correlations.append(X[0])
-        self.gmms = []
-        n = len(correlations[0])
-        log_probs = map(lambda _: 0, correlations)
-        for c in range(0, n):
-            to_fit = map(lambda X: list(X[c]), correlations)
-            self.gmms[c] = mixture.GMM(n_components = len(to_fit[0]))
-            self.fit(to_fit)
+            correlations.append(filter_abc(X[0], numbers.Number))
 
-            #TODO: find non-data dependent value
-            log_prob, _ = self.gmms[c].score_samples(to_fit)
-            log_probs = [sum(x) for x in zip(log_probs, log_prob)]
-        
+        for c in range(0, len(correlations[0])):
+            to_fit = list(map(lambda X: list(X[c]), correlations))
+            gmm = mixture.GMM(n_components = 2)
+            gmm.fit(to_fit)
+            self.gmms.append(gmm)
+
+            lp, _ = self.gmms[c].score_samples(to_fit)
+            #FIXME: change cutoff value
+            self.cutoffs.append(percentile(array(lp), 50))
+
+    def test_one(self, xi, gmm, cutoff):
+        return gmm.score([xi]) <= cutoff
+
     def find_discrepancies(self, X, index):
-        log_prob = self.score(X)
-        return [] if log_prob > self.cutoff else [(0,[])]
+        correlations = X[0]
+        failed_tests = [] #Contains the index of each correlation that wasn't probable enough
 
+        for i in range(len(correlations)):
+            if not self.test_one(correlations[i], self.gmms[i], self.cutoffs[i]):
+                failed_tests.append(i)
+
+        #FIXME
+        return [] if len(failed_tests) == 0 else [(0, [])] 
+        
     def more_info(self, discrepancy, description, X, indent = "", pipe = sys.stdout):
         pass #TODO
