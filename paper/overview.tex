@@ -1,5 +1,11 @@
 We designed a framework that analyzes, models, and detects outliers in data.
-The whole system can be seen in Figure~\ref{TODO}.
+The whole system can be seen in Figure~\ref{fig:pipeline}.
+
+\begin{figure*}
+  \includegraphics[width=\textwidth]{../graphics/pipeline.pdf}
+  \caption{Framework pipeline}
+  \label{fig:pipeline}
+\end{figure*}
 
 As a first step, tuples are read from the database and expanded: a set of type-dependent features is extracted for each field. These features express important properties of the data, such as the length of a string, or the parity of an integer.
 
