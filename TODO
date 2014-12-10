@@ -1,17 +1,19 @@
-*  Poster stuff (see picture) [RCZ]
-*  Mixture model thresholds [C]
+*  Poster stuff (see picture) [DONE]
+*  Mixture model thresholds [CZ / later]
 *  Correlation detection issues [DONE]
 *  Paper writing tasks
    *   Diagrams:
-       - CSAIL evaluation [C]
+       - CSAIL evaluation [C / later]
        - Pipeline diagram (edits) [Z]
        - Tuple expansion diagram [DONE]
    *   Conclusion / previous work [later]
-   *   A pass on section 3 [R tonight, CZ tomorrow morning]
-   *   Pass through section 1 and 2 [CZ tonight, R tomorrow afternoon]
-   *   Fill in section 3 [Z]
+   *   A pass on section 3 [C]
+   *   Pass through section 1 and 2 [C, R]
+   *   Fill in section 3 [C]
 *  Evaluation [R]
 *  Fix href parameters [DONE]
+*  Litterature search [Z]
 
 Long term:
-*  Look at correlations inside the expansion fo a given field
+*  Look at correlations inside the expansion of a given field
+*  Make the plots more reproducible (integrate in the Makefile)
