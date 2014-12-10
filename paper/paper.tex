@@ -11,6 +11,18 @@
 \usepackage{hyperref}
 \usepackage{microtype}
 
+\usepackage[utf8]{inputenc}
+
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\Covar}{Covar}
 \begin{document}
@@ -51,6 +63,7 @@
 
 \numberofauthors{3} 
 
+\newcommand{\MITemail}[1]{\email{#1@mit.edu}}
 \author{
 % You can go ahead and credit any number of authors here,
 % e.g. one 'row of three' or two rows (consisting of one row of three
@@ -65,18 +78,18 @@
 % 1st. author
 \alignauthor
 Rachael Harding\\
-       %\affaddr{Massachusetts Institute of Technology}\\
-       %\affaddr{}\\
-       %\affaddr{}\\
-       \email{rhardin@mit.edu}
+       \affaddr{MIT CSAIL}\\
+       \MITemail{rhardin}
 % 2nd. author
 \alignauthor
 Zelda Mariet\\
-       \email{mariet@mit.edu}
+       \affaddr{MIT CSAIL}\\
+       \MITemail{zmariet}
 % 3rd. author
 \alignauthor
-Clement Pit--Claudel\\
-       \email{cpitcla@mit.edu}
+Clément Pit-\kern0pt-Claudel\\
+       \affaddr{MIT CSAIL}\\
+       \MITemail{cpitcla}
 %\and  % use '\and' if you need 'another row' of author names
 }
 \date{10 December 2014}
