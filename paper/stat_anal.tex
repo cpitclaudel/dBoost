@@ -1,27 +1,24 @@
 % STATISTICAL ANALYSIS
+Following the tuple expansion phase, the new expanded tuples go through a statistical analysis phase. This phase collects two kinds of information: simple statistics on each column's values, and data on possible inter-column correlations.
 
-After expanding each tuple by type, we feed the expanded tuples into a statistical analyzer which collect statistics on the dataset.
-The statistics include the average value of each column, its variance and its standard deviation.
-These statistics can be used by the outlier models to improve performance.
+The statistical information includes the average value of each column, its variance and its standard deviation.These statistics can then be used by the outlier models to improve their performance.
 
-In addition to collecting statistics, if there is more than one column in the original dataset, we also run a statistical analysis to determine whether there are correlations between different columns in the expanded tuples.
-We use the Pearson product-moment correlation to do this analysis.
+Furthermore, if there is more than one column in the original dataset, we run an additional analysis to determine whether there are correlations between columns in the expanded tuples.
 
-The Pearson product-moment correlation coefficient measures linear correlation between two vectors.
-This simple, statistical method is commonly used to find correlation between multiple values.
-The formula to determine the coefficient between two column vectors $X$ and $Y$, often represented as $R$, is the following.
+This analysis is done using the Pearson product-moment correlation. This simple statistical method is commonly used to find correlation between multiple values. It relies on the Pearson product-moment correlation coefficient, which measures linear correlation between two vectors.
+
+Given two column vectors $X$ and $Y$, Pearson's coefficient $R$ is given by the following formula:
 
 $$
 R = \frac{\Covar(X,Y)}{\sqrt{\Var(X)\Var(Y)}}
 $$
 
-The formula returns a value between -1 and 1.
-An $R$ value close to 0 indicates little or no correlation.
-The closer the coefficient is to 1, the more closely correlated the columns are.
-The closer it is to -1, the more inversely correlated the columns are.
+$R$'s value always lies between -1 and 1. An $R$ value close to 0 indicates little or no correlation. The closer the coefficient is to 1, the more closely correlated the columns are; the closer it is to -1, the more inversely correlated the columns are.
 
-If a sufficient correlation or inverse correlation is found, the statistical analyzer encodes information about the tuples and expanded tuples that are correlated as hints to the outlier models.
+If a sufficient correlation or inverse correlation is found, the statistical analyzer sends information (``hints'') about the tuples and expanded tuples that are correlated to the outlier models.
 
-In our implementation we compute all statistics and correlations in memory using a single pass over the data.
-The analyzer processes only one row of expanded tuples at a time and computes the final statistics after the last row has been processed.
-The results of the analyzer are accessible by any models used at later stages in the tool.
+Currently, we only detect correlations between expanded fields of different columns, as they are more likely to be meaningful. However, although some correlations in expanded fields of the same column are redundant (\texttt{isUppercase} and \texttt{isLowercase} for a string), some might be relevant (for example, a correlation between \texttt{weekday} and \texttt{month} for a date).
+
+In our implementation, all statistics and correlations are computed in memory using a single pass over the data; the expanded tuples are analyzed one row at a time, and the final statistics and correlation coefficients are computed after the last tuple has been processed.
+
+The analyzer's results are accessible by any models used at later stages in the tool.
