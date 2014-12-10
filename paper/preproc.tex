@@ -5,6 +5,18 @@ We then use a tuple expander to gather more information from the data, which we 
 
 \subsubsection{Tuple Expansion}
 
+\noindent\begin{minipage}{0.8\linewidth}
+  \itshape
+  What if you need to store a date and time value with subsecond resolution? MySQL
+  currently does not have an appropriate data type for this, but you can use your own
+  storage format: you can use the BIGINT data type and store the value as a timestamp in
+  microseconds, or you can use a DOUBLE and store the fractional part of the second after
+  the decimal point.
+\end{minipage}
+\begin{flushright}
+  \textit{High-Performance MySQL}, 3\textsuperscript{rd} edition (2012), p127
+\end{flushright}
+
 Often data stored in databases has meaning, such as dates or times.
 However, the semantics of SQL are not expressive enough to use them in outlier analysis.
 For example, the day of the week may be relevant information from a date in a banking application in which transactions are only completed on weekdays, but unless the database stores this information in a separate column, the information is lost.
@@ -21,3 +33,44 @@ The expansions we do on strings includes indicating case, determining whether th
 Dates are broken down into year, month, day, hour, minute, seconds, and day of the week.
 Integers are expanded to isolate individual bit activation and modularity.
 
+\begin{figure}
+  \newenvironment{stackedlines}{\renewcommand{\arraystretch}{1.2}\begin{array}[b]{@{}l@{\quad}l@{}}}{\end{array}}
+  $\begin{stackedlines}
+    \texttt{string:}\\
+    \texttt{\parbox{\widthof{1418222134.325}}{"32-G414"}}
+  \end{stackedlines} \longrightarrow
+  \begin{cases}
+    \text{length: } & \texttt{7}\\
+    \text{pattern: } & \texttt{NNPLNNN}\\
+    \text{uppercase: } & \texttt{True (1)}\\
+    \text{lowercase: } & \texttt{False (0)}\\
+    \text{\parbox{\widthof{base-10 residue:}}{title case:} } & \texttt{True (1)}
+  \end{cases}$
+
+  $\begin{stackedlines}
+    \texttt{int:}\\
+    \texttt{\parbox{\widthof{1418222134.325}}{1418222134}}
+  \end{stackedlines} \longrightarrow
+  \begin{cases}
+    \text{date: } & \texttt{(2014,12,10)}\\
+    \text{time: } & \texttt{(14,35)}\\
+    \text{weekday: } & \texttt{Wed (2)}\\
+    \text{day of year: } & \texttt{344}\\
+    \text{binary: } & \texttt{0b10101\ldots010}\\
+    \text{base-10 residue: } & \texttt{4}
+  \end{cases}$
+
+   $\begin{stackedlines}
+    \texttt{float:}\\
+    \texttt{1418222134.325}
+  \end{stackedlines} \longrightarrow
+  \begin{cases}
+    \text{intpart: } & \texttt{1418222134}\\
+    \text{decpart: } & \texttt{0.325}\\
+    \text{millis: } & \texttt{325}\\
+    \text{\parbox{\widthof{base-10 residue:}}{date, \ldots:} } & \texttt{\ldots}
+  \end{cases}$
+
+  \caption{Summary of tuple expansion rules currently implemented.}
+  \label{fig:tuple-expansion}
+\end{figure}
