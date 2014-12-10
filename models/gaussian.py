@@ -79,9 +79,10 @@ class Simple:
 class Mixture:
     ID = "mixture"
     
-    def __init__(self, cutoff):
+    def __init__(self, n_components, cutoff):
         #FIXME: currently unused, using self.cutoffs instead
         self.cutoff = cutoff
+        self.n_components = n_components
         
     def reset(self):
         self.gmms    = None
@@ -91,9 +92,9 @@ class Mixture:
         
     @staticmethod
     def register(parser): #TODO (Z): fix the doc. Add an extra arg?
-        parser.add_argument("--" + Mixture.ID, nargs = 1, metavar = "n_subpops",
+        parser.add_argument("--" + Mixture.ID, nargs = 2, metavar = ("n_subpops", "threshold"),
                             help = "Use a gaussian mixture model, reporting values whose probability is " +
-                            "below ??, as predicted by a model of the data comprised of n_subpops "+
+                            "below threshold, as predicted by a model of the data comprised of n_subpops "+
                             "gaussians. Suggested value: 2.")
         
     @staticmethod
@@ -110,13 +111,13 @@ class Mixture:
 
         for c in range(0, len(correlations[0])):
             to_fit = list(map(lambda X: list(X[c]), correlations))
-            gmm = mixture.GMM(n_components = 2)
+            gmm = mixture.GMM(n_components = self.n_components)
             gmm.fit(to_fit)
             self.gmms.append(gmm)
 
             lp, _ = self.gmms[c].score_samples(to_fit)
             #FIXME: change cutoff value
-            self.cutoffs.append(percentile(array(lp), 50))
+            self.cutoffs.append(percentile(array(lp), 90))
 
     def test_one(self, xi, gmm, cutoff):
         return gmm.score([xi]) <= cutoff
