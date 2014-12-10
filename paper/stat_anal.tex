@@ -1,22 +1,27 @@
 % STATISTICAL ANALYSIS
 
 After expanding each tuple by type, we feed the expanded tuples into a statistical analyzer which collect statistics on the dataset.
-These statistics are used by the outlier models to improve performance.
-The statistics we collect include the average value of each column and its variance.
+The statistics include the average value of each column, its variance and its standard deviation.
+These statistics can be used by the outlier models to improve performance.
 
-In addition to collecting statistics, if there is more than one column in the original dataset, we also run statistical analysis to determine whether there are correlations between different columns in the expanded tuples.
+In addition to collecting statistics, if there is more than one column in the original dataset, we also run a statistical analysis to determine whether there are correlations between different columns in the expanded tuples.
 We use the Pearson product-moment correlation to do this analysis.
 
 The Pearson product-moment correlation coefficient measures linear correlation between two vectors.
 This simple, statistical method is commonly used to find correlation between multiple values.
-The formula to determine the coefficient, often represented as $R$, is the following.
+The formula to determine the coefficient between two column vectors $X$ and $Y$, often represented as $R$, is the following.
 
 $$
 R = \frac{\Covar(X,Y)}{\sqrt[](\Var(X)\Var(Y))}
 $$
 
-The formula returns a value between -1 and 1, where a value close to 0 indicates no correlation, and the closer the value is to 1, the more closely correlated the columns are.
-If a sufficient correlation or inverse correlation is found, we pass the information about the tuples and expanded tuples that are correlated as hints to the outlier models.
+The formula returns a value between -1 and 1.
+An $R$ value close to 0 indicates little or no correlation.
+The closer the coefficient is to 1, the more closely correlated the columns are.
+The closer it is to -1, the more inversely correlated the columns are.
 
-In our implementation we compute all statistics and correlations in memory, so we process only one row of expanded tuples at a time and compute the final statistics after the last row has been processed.
+If a sufficient correlation or inverse correlation is found, the statistical analyzer encodes information about the tuples and expanded tuples that are correlated as hints to the outlier models.
+
+In our implementation we compute all statistics and correlations in memory using a single pass over the data.
+The analyzer processes only one row of expanded tuples at a time and computes the final statistics after the last row has been processed.
 The results of the analyzer are accessible by any models used at later stages in the tool.

@@ -1,7 +1,7 @@
 % OUTLIER DETECTION
-Once the selected model has learned all necessary parameters, it can be used for classification purposes - either on new rows for real-time outlier detection, or on older rows (including those used for learning the parameters).
+Once the selected model has learned all necessary parameters, it can be used for classification purposes - either on new rows for real-time outlier detection, or on rows already present in the database (including those used for learning the parameters).
 
-Given that databases can contain tables with several hundred columns, simply flagging a row as an outlier is insufficient: the user cannot be expected to painstakingly analyze each outlier row. Instead, they must be made aware of which values in the row caused it to be flagged as an outlier.
+Given that databases can contain tables with several hundred columns, simply flagging a row as an outlier is insufficient: the user cannot be expected to painstakingly analyze each outlier row. Instead, the tool should automatically indicate which values in the row caused it to be flagged as an outlier.
 
 \subsubsection{Histogram Model}
 \subsubsection{Gaussian Model}
@@ -12,7 +12,7 @@ Given a parameter $\texttt{tolerance}$, a row is flagged as an outlier if at lea
 |v_a - \mu_a| \leq \texttt{tolerance} \cdot \sigma_a
 \label{eqn:gaussian-outlier}
 \end{align}
-doesn't hold, where $(\mu_a, \sigma_a)$ are the model's parameters for column $a$.
+doesn't hold, where $(\mu_a, \sigma_a)$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
 
 In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes didn't satisfy equation~\ref{eqn:gaussian-outlier}.
  

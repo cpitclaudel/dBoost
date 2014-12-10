@@ -2,13 +2,14 @@
 
 \subsubsection{Histogram Model}
 \subsubsection{Gaussian Model}
+\label{sec:gaus_model}
 The Gaussian Model assumes that each value in a column $c$ is  independent from the others, and drawn from a normal distribution $\mathcal N(\mu_c, \sigma_c)$.
 
-The model's parameters (a pair $(\mu, \sigma)$ for each numerical column) are obtained by calculating each column's mean and standard deviation, using a single pass over the data, without loading the tuples in memory.
+The model's parameters (a pair $(\mu, \sigma)$ for each numerical column) are obtained by calculating each column's mean and standard deviation, as calculated by the statistical analyzer. %, using a single pass over the data, without loading the tuples in memory.
 
 \subsubsection{Mixture Model}
 
-The Mixture Model (MM) assigns a Gaussian Mixture Model (GMM) to each correlation between numerical valued-columns that has been detected during the statistical analysis. These GMMs model the probability distribution of the correlated values.
+The Mixture Model (MM) assigns a Gaussian Mixture Model (GMM) to each correlation between numerical valued-columns that was detected during the statistical analysis. These GMMs model the probability distribution of the correlated values.
 
 For example, if the statistical analysis phase detects that two fields in two different expanded columns are correlated, the model will learn a GMM to model this correlation. The probability of obtaining $(X_1, X_2)$ as values for the two correlated fields is given by
 \[\Pr(X_1, X_2) = \sum_{j=1}^{n} \pi_j \mathcal N(\mu_j, \Sigma_j)(X_1, X_2)\]
