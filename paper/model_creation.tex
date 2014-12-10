@@ -14,7 +14,7 @@ The multivariate Gaussian Mixture model takes advantage of the correlation hints
 
 For example, if the statistical analysis phase outlines a pair of fields $(f_1, f_2)$ as good candidate for joint modeling, then the Mixture modeling strategy will learn a particular GMM to model this correlation. Pairs of values $(X_1, X_2)$ are here assumed to have been produced by random sampling off a distribution of the form
 \[ \sum_{j=1}^{N} \pi_j \mathcal N(\mu_j, \Sigma_j), \]
-where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined implementation value, but abundant literature exists on the subject of TODO), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learnt as part of the modeling pass. This was implemented using the community-developed package \texttt{scikit-learn}. 
+where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined implementation value, but abundant literature exists on the subject of TODO), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learned as part of the modeling pass. This was implemented using the community-developed package \texttt{scikit-learn}. 
 
 Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Most of the expanded tuples, however, are discarded after the relevant fields are extracted for learning purposes; in most cases we expect that the set of values retained will be much smaller than the set of all rows itself, thus limiting the memory usage.
 
