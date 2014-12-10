@@ -47,7 +47,7 @@ def outliers_streaming(generator, preprocessor, model, rules):
     print(preprocessor.hints)
     
     print(">> Building model...")
-    model.fit(expand_stream(generator, rules, False))
+    model.fit(expand_stream(generator, rules, False,preprocessor.hints))
 
     print(">> Finding outliers...")
     for index, (x, X) in enumerate(expand_stream(generator, rules,
