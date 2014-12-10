@@ -13,7 +13,7 @@ The Mixture Model (MM) assigns a Gaussian Mixture Model (GMM) to each correlatio
 
 For example, if the statistical analysis phase detects that two fields in two different expanded columns are correlated, the model will learn a GMM to model this correlation. The probability of obtaining $(X_1, X_2)$ as values for the two correlated fields is given by
 \[\Pr(X_1, X_2) = \sum_{j=1}^{n} \pi_j \mathcal N(\mu_j, \Sigma_j)(X_1, X_2)\]
-where $n$ is the number of components chosen for the GMM (we set $n=2$, as learning this parameter would severely increase the time necessary for learning the Mixture Model), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM. 
+where $n$ is the number of components chosen for the GMM ($n$ is a user-defined parameter), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM. 
 
 The Mixture Model learns all  $\pi_j, \mu_j$ and $\Sigma_j$ parameters for each correlation found during the statistical analysis phase. This was implemented using python's \texttt{scikit-learn} library. The learning process loads all correlations to memory, but not the rows themselves. We expect that on average, the set of correlations will be much smaller than the set of rows themselves, thus limiting memory usage.
 
