@@ -7,10 +7,10 @@ Given that databases can contain tables with several hundred columns, simply fla
 \subsubsection{Gaussian Model}
 The Gaussian Model uses each numerical value's distance to the mean as its criterion for outlier detection. 
 
-Given a parameter $\texttt{tolerance}$, a row is flagged as an outlier if at least one of its attributes $a$ has a value $v_a$ such that 
+Given a tolerance parameter $\epsilon$, a row is flagged as an outlier if at least one of its attributes $a$ has a value $v_a$ such that 
 \begin{align}
-|v_a - \mu_a| \leq \texttt{tolerance} \cdot \sigma_a
-\label{eqn:gaussian-outlier}
+  |v_a - \mu_a| \leq \epsilon \cdot \sigma_a
+  \label{eqn:gaussian-outlier}
 \end{align}
 doesn't hold, where $(\mu_a, \sigma_a)$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
 
@@ -19,11 +19,11 @@ In this model, detecting which values are responsible for the outlier flag is si
 \subsubsection{Mixture Model}
 The Mixture Model uses the correlation hints provided by the statistical analysis phase to break down a row into subsets of correlated values.
 
-Each correlation subset is then evaluated using the corresponding GMM; if the correlated values' $v_c$ probability is smaller than the user-defined parameter \texttt{threshold}
+Each correlation subset is then evaluated using the corresponding GMM; if the correlated values' $v_c$ probability is smaller than the user-defined threshold parameter $\theta$.
 \begin{align}
-\Pr(v_c | \pi_c, \mu_c, \Sigma_c) \leq \texttt{threshold}, 
-\label{eqn:mixture-outlier}
+  \Pr(v_c | \pi_c, \mu_c, \Sigma_c) \leq \theta, 
+  \label{eqn:mixture-outlier}
 \end{align}
 the row is flagged as an outlier.
 
-As in the Gaussian Model, providing the user with which attributes caused the row to be flagged as an outlier can be done by tracking correlations that failed the test~\ref{eqn:mixture-outlier}.
+As in the Gaussian Model, providing the user with which attributes caused the row to be flagged as an outlier can be done by tracking correlations that failed test~\ref{eqn:mixture-outlier}.

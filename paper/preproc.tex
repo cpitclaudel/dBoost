@@ -4,15 +4,62 @@ Before being used to generate a model of the data, the tuples are cleaned up and
 
 \subsubsection{Tuple Expansion}
 
-Relevant information about tuples stored in databases is not necessarily readily available given the storage format. For example, the day of the week might be an important information for outlier detection (for example in a banking application where a specific transaction only takes place on Mondays), but not obvious when working with an integer representing a Unix time stamp.
+\noindent\begin{minipage}{0.8\linewidth}
+  \itshape
+  What if you need to store a date and time value with subsecond resolution? MySQL
+  currently does not have an appropriate data type for this, but you can use your own
+  storage format: you can use the BIGINT data type and store the value as a timestamp in
+  microseconds, or you can use a DOUBLE and store the fractional part of the second after
+  the decimal point.
+\end{minipage}
+\begin{flushright}
+  \textit{High-Performance MySQL}, 3\textsuperscript{rd} edition (2012), p127
+\end{flushright}
 
-In order to capture this additional information, we break down each field in a tuple into a sub-tuple of extracted features, which depend on the type of the original field (see Figure~\ref{fig:TODO})
+Data stored in databases often has rich semantics, encompassing dates and times, highly stuctured datatypes such as phone numbers or addresses, or GIS data. The semantics of plain SQL, however, are not expressive enough to properly store these rich data types. Programmers are thus forced to make revert to simpler types, relying on application logic to parse the data out and in the DBMS. 
 
-Our tool currently expands three kinds of data types: strings, dates, and integers. All other types are passed to the other stages in the framework without modification.
+Unfortunately, information on the structure of this data is also what an outlier detection engine would most benefit of: for example, the day of the week in a date may be relevant information in a banking application in which transactions are only completed on weekdays; but unless the programmer explicitly duplicates this information in a separate column, it remains inaccessible to an automated outlier detector.
 
-Currently, our tool automatically detects field type as tuples are read in; it could also be modified to get this information directly from table schemas.
+To reconstruct the lost information we expand tuples, breaking down each field into a sub-tuple of extracted type-depent features. Figure~\ref{fig:tuple-expansion} lists the rules that we apply to values of these three data types; these rules are expected to serve as a good starting points, but we expect users of our toolbox to expand this ruleset to add insight specific to their application domain. Expressing rules as simple functions mapping a value of a given type to a tuple of features makes it possible to express soft constraints about the data easily: instead of specifying hard constraints, users ensure that a certain way of looking at the data is consistent across the rows of the table.
 
-The expansions we do on strings includes indicating case, determining whether there are digits in the string, and the string length.
-Dates are broken down into year, month, day, hour, minute, seconds, and day of the week.
-Integers are expanded to isolate individual bit activation and modularity.
+\begin{figure}
+  \newenvironment{stackedlines}{\renewcommand{\arraystretch}{1.2}\begin{array}[b]{@{}l@{\quad}l@{}}}{\end{array}}
+  $\begin{stackedlines}
+    \texttt{string:}\\
+    \texttt{\parbox{\widthof{1418222134.325}}{"32-G414"}}
+  \end{stackedlines} \longrightarrow
+  \begin{cases}
+    \text{length: } & \texttt{7}\\
+    \text{pattern: } & \texttt{NNPLNNN}\\
+    \text{uppercase: } & \texttt{True (1)}\\
+    \text{lowercase: } & \texttt{False (0)}\\
+    \text{\parbox{\widthof{base-10 residue:}}{title case:} } & \texttt{True (1)}
+  \end{cases}$
 
+  $\begin{stackedlines}
+    \texttt{int:}\\
+    \texttt{\parbox{\widthof{1418222134.325}}{1418222134}}
+  \end{stackedlines} \longrightarrow
+  \begin{cases}
+    \text{date: } & \texttt{(2014,12,10)}\\
+    \text{time: } & \texttt{(14,35)}\\
+    \text{weekday: } & \texttt{Wed (2)}\\
+    \text{day of year: } & \texttt{344}\\
+    \text{binary: } & \texttt{0b10101\ldots010}\\
+    \text{base-10 residue: } & \texttt{4}
+  \end{cases}$
+
+   $\begin{stackedlines}
+    \texttt{float:}\\
+    \texttt{1418222134.325}
+  \end{stackedlines} \longrightarrow
+  \begin{cases}
+    \text{intpart: } & \texttt{1418222134}\\
+    \text{decpart: } & \texttt{0.325}\\
+    \text{millis: } & \texttt{325}\\
+    \text{\parbox{\widthof{base-10 residue:}}{date, \ldots:} } & \texttt{\ldots}
+  \end{cases}$
+
+  \caption{Summary of tuple expansion rules currently implemented.}
+  \label{fig:tuple-expansion}
+\end{figure}
