@@ -8,16 +8,16 @@ Each data entry is timestamped and contains information including humidity, temp
 The Intel lab dataset has known outliers from faulty sensor readings due to periods of critically low voltage.
 Most notably, sensor 15 fails, its voltage drops, and the temperature rises to over 120 degrees Celsius while the humidity readings fail. 
 For this experiment, we analyzed only the humidity, temperature, light and voltage readings from sensor 15.  
-Our outlier detector captures the lowest voltage readings when running a gaussian model with a standard deviation of 3.
-As we reduce the number of standard deviations required between outliers and normal data, we also capture the bad humidity readings and the the high temperature readings.
+Our outlier detector captures the lowest voltage readings when running a Gaussian model with a tolerance of 3.
+As we reduce the tolerance, we also capture the bad humidity readings and the the high temperature readings.
 
 Another rogue sensor is sensor 18.
 For this experiment, we used only the humidity, temperature, light and voltage readings from sensor 18 as our input dataset.
 So much of the data is off in this data set that when we only analyze data from sensor 18, the model identifies the readings when the sensor is functioning correctly as outliers.
 
 In a third experiment, we do statistical analysis and create models using a separate training data made of 1000 data points selected randomly from the approximately 2.3 million data points in the Intel lab data set.
-When using the data from sensor 15 as the test set, the gaussian model captures high light measurements as outliers at around 2.5 standard deviations.
-When the requirements are reduced to 2 standard deviations, the gaussian model outputs the bad humidity and high temperature readings as outliers.
-When using the data from sensor 18 as the test set, the gaussian model outputs the low voltage readings as outliers.
+When using the data from sensor 15 as the test set, the Gaussian model captures high light measurements as outliers at a tolerance around 2.5.
+When the tolerance is reduced to 2, the Gaussian model outputs the bad humidity and high temperature readings as outliers.
+When using the data from sensor 18 as the test set, the Gaussian model outputs the low voltage readings as outliers.
 
 %Gaussian Mixture Model?

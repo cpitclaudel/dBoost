@@ -1,33 +1,23 @@
 % PREPROCESSOR
 
+We preprocess the data by first discarding tuples that do not have the correct number of tuples.
+We then use a tuple expander to gather more information from the data, which we describe in the next section.
+
 \subsubsection{Tuple Expansion}
+
+Often data stored in databases has meaning, such as dates or times.
+However, the semantics of SQL are not expressive enough to use them in outlier analysis.
+For example, the day of the week may be relevant information from a date in a banking application in which transactions are only completed on weekdays, but unless the database stores this information in a separate column, the information is lost.
 We expand tuples in order to harness isolated information about the data that may not be easy to see when looking at the data in its original form.
-For example, the day of the week may be relevant information from a date, but unless the database stores this information in a separate column, the information is lost on most analyzers.
-In order to capture this kind of information, we break down tuples into a series of sub-tuples based on the type of each column along with the original value.
+
+In order to capture this extra information, we break down tuples into a series of sub-tuples based on the type of each column along with the original value, as shown in Figure~\ref{TODO}.
 We determined these breakdowns based on our own intuition and the datasets we worked with.
 
-\begin{itemize}
-\item Strings
-\begin{itemize}
-\item Case: All upper or lower case, or title case.
-\item Digits: Are there digits in the string?
-\item Length: The length of the string in characters.
-\end{itemize}
-\item Dates
-\begin{itemize}
-\item Year, month, day
-\item Hour, minute, seconds
-\item Day of the week
-\end{itemize}
-\item Integers
-\begin{itemize}
-\item Bit position: What bits are activated?
-\item Modulo: What is the value modulo some other value?
-\end{itemize}
-\item Floating Point
-\begin{itemize}
-\item Length: What is the significance of the number?
-\end{itemize}
-\end{itemize}
+Our tool currently expands three kinds of data types: strings, dates, and integers.
+All other types are passed to the other stages in the framework without modification.
+Our tool automatically determines the data type as tuples are read in, although the tool could be modified to get this information from table schemas.
 
+The expansions we do on strings includes indicating case, determining whether there are digits in the string, and the string length.
+Dates are broken down into year, month, day, hour, minute, seconds, and day of the week.
+Integers are expanded to isolate individual bit activation and modularity.
 
