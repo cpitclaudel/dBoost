@@ -1,41 +1,41 @@
-\begin{block}{\thighlight{Outlier characterization and detection}}
+\newcommand{\picturecolumn}[2][1]{
+    \begin{column}{.32\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[height=.75\linewidth,page=#1]{#2}
+      \end{figure}
+    \end{column}
+}
 
+\begin{block}{\thighlight{Outliers characterization and detection}}
   \subttl{Statistical analysis}
   \begin{center}
   	Pearson
   \end{center}
   
   \subttl{Data modeling}
-  
   \begin{columns}[T]
     \begin{column}{.32\textwidth}
-    	\centering
-    	Histogram
+      \centering
+      Gaussian Model
     \end{column}
     
     \begin{column}{.32\textwidth}
-    	\centering
-    	Gaussian Model
+      \centering
+      Mixture Model
     \end{column}
-    
+
     \begin{column}{.32\textwidth}
-    	\centering
-    	Mixture Model
+      \centering
+      Histogram
     \end{column}
   \end{columns}
   ~
   
   \subttl{Outlier Analysis}	
-  
- \begin{columns}[T]
-    \begin{column}{.32\textwidth}
-    \end{column}
-    
-    \begin{column}{.32\textwidth}
-    \end{column}
-    
-    \begin{column}{.32\textwidth}
-    \end{column}
+  \begin{columns}[T]
+    \picturecolumn[1]{../graphics/models-plots-crop.pdf}
+    \picturecolumn[2]{../graphics/models-plots-crop.pdf}
+    \picturecolumn[3]{../graphics/models-plots-crop.pdf}
   \end{columns}
-
 \end{block}
