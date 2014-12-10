@@ -41,16 +41,17 @@
 \date{Dec. 10, 2014}
 
 \newlength{\colwidth}
+\newlength{\colswidth}
 \newlength{\doublecolwidth}
 \newlength{\blocksep}
 
 \begin{document}
 \begin{frame}[fragile]{}
-  \setlength{\blocksep}{1.5ex}
-  \setlength{\colwidth}{(\linewidth - 2\blocksep)/3}
+  \setlength{\blocksep}{2.5ex}
+  \setlength{\colwidth}{(\textwidth - 2\blocksep)/3}
   \setlength{\doublecolwidth}{2\colwidth + \blocksep}
 
-  \begin{columns}[T]
+  \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{\colwidth}
       \input{motivation} \vspace{\blocksep}
       \input{csail-example} \vspace{\blocksep}
@@ -66,7 +67,7 @@
       \end{block} \vspace{\blocksep}
 
       \vspace{-\baselineskip}
-      \begin{columns}[t,totalwidth=\textwidth] % 
+      \begin{columns}[t,totalwidth=\textwidth]
         \begin{column}{\colwidth}
           \input{analysis-and-modeling} \vspace{\blocksep}
         \end{column}
