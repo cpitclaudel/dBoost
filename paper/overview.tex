@@ -1,26 +1,29 @@
 We designed a framework that analyzes, models, and detects outliers in data.
-The whole system can be seen in Figure~\ref{TODO}.
+The whole system can be seen in Figure~\ref{fig:pipeline}.
 
-The data is first read from the database and fed through a tuple expander, which expands each tuple entry into a wider tuple that isolates specific properties of the data.
-The expanded tuples are used by all the other components of our framework in order to analyze and model the data.
-In our statistical analysis, we make a pass through the data to collect basic statistics on the data, such as its average and variance.
-In this stage we also use a statistical method to detect correlations in the data, which can give the modeler additional insight into the data.
-These hints are passed to the model creator along with the expanded tuples.
-The model creator generates a model of the data to determine what values would be considered normal or not.
-The model parameters are then passed to the outlier detector.
-The outlier detector uses the models to determine what data falls outside the expected behavior.
-In our implementation we use expanded tuples of the same data set for the outlier detection stage, however this pass can be made on any data.
+\begin{figure*}
+  \includegraphics[width=\textwidth]{../graphics/pipeline.pdf}
+  \caption{Framework pipeline}
+  \label{fig:pipeline}
+\end{figure*}
 
-The framework makes three passes over the data.
-Our implementation keeps all computation in memory so we can operate over larger datasets without performance penalty.
-As a result, we do not save expanded tuples and recompute them before each stage.
+As a first step, tuples are read from the database and expanded: a set of type-dependent features is extracted for each field. These features express important properties of the data, such as the length of a string, or the parity of an integer.
 
-The components in our framework are summarized as follows and described in detail in the following sections:
+These expanded tuples are then analyzed in order to obtain simple statistical information (mean, variance), and to detect correlations between the different fields. Next, the expanded tuples as well as the correlation information are passed to one of three data model generators, which return a model of the data.
+
+Finally, this model is used to determine whether or not new tuples fall outside the learned data distribution. Although we mostly used the data models to detect outliers in the tuples used to learn the model parameters, the models can also be used to analyze new inputs.
+
+From a high level view, our pipeline is implemented as a three-pass streaming algorithm, requiring no memory beyond that required to train the individual models.
+
+The different stages of our pipeline are summarized as follows and described in detail in the following sections:
+
 \begin{enumerate}
-\item Preprocessor -- The preprocessor expands tuples using knowledge about the schema and data types. The preprocessor is described in detail in Section~\ref{sec:preproc}.
-\item Statistical Analyzer -- The analyzer collects statistics on the expanded data which can be used in future pipeline stages. The analyzer also detects linear correlations between expanded tuples and outputs hints about these correlations for the model creator. The statistical analyzer is detailed in Section~\ref{sec:stat_anal}. 
-\item Model Creator -- We apply several machine learning algorithms to build models of the data. We describe the model creator is Section~\ref{sec:model_creation}
-\item Outlier Detector -- Using the models built by the model creator, the outlier detector identifies data that lies outside of specified parameters. This process is detailed in Section~\ref{sec:outlier_detection}.
-\end{enumerate}
+	\item Preprocessing -- During this phase, tuples are expanded using knowledge about the database schema and field types. This process is described in detail in Section~\ref{sec:preproc}.
 
+	\item Statistical analysis -- During this stage, we collect statistics on the expanded data. These statistics are used during data modeling and outlier detection. During this analysis, information about linear correlations between expanded tuples are also gathered for the data modeling phase. This process is detailed in Section~\ref{sec:stat_anal}.
+ 
+	\item Data modeling -- We apply several machine-learning algorithms to build models of the data. We describe this phase in Section~\ref{sec:model_creation}
+
+	\item Outlier detection -- Using the models built in the previous stage, the outlier detector identifies data that lies outside of specified parameters. This process is detailed in Section~\ref{sec:outlier_detection}.
+\end{enumerate}
 
