@@ -4,6 +4,8 @@ We evaluated our outlier detection framework on sensor data from the publicly av
 The Intel Lab Data contains data collected from 54 sensors spread throughout the Intel Berkeley Research Lab.
 Each data entry is timestamped and contains information including humidity, temperature, light and voltage taken from a Micro2dot sensor and weatherboard.
 %The dataset contains a total of approximately 2.3 million measurements.
+Because the data is numerical, the histogram model does not operate well on this data.
+The Gaussian and Mixture Models do, however.
 
 The Intel lab dataset has known outliers from faulty sensor readings due to periods of critically low voltage.
 Most notably, sensor 15 fails, its voltage drops, and the temperature rises to over 120 degrees Celsius while the humidity readings fail. 
@@ -21,3 +23,6 @@ When the tolerance is reduced to 2, the Gaussian model outputs the bad humidity 
 When using the data from sensor 18 as the test set, the Gaussian model outputs the low voltage readings as outliers.
 
 %Gaussian Mixture Model?
+We find that the sensor data is tightly correlated.
+The statistical analyzer finds high corrleation between humidity and voltage and inverse correlations between temperature and humidity, temperature and voltage.
+When we use the Mixture Model to model these correlations, 
