@@ -52,7 +52,7 @@ def outliers_training(generator, preprocessor, model, rules):
     print(preprocessor.hints)
     
     print(">> Building model...")
-    model.fit(expand_stream(generator, rules, False,preprocessor.hints))
+    model.fit(expand_stream(generator, rules, False, preprocessor.hints))
 
 def outliers_testing(generator, preprocessor, model, rules):
     print(">> Finding outliers...")
