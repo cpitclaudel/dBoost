@@ -51,15 +51,18 @@ class Pearson:
             # discard first tuple, since this is empty hints tuple
             X_ = X_[1:len(X_)]
             X_ = filter_abc(X_, numbers.Number)
-            S, S2, C = zeroif(S, X_), zeroif(S2, X_), zeroif(C, X_)
+            S, S2, C= zeroif(S, X_), zeroif(S2, X_), zeroif(C, X_)
             S = merge(S, X_, id, plus)
             S2 = merge(S2, X_, sqr, plus)
             C = merge(C, X_, not_null, plus)
             XY_ = () 
+            idx = -1
             for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
               for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
+                idx = idx + 1
+                #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny))
                 XY_ = XY_ + ((x[0]*y[0],),)
-            SXY = zeroif(SXY,XY_)
+            SXY = zeroif(SXY, XY_)
             SXY = merge(SXY, XY_, id, plus)
 
         AVGX = merge(S,C,id,div0)
@@ -71,16 +74,22 @@ class Pearson:
         VARXY = ()
 
         for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
-          for (nnx,nny) in itertools.product(range(len(X)),range(len(Y))):
+          #for (nnx,nny) in itertools.product(range(len(X)),range(len(Y))):
+          for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
             idx = idx + 1
+
+            #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny))
             VARXY = VARXY + ((SXY[idx][0]/C[nx][nnx] - (AVGX[nx][nnx] * AVGX[ny][nny])),)
             if VARX[nx][nnx] == 0 or VARX[ny][nny] == 0:
               PR = PR + (float('nan'),)
             else:
               PR = PR + ((VARXY[idx] / math.sqrt(VARX[nx][nnx] * VARX[ny][nny])),)
+
+            #print(str(idx) + " " + str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + " " + str(C[nx][nnx]) + " " + str(AVGX[nx][nnx]) + " " + str(AVGX[ny][nny]) + " " + str(SXY[idx][0]) + " " + str(VARX[nx][nnx]) + " " + str(VARX[ny][nny]) + " " + str(PR[idx]))
+
             if not math.isnan(PR[idx]) and math.fabs(PR[idx]) > self.eps:
+              assert(math.fabs(PR[idx]) <= 1)
               self.hints.append(((nx,nnx),(ny,nny)))
-            #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + " " + str(AVGX[nx][nnx]) + " " + str(AVGX[ny][nny]) + " " + str(SXY[idx][0]) + " " + str(PR[idx]))
 
         self.cnt = C
         self.sum = S 
