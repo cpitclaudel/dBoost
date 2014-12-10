@@ -94,8 +94,8 @@ class Mixture:
     def register(parser): #TODO (Z): fix the doc. Add an extra arg?
         parser.add_argument("--" + Mixture.ID, nargs = 2, metavar = ("n_subpops", "threshold"),
                             help = "Use a gaussian mixture model, reporting values whose probability is " +
-                            "below threshold, as predicted by a model of the data comprised of n_subpops "+
-                            "gaussians. Suggested value: 2.")
+                            "below the threshold percentile, as predicted by a model of the data comprised of n_subpops "+
+                            "gaussians. Suggested value: 2, TODO.")
         
     @staticmethod
     def from_parse(params):
@@ -117,7 +117,7 @@ class Mixture:
 
             lp, _ = self.gmms[c].score_samples(to_fit)
             #FIXME: change cutoff value
-            self.cutoffs.append(percentile(array(lp), 90))
+            self.cutoffs.append(percentile(array(lp), self.cutoff))
 
     def test_one(self, xi, gmm, cutoff):
         return gmm.score([xi]) <= cutoff
