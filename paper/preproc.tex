@@ -1,21 +1,16 @@
 % PREPROCESSOR
 
-We preprocess the data by first discarding tuples that do not have the correct number of tuples.
-We then use a tuple expander to gather more information from the data, which we describe in the next section.
+Before being used to generate a model of the data, the tuples are cleaned up and expanded in order to extract relevant information. 
 
 \subsubsection{Tuple Expansion}
 
-Often data stored in databases has meaning, such as dates or times.
-However, the semantics of SQL are not expressive enough to use them in outlier analysis.
-For example, the day of the week may be relevant information from a date in a banking application in which transactions are only completed on weekdays, but unless the database stores this information in a separate column, the information is lost.
-We expand tuples in order to harness isolated information about the data that may not be easy to see when looking at the data in its original form.
+Relevant information about tuples stored in databases is not necessarily readily available given the storage format. For example, the day of the week might be an important information for outlier detection (for example in a banking application where a specific transaction only takes place on Mondays), but not obvious when working with an integer representing a Unix time stamp.
 
-In order to capture this extra information, we break down tuples into a series of sub-tuples based on the type of each column along with the original value, as shown in Figure~\ref{TODO}.
-We determined these breakdowns based on our own intuition and the datasets we worked with.
+In order to capture this additional information, we break down each field in a tuple into a sub-tuple of extracted features, which depend on the type of the original field (see Figure~\ref{fig:TODO})
 
-Our tool currently expands three kinds of data types: strings, dates, and integers.
-All other types are passed to the other stages in the framework without modification.
-Our tool automatically determines the data type as tuples are read in, although the tool could be modified to get this information from table schemas.
+Our tool currently expands three kinds of data types: strings, dates, and integers. All other types are passed to the other stages in the framework without modification.
+
+Currently, our tool automatically detects field type as tuples are read in; it could also be modified to get this information directly from table schemas.
 
 The expansions we do on strings includes indicating case, determining whether there are digits in the string, and the string length.
 Dates are broken down into year, month, day, hour, minute, seconds, and day of the week.
