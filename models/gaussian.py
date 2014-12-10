@@ -126,7 +126,7 @@ class Mixture:
             self.cutoff = 1
         correlations = []
         for X in Xs:
-            print(X[0])
+            #print(X[0])
             correlations.append(X[0])
         self.gmms = []
         n = len(correlations[0])
