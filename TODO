@@ -10,6 +10,7 @@
    *   A pass on section 3 [C]
    *   Pass through section 1 and 2 [C, R]
    *   Fill in section 3 [C]
+   *   Pass on the abstract [DONE]
 *  Evaluation [R]
 *  Fix href parameters [DONE]
 *  Litterature search [Z]
