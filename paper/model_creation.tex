@@ -1,5 +1,5 @@
 % MODEL CREATION
-The current distribution of dBoost comprises three data modeling strategies. Two of them are relatively simple machine-learning based applications that deal well with mostly continuous numerical data; the last one make much weaker assumptions about its input, and is best used for studying discrete heterogeneous distributions that arise from collection of human-input data. The following three subsections discuss the particulars of these three models.
+The current distribution of dBoost comprises three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well; the last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions that arise from collections of human-input data. The following three subsections discuss the particulars of these three models.
 
 \subsubsection{Simple Gaussian Modeling}
 \label{sec:gaus_model}
@@ -7,26 +7,26 @@ The univariate Gaussian model treats each value $x_i$ of the expanded tuples as 
 
 The model's parameters (a pair $(\mu, \sigma)$ for each numerical column) are inferred by calculating each column's mean and standard deviation. In the common case where the dataset has not significantly changed between the analysis and the modeling passes, the information obtained during the statistical analysis pass is sufficient to derive these parameters.
 
-Despite its simplicity, this model presents the attractive property of requiring extremely little memory; in the order of the size of one expanded tuple.
+Despite its simplicity, this model presents the attractive property of requiring extremely little memory on the order of the size of one expanded tuple.
 
 \subsubsection{Mixture Modeling}
 The multivariate Gaussian Mixture model takes advantage of the correlation hints supplied by the statistical analysis part to model sub-tuples of the expanded tuples as samples from multivariate Gaussian mixtures (GMMs), creating one model per set or correlated columns.
 
 For example, if the statistical analysis phase outlines a pair of fields $(f_1, f_2)$ as good candidate for joint modeling, then the Mixture modeling strategy will learn a particular GMM to model this correlation. Pairs of values $(X_1, X_2)$ are here assumed to have been produced by random sampling off a distribution of the form
 \[ \sum_{j=1}^{N} \pi_j \mathcal N(\mu_j, \Sigma_j), \]
-where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined implementation value, but abundant literature exists on the subject of TODO), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learned as part of the modeling pass. This was implemented using the community-developed package \texttt{scikit-learn}. 
+where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined implementation value, but abundant literature exists on the subject of choosing $N$~\cite{Schwartz1978}~\cite{Akaike1974}), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learned as part of the modeling pass. This was implemented using the community-developed package \texttt{scikit-learn}. 
 
 Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Most of the expanded tuples, however, are discarded after the relevant fields are extracted for learning purposes; in most cases we expect that the set of values retained will be much smaller than the set of all rows itself, thus limiting the memory usage.
 
 \subsubsection{Histogram-based Modeling}
-Simple Gaussian modeling and Gaussian Mixture modeling both offer good results for continuous numerical data such as that produced by sensor networks, but suffer from two limitations:
+Simple Gaussian modeling and Gaussian Mixture modeling both offer good results for continuous numerical data such as those produced by sensor networks, but suffer from two limitations:
 
 \begin{itemize}
 \item They make strong hypotheses about the distribution of the data under study
-\item They fail to capture patterns in discrete numerical data, non-numerical data, or in heterogeneous data
+\item They fail to capture patterns in discrete numerical data, non-numerical data, or heterogeneous data
 \end{itemize}
 
-Our last model does not make any assumption about the data under study. Instead it counts occurrences, for each column in the expanded tuple and for each set of potentially correlated sub-tuples (as suggested by the analysis module), of each individual value or set of values. These counts, accumulated over the entire dataset, provide a \emph{de facto} distribution of the data in each field, or each set of correlated fields. 
+Our last model does not make any assumption about the data under study. Instead it counts the occurrences of each unique value in each column in the expanded tuple and for each set of potentially correlated sub-tuples (as suggested by the analysis module). These counts, accumulated over the entire dataset, provide a \emph{de facto} distribution of the data in each field, or each set of correlated fields. 
 
-As described above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. To limit memory usage, and to speed up the modeling phase, we chose to discard histograms as soon as they reached a certain size -- say, 16 different bins. A number of heuristics could be implemented here, but the idea is generally that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned. With this modification, histograms are quick to generate, and extremely memory efficient. They also present the nice property of treating sets of fields and single fields in the exact same way, thus requiring no adjustment to changes in the type of correlations detected by the statistical analyzer. Finally, because they make no assumption about the data that they manipulate (unless for the requirement that it be of small cardinality), histograms are able to accurately describe a broad class of discrete distributions.
+As described above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. To limit memory usage, and to speed up the modeling phase, we chose to discard histograms as soon as they reached a certain size -- say, 16 different bins. A number of heuristics could be implemented here, but the idea is generally that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned. With this modification, histograms are quick to generate and extremely memory efficient. They also present the nice property of treating sets of fields and single fields in the exact same way, thus requiring no adjustment to changes in the type of correlations detected by the statistical analyzer. Finally, because they make no assumption about the data that they manipulate (unless for the requirement that it be of small cardinality), histograms are able to accurately describe a broad class of discrete distributions.
 
