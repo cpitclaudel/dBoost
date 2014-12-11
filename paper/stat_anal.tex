@@ -1,9 +1,9 @@
 % STATISTICAL ANALYSIS
 Following the tuple expansion phase, the new expanded tuples go through a statistical analysis phase. This phase collects two kinds of information: simple statistics on each column's values, and data on possible inter-column correlations.
 
-The statistical information includes the average value of each column, its variance and its standard deviation.These statistics can then be used by the outlier models to improve their performance.
+The statistical information includes the average value of each column, its variance and its standard deviation. These statistics can then be used by the outlier models to improve their performance.
 
-Furthermore, if there is more than one column in the original dataset, we run an additional analysis to determine whether there are correlations between columns in the expanded tuples.
+Furthermore, if there is more than one column in the original dataset, we run an additional analysis to determine whether there are correlations between columns in the expanded sub-tuples.
 
 This analysis is done using the Pearson product-moment correlation. This simple statistical method is commonly used to find correlation between multiple values. It relies on the Pearson product-moment correlation coefficient, which measures linear correlation between two vectors.
 
@@ -15,9 +15,9 @@ $$
 
 $R$'s value always lies between -1 and 1. An $R$ value close to 0 indicates little or no correlation. The closer the coefficient is to 1, the more closely correlated the columns are; the closer it is to -1, the more inversely correlated the columns are.
 
-If a sufficient correlation or inverse correlation is found, the statistical analyzer sends information (``hints'') about the tuples and expanded tuples that are correlated to the outlier models.
+If a sufficient correlation or inverse correlation is found, the statistical analyzer sends information (``hints'') about the tuples and sub-tuples that are correlated to the outlier models.
 
-Currently, we only detect correlations between expanded fields of different columns, as they are more likely to be meaningful. However, although some correlations in expanded fields of the same column are redundant (\texttt{isUppercase} and \texttt{isLowercase} for a string), some might be relevant (for example, a correlation between \texttt{weekday} and \texttt{month} for a date).
+Currently, we only detect correlations between expanded fields of different columns, as they are more likely to be meaningful. However, although some correlations in expanded fields of the same column are redundant (\texttt{isUppercase} and \texttt{isLowercase} for a string), some might be relevant (for example, a correlation between \texttt{weekday} and \texttt{month} for a date). We leave this exploration to future work.
 
 In our implementation, all statistics and correlations are computed in memory using a single pass over the data; the expanded tuples are analyzed one row at a time, and the final statistics and correlation coefficients are computed after the last tuple has been processed.
 
