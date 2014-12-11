@@ -1,17 +1,17 @@
 % CSAIL Directory
 The CSAIL directory is an online directory of about 1000 faculty, staff and students in the MIT Computer Science and Artificial Intelligence Laboratory \cite{CSAILDirectory}. Each entry contains a person's name, phone number, office number, email address, and position.
 
-Some data, such as a phone number, may be missing from the directory. Still, we expect our framework to be usefull in flagging discrepancies between the different records. Since the notion of what precisely constitutes an outlier here is imprecise at best, we also expect the tool to allow the user to explore different sets of parameters. To illustrate the process, we chose to dicuss the results returned by three runs of the tool, with increasingly strict limits on the number of outliers returned. Because the CSAIL test set is exclusively textual, we modeled it using histograms.
+Some fields, such as the phone number, may be missing from the directory. Still, we expect our framework to be usefull in flagging discrepancies between the different records. Since the notion of what precisely constitutes an outlier here is imprecise at best, we also expect the tool to allow the user to explore different sets of parameters. To illustrate the process, we chose to dicuss the results returned by three runs of the tool, with increasingly strict limits on the number of outliers returned. Because the CSAIL test set is exclusively textual, we modeled it using histograms.
 
 \subsubsection{Initial run: low specificity filtering}
-The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0.2$, by issuing the following command (the \lstinline{--statistical 1} parameter, used to disable correlation detection, is omitted for brevity in the following examples):
+The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0.2$, by issuing the following command (for brevity's sake, the \lstinline{--statistical 1} parameter, used to disable correlation detection, is omitted in the following examples):
 
 \begin{lstlisting}[gobble=2]
   ./dboost-stdin.py --histogram 0.8 0.2 
                     samples/csail.txt
 \end{lstlisting}
 
-This invocation produces a long list of outliers; a small subset of these is presented below; for privacy reasons, names have been omitted in the following listings. Phone numbers and emails have been removed and anonymized, respectively, and office numbers were exchanged.
+This invocation produces a long list of outliers; a small subset of these is presented below. For privacy reasons, names have been omitted in the following listings. Phone numbers and emails have been removed and anonymized, respectively, and office numbers were exchanged.
 
 \begin{lstlisting}[gobble=2]
   Doe, Jane, 32-D968, 
@@ -24,7 +24,7 @@ This invocation produces a long list of outliers; a small subset of these is pre
     lep@csail.mit.edu, Research Scientist
 \end{lstlisting}
 
-In total, the list covers 451 lines, out of a total of 1000. Office numbers are often flagged, as well as names, and email addresses. Before diving into the particulars of why these values are returned, we therefore reduce the result set by imposing more stringent thresholds for outlier detection. The new invocation of the tool is shown below: 
+In total, the list covers 451 lines, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. Before diving into the particulars of why these values are returned, we therefore reduce the result set by imposing more stringent thresholds for outlier detection. The new invocation of the tool is shown below: 
 
 \begin{lstlisting}[gobble=2]
 ./dboost-stdin.py --histogram 0.9 0.05 
@@ -75,7 +75,7 @@ Should further information be wanted, our tool offers an extra verbosity level, 
     ████████████████████ True
 \end{lstlisting}
 
-Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case in particularly interesting: to extract the signature of a string, our tool replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{32-221B} is converted to \lstinline{Nd,Nd,Pd,Nd,Nd,Nd,Lu}, which does not fal in any of the dominant bins (the most frequent one, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center.  
+Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case in particularly interesting: to extract the signature of a string, our tool replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{32-221B} is converted to \lstinline{Nd,Nd,Pd,Nd,Nd,Nd,Lu}, which does not fal in any of the dominant bins (the most frequent one, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center).
 
 Manual inspection of the results reveal that most of the outliers reported are actually values that require fixing. There are, however, a number of false positives, such as:
 
