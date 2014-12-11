@@ -6,7 +6,7 @@ However many of these algorithms are complex and can require substantial computa
 
 Several algorithms exist in the data mining community to determine outliers when doing data analysis.
 Local outlier factor measures the degree to which a data point is an outlier~\cite{Breunig2000}.
-Other techniques include k-nearest neighbor and cluster analysis.
+Other techniques include k-nearest neighbor~\cite{Ramaswamy2000} and cluster analysis.
 
 % Outlier Detection Visualization
 Research has been done to attempt to explain why outliers exist given properties of the original data~\cite{Wu}. Unlike our tool, Scorpion starts with user-defined outliers and works backwards to find potential explanations as to why the data points are outliers.
@@ -18,7 +18,7 @@ Statistical methods have been used to detect dependencies between columns of rel
 Gaussian Mixture Models have been used for outlier detection in multiple contexts~\cite{Lu2005,Roberts1994,Roberts1999}.
 
 % Histograms
-Histograms are used in conjunction with local outlier factors to detect outliers~\cite{Gebski2007}.
+Histograms are used in conjunction with local outlier factors to detect outliers~\cite{Gebski2007,Sheng2007}, in cases of numerical or categorical data.
 
 % String data
 To the extent of our knowledge, the literature regarding outlier detection on non-numerical data is much less extensive. Some common approaches include identifying outliers using a similarity measure~\cite{Budalakoti2006}, Probabilistic Suffix Trees~\cite{Sun2006} and sequence alignment~\cite{Bouarfa2012}.
