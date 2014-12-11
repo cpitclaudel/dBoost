@@ -1,7 +1,7 @@
 % CSAIL Directory
 The CSAIL directory is an online directory of about 1000 faculty, staff and students in the MIT Computer Science and Artificial Intelligence Laboratory \cite{CSAILDirectory}. Each entry contains a person's name, phone number, office number, email address, and position.
 
-Some data, such as a phone number, may be missing from the directory. Still, we expect our framework to be usefull in flagging discrepancies between the different records. Since the notion of what precisely constitutes an outlier here is imprecise at best, we also expect the tool to allow the user to explore different sets of parameters. To illustrate the process, we chose to dicuss the results returned by three runs of the tool, with increasingly strict limits on the number of outliers returned. Because the CSAIL test set is exclusively textual, we modeled it using histograms.
+Some data, such as a phone number, may be missing from the directory. Still, we expect our framework to be useful in flagging discrepancies between the different records. Since the notion of what constitutes an outlier here is imprecise at best, we also expect the tool to allow the user to explore different sets of parameters. To illustrate the process, we chose to dicuss the results returned by three distinct iterations of the tool, each with increasingly strict limits on the number of outliers returned. Because the CSAIL test set is exclusively textual, we used the Histogram model.
 
 \subsubsection{Initial run: low specificity filtering}
 The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0.2$, by issuing the following command (the \lstinline{--statistical 1} parameter, used to disable correlation detection, is omitted for brevity in the following examples):
@@ -24,14 +24,14 @@ This invocation produces a long list of outliers; a small subset of these is pre
     lep@csail.mit.edu, Research Scientist
 \end{lstlisting}
 
-In total, the list covers 451 lines, out of a total of 1000. Office numbers are often flagged, as well as names, and email addresses. Before diving into the particulars of why these values are returned, we therefore reduce the result set by imposing more stringent thresholds for outlier detection. The new invocation of the tool is shown below: 
+In total, the list covers 451 lines, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. Before diving into the particulars of why these values are returned, we reduce the size of the result set by imposing more stringent thresholds for outlier detection. The new invocation of the tool is shown below: 
 
 \begin{lstlisting}[gobble=2]
 ./dboost-stdin.py --histogram 0.9 0.05 
                   samples/csail.txt
 \end{lstlisting}
 
-This reduces the outliers set to $68$ results. Most of the hits against office numbers have disappeared: increasing the peak threshold to $0.9$ did not eliminate the corresponding histogram, but lowering the sensitivity did eliminate some of the questionable office numbers. At this point, it becomes interesting to look into the details of these outliers; adding the \lstinline{--verbose} flag gives us a bit more insight about these results:
+This reduces the output to $68$ outliers. Most of the outliers due to office numbers disappear. Increasing the peak threshold to $0.9$ did not eliminate the corresponding histogram, but lowering the sensitivity did eliminate some of the questionable office numbers. At this point, it becomes interesting to look into the details of these outliers; adding the \lstinline{--verbose} flag gives us a bit more insight about these results:
 
 \begin{lstlisting}[gobble=2]
   Sholmes, Herlock, $32-221B$, 
