@@ -9,18 +9,17 @@ Table~\ref{table:flags} shows the usage options to run the models supported by d
 \label{table:flags}
 \caption{dBoost command line usage.}
 \centering
-\begin{tabular} {| l | l | p{10cm} |}
-\hline
-\multicolumn{3}{|c|}{./dboost-stdin.py input-file} \\
+\begin{tabular} { l | l | p{10cm} }
+\multicolumn{3}{l}{./dboost-stdin.py input-file} \\
 \hline
 Flag & Options & Explanation \\
 \hline
 --gaussian & n\_stdev & Report outliers that fall more than n\_stdev standard deviations away from the mean of the data \\
 --mixture & n\_subpops & Use a model of n\_subpops gaussians \\
+  & threshold & Report outliers above threshold percentile \\
 --histogram & peak\_s & Consider only fields with a peaked distribution with peakiness peak\_s \\
   & outlier\_s & Report values that fall in classes with less than outlier\_s percent \\
---statistical & epsilon & Give hints to the model for correlations with Pearson R coefficient greater than epsilon \\
-\hline
+--statistical & epsilon & Give hints to the model for correlations with Pearson $R$ coefficient greater than epsilon \\
 \end{tabular}
 \end{table*}
 
