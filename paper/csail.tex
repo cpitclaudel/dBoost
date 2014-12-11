@@ -36,13 +36,13 @@ This reduces the outliers set to $68$ results. Most of the hits against office n
 \begin{lstlisting}[gobble=2]
   Sholmes, Herlock, $32-221B$, 
     shherlock@csail.mit.edu, Graduate Student
-  > Value '32-221B' (3) doesn't match 
-    feature 'signature'
+  > Value $'32-221B'$ (3) doesn't match 
+    feature $'signature'$
  
   $Evans-potter$, Lily, 32-G972, 
     lep@csail.mit.edu, Research Scientist
-  > Value 'Evans-potter' (1) doesn't match 
-    feature 'title case'  
+  > Value $'Evans-potter'$ (1) doesn't match 
+    feature $'title case'$  
 \end{lstlisting}
 
 \lstinline{Doe, Jane} has disappeared from the list, since improperly cased e-mails are common enough in the database that they are not considered an outlier at sensitivity level $\epsilon = 0.05$.
@@ -52,9 +52,9 @@ Should further information be wanted, our tool offers an extra verbosity level, 
 \begin{lstlisting}[gobble=2]
   Sholmes, Herlock, $32-221B$, 
     shherlock@csail.mit.edu, Graduate Student
-  > Value '32-221B' (3) doesn't match 
-    feature 'signature'
-  • histogram for ('signature',):
+  > Value $'32-221B'$ (3) doesn't match 
+    feature $'signature'$
+  • histogram for ($'signature'$,):
     ██████████ 
     Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd
     Lu,Nd,Nd,Pd,Nd,Nd,Nd
@@ -68,9 +68,9 @@ Should further information be wanted, our tool offers an extra verbosity level, 
 
   $Evans-potter$, Lily, 32-G972, 
     lep@csail.mit.edu, Research Scientist
-  > Value 'Evans-potter' (1) doesn't match 
-    feature 'title case'  
-  • histogram for ('title case',):
+  > Value $'Evans-potter'$ (1) doesn't match 
+    feature $'title case'$  
+  • histogram for ($'title case'$,):
     $False$
     ████████████████████ True
 \end{lstlisting}
@@ -82,11 +82,11 @@ Manual inspection of the results reveal that most of the outliers reported are a
 \begin{lstlisting}[gobble=2]
   $MacDonald$, Ronald, 32-D597, 
     rmacdon@csail.mit.edu, Graduate Student    
-  > Value 'MacDonald' (1) doesn't match 
-    feature 'title case'  
-  • histogram for ('title case',):
+  > Value $'MacDonald'$ (1) doesn't match 
+    feature $'title case'$  
+  • histogram for ($'title case'$,):
     $False$
     ████████████████████ True
 \end{lstlisting}
 
-The casing of \lstinline{MacDonald} is proper, but our tool notes that it doesn't adhere to the standard derived from almost all other tuples, and thus reports it. 
+The casing of \lstinline{MacDonald} is proper, but our tool notes that it does not adhere to the standard derived from almost all other tuples, and thus reports it. 
