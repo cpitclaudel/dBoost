@@ -1,6 +1,75 @@
 % CSAIL Directory
-The CSAIL directory is an online directory of faculty, staff and students in the MIT Computer Science and Artificial Intelligence Laboratory \cite{CSAILDirectory}.
-Each entry contains a person's name, phone number, office number, email address, and position.
-Some data, such as a phone number, may be missing from the directory.
+The CSAIL directory is an online directory of about 1000 faculty, staff and students in the MIT Computer Science and Artificial Intelligence Laboratory \cite{CSAILDirectory}. Each entry contains a person's name, phone number, office number, email address, and position.
 
-%Histograms
+Some data, such as a phone number, may be missing from the directory. Still, we expect our framework to be usefull in flagging discrepancies between the different records. Since the notion of what precisely constitutes an outlier here is imprecise at best, we also expect the tool to allow the user to explore different sets of parameters. To illustrate the process, we chose to dicuss the results returned by three runs of the tool, with increasingly strict limits on the number of outliers returned. Because the CSAIL test set is exclusively textual, we modeled it using histograms.
+
+\subsubsection{Initial run: low specificity filtering}
+The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0.2$, by issuing the following command (the \lstinline{--statistical 1} parameter, used to disable correlation detection, is omitted for brevity in the following examples):
+
+\begin{lstlisting}
+  ./dboost-stdin.py --histogram 0.8 0.2 samples/csail.txt
+\end{lstlisting}
+
+This invocation produces a long list of outliers; a small subset of these is presented below; for privacy reasons, names have been omitted in the following listings. Phone numbers and emails have been removed and anonymized, respectively, and office numbers were exchanged.
+
+\begin{lstlisting}
+  Doe, Jane, 32-D968, $jdoe@CSAIL.MIT.EDU$, Postdoctoral Associate
+  Sholmes, Herlock, $32-221B$, shherlock@csail.mit.edu, Graduate Student
+  $Evans-potter$, Lily, 32-G972, Research Scientist
+\end{lstlisting}
+
+In total, the list covers 451 lines, out of a total of 1000. Office numbers are often flagged, as well as names, and email addresses. Before diving into the particulars of why these values are returned, we therefore reduce the result set by imposing more stringent thresholds for outlier detection. The new invocation of the tool is shown below: 
+
+\begin{lstlisting}
+./dboost-stdin.py --histogram 0.9 0.05 samples/csail.txt
+\end{lstlisting}
+
+This reduces the outliers set to $68$ results. Most of the hits against office numbers have disappeared: increasing the peak threshold to $0.9$ did not eliminate the corresponding histogram, but lowering the sensitivity did eliminate some of the questionable office numbers. At this point, it becomes interesting to look into the details of these outliers; adding the \lstinline{--verbose} flag gives us a bit more insight about these results:
+
+\begin{lstlisting}
+  Sholmes, Herlock, $32-221B$, shherlock@csail.mit.edu, Graduate Student
+  > Value '32-221B' (3) doesn't match feature 'signature'
+ 
+  $Evans-potter$, Lily, 32-G972, Research Scientist
+  > Value 'Evans-potter' (1) doesn't match feature 'title case'  
+\end{lstlisting}
+
+\lstinline{Doe, Jane} has disappeared from the list, since improperly cased e-mails are common enough in the database that they are not considered an outlier at sensitivity level $\epsilon = 0.05$.
+ 
+Should further information be wanted, our tool offers an extra verbosity level, \lstinline{--debug};
+
+\begin{lstlisting}
+  Sholmes, Herlock, $32-221B$, shherlock@csail.mit.edu, Graduate Student
+  > Value '32-221B' (3) doesn't match feature 'signature'
+  • histogram for ('signature',):
+    ██████████ 
+    Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd
+    Lu,Nd,Nd,Pd,Nd,Nd,Nd
+    Nd,Nd,Lu,Pd,Nd,Nd,Nd
+    ████████████████████ Nd,Nd,Pd,Lu,Nd,Nd,Nd
+    ██ Nd,Nd,Pd,Lu,Nd,Nd,Nd,Lu
+    ██████ Nd,Nd,Pd,Nd,Nd,Nd
+    $█ Nd,Nd,Pd,Nd,Nd,Nd,Lu$
+    Nd,Nd,Pd,Nd,Nd,Nd,Nd
+    Nd,Pd,Nd,Nd,Nd
+
+  $Evans-potter$, Lily, 32-G972, Research Scientist
+  > Value 'Evans-potter' (1) doesn't match feature 'title case'  
+  • histogram for ('title case',):
+    $False$
+    ████████████████████ True
+\end{lstlisting}
+
+Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case in particularly interesting: to extract the signature of a string, our tool replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{32-221B} is converted to \lstinline{Nd,Nd,Pd,Nd,Nd,Nd,Lu}, which does not fal in any of the dominant bins (the most frequent one, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center.  
+
+Manual inspection of the results reveal that most of the outliers reported are actually values that require fixing. There are, however, a number of false positives, such as:
+
+\begin{lstlisting}
+  $MacDonald$, Ronald, 32-D597, rmacdon@csail.mit.edu, Graduate Student    
+  > Value 'MacDonald' (1) doesn't match feature 'title case'  
+  • histogram for ('title case',):
+    $False$
+    ████████████████████ True
+\end{lstlisting}
+
+The casing of \lstinline{MacDonald} is proper, but our tool notes that it doesn't adhere to the standard derived from almost all other tuples, and thus reports it. 
