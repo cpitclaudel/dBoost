@@ -1,14 +1,13 @@
 % Evaluation
 
-We evaluated our framework by implementing a tool in python3.
-We wrote approximately 950 lines of code.
-Our code is publicly available on GitHub under a GNU Public License~\cite{github}.
+We implemented dBoost in approximately 2000 lines of python3 code.
+Our code is publicly available on GitHub under version 3 of the GNU Public License~\cite{github}.
 The program loads data from a text file (column separators can be specified on the command line, so many formats are possible), does computation, and reports outliers on the command line.
-Table~\ref{table:flags} shows some of the usage of our code.
+Table~\ref{table:flags} shows the usage options to run the models our tool supports. 
 
 \begin{table*}
 \label{table:flags}
-\caption{Tool usage.}
+\caption{dBoost command line usage.}
 \centering
 \begin{tabular} {| l | l | p{10cm} |}
 \hline
@@ -25,5 +24,7 @@ Flag & Options & Explanation \\
 \end{tabular}
 \end{table*}
 
-We ran our tool on several real-world data sets with varying schemas and properties.
-We analyze each data set separately in the following sections.
+We ran our tool on two real-world data sets: a lab directory and a collection of sensor data.
+The lab directory represents a heterogeneous data set with a significant amount of rich string data.
+We use it to evaluate the use of the Histogram model.
+The sensor data is used to evaluate the effectiveness of the statistical analyzer and Gaussian and Mixture models.

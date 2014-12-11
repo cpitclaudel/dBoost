@@ -9,16 +9,16 @@ The simple Gaussian model measures how much each value differs from the mean com
   |v_a - \mu_a| \ge \epsilon \cdot \sigma_a
   \label{eqn:gaussian-outlier}
 \end{align}
-, where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
+where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
 
-In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied equation~\ref{eqn:gaussian-outlier}.
+In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\ref{eqn:gaussian-outlier}.
  
 \subsubsection{Mixture Modeling}
 The Gaussian Mixture model uses the correlation hints provided by the statistical analysis phase to break down each row into small set of tuples of presumably correlated values.
 
 Each resulting tuple is then evaluated using the corresponding GMM; if the correlated values' $v_c$ probability is smaller than the user-defined threshold parameter $\theta$; that is, if
 \begin{align}
-  \Pr(v_c | \pi_c, \mu_c, \Sigma_c) \leq \theta, 
+  \Pr(v_c | \pi_c, \mu_c, \Sigma_c) \leq \theta 
   \label{eqn:mixture-outlier}
 \end{align}
 then the row is flagged as an outlier.
@@ -28,10 +28,14 @@ As in the Gaussian Model, providing the user with a list of attributes that caus
 \subsubsection{Histogram Modeling}
 The histogram-based modeling strategy proceeds in two phases to detect outliers. 
 
-First, after running through the training phase, it decides for each histogram whether that histogram is peaked enough that it may be used to detect outliers: the aim of this phase is to discard histograms where most bins have a similar numbers of values. In practice, we use the following simple statistical test to determine whether a histogram is ``peaked'' (modal) enough: given a histogram with $N$ bins, we count the number $n_{top}$ of values in the top $N'$ bins, where $N'$ is $1$ for $1 \leq N \leq 3$, $2$ for $4 \leq N \leq 5$, and $3$ for $3 \leq N \leq 16$ (histograms with $N > 16$ bins were previously discarded). A histogram is deemed relevant to outlier detection if
-\[ \frac{n_{top}}{n} \geq \theta \]
+First, after running through the training phase, it decides for each histogram whether that histogram is peaked enough that it may be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar numbers of values. In practice, we use the following simple statistical test to determine whether a histogram is ``peaked'' (modal) enough: given a histogram with $N$ bins, we count the number $n_{top}$ of values in the top $N'$ bins, where $N'$ is $1$ for $1 \leq N \leq 3$, $2$ for $4 \leq N \leq 5$, and $3$ for $3 \leq N \leq 16$ (histograms with $N > 16$ bins were previously discarded). A histogram is deemed relevant to outlier detection if
+\begin{equation}
+ \frac{n_{top}}{n} \geq \theta 
+\end{equation}
 where $\theta$ is a user-chosen threshold. 
 
 After identifying a relevant set of histograms (this operation only needs to run once, at the very beginning of the last pass), we proceed to the actual detection phase. We classify an expanded tuple $X$ as an outlier if any of its values (or set of values, as grouped according to the correlation hints previously obtained) $x_a$ verifies:
-\[h_a(x_a) \le \epsilon \sum_k h_a(k)\]
+\begin{equation}
+h_a(x_a) \le \epsilon \sum_k h_a(k)
+\end{equation}
 where $h_a(x)$ counts the number of tuples in bin $x_a$, and $\epsilon$ is a user-chosen sensitivity parameter.
