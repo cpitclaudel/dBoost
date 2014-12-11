@@ -11,7 +11,19 @@
 \usepackage{hyperref}
 \usepackage{microtype}
 \usepackage{calc}
+\usepackage{listings}
+\usepackage{xcolor}
 \usepackage[utf8]{inputenc}
+
+\lstset{}
+
+\lstset{ %
+  basicstyle=\ttfamily\small,  %
+  breaklines=true, %
+  keywordstyle=\textbf, %
+  literate={█}{{$\blacksquare$}}1{•}{{$\bullet$}}1,
+  moredelim=[is][\color{red}]{\$}{\$}
+}
 
 \hypersetup{breaklinks=true,
             bookmarks=true,
