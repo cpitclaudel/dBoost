@@ -4,7 +4,7 @@ Before being used to generate a model of the data, the tuples are cleaned up and
 
 \subsubsection{Tuple Expansion}
 
-\indent\indent\begin{minipage}{0.8\linewidth}
+\noindent\begin{minipage}{0.8\linewidth}
   \itshape
   What if you need to store a date and time value with subsecond resolution? MySQL
   currently does not have an appropriate data type for this, but you can use your own
@@ -13,7 +13,7 @@ Before being used to generate a model of the data, the tuples are cleaned up and
   the decimal point.
 \end{minipage}
 \begin{flushright}
-  \textit{High-Performance MySQL}, 3\textsuperscript{rd} edition (2012), p127
+  \textit{High-Performance MySQL}, 3\textsuperscript{rd} edition (2012), p.~127
 \end{flushright}
 
 Data stored in databases often has rich semantics, encompassing dates and times, highly stuctured datatypes such as phone numbers or addresses, or GIS data. The semantics of plain SQL, however, are not expressive enough to properly store these rich data types. Programmers are thus forced to revert to simpler types, relying on application logic to parse the data. 
