@@ -45,9 +45,9 @@ This reduces the output to $68$ outliers. Most of the outliers due to office num
     feature $'title case'$  
 \end{lstlisting}
 
-\lstinline{Doe, Jane} has disappeared from the list, since improperly cased e-mails are common enough in the database that they are not considered an outlier at sensitivity level $\epsilon = 0.05$.
+\lstinline{Doe, Jane} disappears from the list, since e-mails with the domain in all capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$.
  
-Should further information be wanted, our tool offers an extra verbosity level, \lstinline{--debug};
+For further information, our tool offers an extra verbosity level, \lstinline{--debug};
 
 \begin{lstlisting}[gobble=2]
   Sholmes, Herlock, $32-221B$, 
@@ -75,7 +75,7 @@ Should further information be wanted, our tool offers an extra verbosity level, 
     ████████████████████ True
 \end{lstlisting}
 
-Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case in particularly interesting: to extract the signature of a string, our tool replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{32-221B} is converted to \lstinline{Nd,Nd,Pd,Nd,Nd,Nd,Lu}, which does not fal in any of the dominant bins (the most frequent one, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center).
+Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case is particularly interesting: to extract the signature of a string, our tool replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{32-221B} is converted to \lstinline{Nd,Nd,Pd,Nd,Nd,Nd,Lu}, which does not fall in any of the dominant bins (the most frequent case, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center).
 
 Manual inspection of the results reveal that most of the outliers reported are actually values that require fixing. There are, however, a number of false positives, such as:
 
@@ -89,4 +89,4 @@ Manual inspection of the results reveal that most of the outliers reported are a
     ████████████████████ True
 \end{lstlisting}
 
-The casing of \lstinline{MacDonald} is proper, but our tool notes that it does not adhere to the standard derived from almost all other tuples, and thus reports it. 
+The case of \lstinline{MacDonald} is correct, but our tool notes that it does not adhere to the standard derived from almost all other tuples, and thus reports it. 
