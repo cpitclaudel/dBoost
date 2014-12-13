@@ -24,11 +24,7 @@ def get_base_parser():
                              action = "append", metavar = 'rule',
                              help = "Disable a rule.")
 
-    base_parser.add_argument("-tr", "--train_data", dest = "train_input",
-                             type = argparse.FileType('r'),
-                             help = "Data to train the models on.")
-
-    base_parser.add_argument("-te", "--test_data", dest = "test_input",
+    base_parser.add_argument("-t", "--testset", dest = "test_input",
                              type = argparse.FileType('r'),
                              help = "Data to generate outliers from.")
 
