@@ -1,9 +1,9 @@
 import argparse
 import features
 from preprocessors import statistical
-from models import gaussian, discrete 
+from models import gaussian, discrete, mixture
 
-REGISTERED_MODELS = (gaussian.Simple, gaussian.Mixture, discrete.Histogram)
+REGISTERED_MODELS = (gaussian.Simple, mixture.Mixture, discrete.Histogram)
 REGISTERED_PREPROCESSORS = (statistical.Pearson,)
 
 def register_modules(parser, modules):
