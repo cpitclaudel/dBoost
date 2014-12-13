@@ -1,8 +1,6 @@
 import numbers
 from utils.tupleops import *
 from utils.autoconv import autoconv
-from sklearn import mixture
-from numpy import array, percentile
 
 class Simple:
     ID = "gaussian"
