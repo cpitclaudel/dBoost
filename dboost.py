@@ -35,28 +35,18 @@ def parse_discrepancies(x, X, discrepancies, hints):
 
     return (x, X, parsed)
         
-def outliers_static(dataset, preprocessor, model, rules, testset = ()):
-    dataset = list(dataset)
-    if testset: testset = list(testset)
-    else: testset = dataset
-    return list(outliers_streaming(lambda: dataset, lambda: testset, preprocessor, model, rules))
-
-def outliers_streaming(generator_train, generator_test, preprocessor, model, rules):
+def outliers(trainset_generator, testset_generator, preprocessor, model, rules):
     #TODO: Models shouldn't be applied one by one
-    outliers_training(generator_train, preprocessor, model, rules)
-    return outliers_testing(generator_test, preprocessor, model, rules)
-    
-def outliers_training(generator, preprocessor, model, rules):
+
     print(">> Finding correlations")
-    preprocessor.fit(expand_stream(generator, rules, False))
+    preprocessor.fit(expand_stream(trainset_generator, rules, False))
     print(preprocessor.hints)
     
     print(">> Building model...")
-    model.fit(expand_stream(generator, rules, False, preprocessor.hints))
+    model.fit(expand_stream(trainset_generator, rules, False, preprocessor.hints))
 
-def outliers_testing(generator, preprocessor, model, rules):
     print(">> Finding outliers...")
-    for index, (x, X) in enumerate(expand_stream(generator, rules,
+    for index, (x, X) in enumerate(expand_stream(testset_generator, rules,
                                                  True, preprocessor.hints)):
         discrepancies = model.find_discrepancies(X, index)
         if len(discrepancies) > 0:

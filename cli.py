@@ -22,11 +22,11 @@ def get_base_parser():
 
     base_parser.add_argument("-d", "--disable-rule", dest = "disabled_rules",
                              action = "append", metavar = 'rule',
-                             help = "Disable a rule.")
+                             help = "Disable a tuple expansion rule.")
 
-    base_parser.add_argument("-t", "--testset", dest = "test_input",
-                             type = argparse.FileType('r'),
-                             help = "Data to generate outliers from.")
+    base_parser.add_argument("--floats-only", dest = "floats_only",
+                             action = "store_const", const = True, default = False,
+                             help = "Parse all numerical fields as floats.")
 
     base_parser.set_defaults(disabled_rules = [])
 
@@ -39,7 +39,15 @@ def get_sdtin_parser():
     parser = argparse.ArgumentParser(parents = [get_base_parser()],
                                      description="Loads a database from a text file, and reports outliers")
     parser.add_argument("input", nargs='?', default = "-", type = argparse.FileType('r'),
-                        help = "Read data from file input. If omitted or '-', read from standard input.")
+                        help = "Read data from file input. If omitted or '-', read from standard input. Separate training data can be specified using --train-with")
+
+    parser.add_argument("--train-with", dest = "trainwith", metavar = "input",
+                        action = "store", default = None, type = argparse.FileType('r'),
+                        help = "Look for correlations and train the model on a different dataset. ")
+    
+    parser.add_argument("-m", "--in-memory",  dest = "inmemory",
+                        action = "store_const", const = True, default = False,
+                        help = "Load the entire dataset in memory before running. Required if input does not come from a seekable file.")
     
     parser.add_argument("-F", "--field-separator", dest = "fs",
                         action = "store", default = "\t", metavar = "fs",
@@ -69,7 +77,7 @@ def load_modules(namespace, parser, registered_modules):
 
 def parsewith(parser):
     args = parser.parse_args()
-    
+
     models = load_modules(args, parser, REGISTERED_MODELS)
     preprocessors = load_modules(args, parser, REGISTERED_PREPROCESSORS)
     

@@ -6,35 +6,32 @@ import features
 import argparse
 import cli
 import itertools 
+from utils.read import stream_tuples 
 from utils.autoconv import autoconv
 from utils.print import print_rows
-
-dataset = []
-testset = []
-
-def process_file(f,d):
-  row_length = None
-  for line in f: 
-      line = line.strip().split(args.fs)
-    
-      if row_length != None and len(line) != row_length:
-          sys.stderr.write("Discarding {}\n".format(line))
-
-      row_length = len(line)
-      d.append(tuple(autoconv(field) for field in line))
 
 parser = cli.get_sdtin_parser()
 args, models, preprocessors, rules = cli.parsewith(parser)
 
-process_file(args.input,dataset)
-if args.test_input is not None:
-  process_file(args.test_input,testset)
+testset_generator = stream_tuples(args.input, args.fs, args.floats_only, args.inmemory)
 
-for preprocessor, model in itertools.product(preprocessors, models):
-    outliers = dboost.outliers_static(dataset, preprocessor, model, rules, testset)
+if args.trainwith == None:
+    args.trainwith = args.input
+    trainset_generator = testset_generator
+else:
+    trainset_generator = stream_tuples(args.trainwith, args.fs, args.floats_only, args.inmemory)
 
-    if len(outliers) == 0:
-        print("   All clean!")
-    else:
-        print_rows(outliers, model, preprocessor.hints,
-                   features.descriptions(rules), args.verbosity)
+if not args.inmemory and not args.trainwith.seekable():
+    raise ArgumentError("Input does not support streaming. Try using --inmemory?")
+
+# TODO: Input should be fed to all models in one pass.
+for model in models:
+    for preprocessor in preprocessors:
+        outliers = list(dboost.outliers(trainset_generator, testset_generator,
+                                        preprocessor, model, rules))
+
+        if len(outliers) == 0:
+            print("   All clean!")
+        else:
+            print_rows(outliers, model, preprocessor.hints,
+                       features.descriptions(rules), args.verbosity)
