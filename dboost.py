@@ -24,16 +24,6 @@ def expand_stream(generator, rules, keep_x, hints = ()):
         #if hints:
         X = expand_hints(X, hints)
         yield (x, X) if keep_x else X 
-
-def parse_discrepancies(x, X, discrepancies, hints):
-    parsed = []
-
-    for (index, subindices) in discrepancies:
-        # TODO: In the long run, in might be better to adjust models to directly
-        # return outliers in this format
-        parsed.extend(((index, subindex),) for subindex in subindices)
-
-    return (x, X, parsed)
         
 def outliers(trainset_generator, testset_generator, preprocessor, model, rules):
     #TODO: Models shouldn't be applied one by one

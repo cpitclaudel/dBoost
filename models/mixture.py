@@ -52,14 +52,13 @@ class Mixture:
 
     def find_discrepancies(self, X, index):
         correlations = X[0]
-        failed_tests = [] #Contains the index of each correlation that wasn't probable enough
+        discrepancies = []
+        
+        for id, (correlation, gmm, cutoff) in enumerate(zip(correlations, self.gmms, self.cutoffs)):
+            if not self.test_one(correlation, gmm, cutoff):
+                discrepancies.append(((0, id),))
 
-        for i in range(len(correlations)):
-            if not self.test_one(correlations[i], self.gmms[i], self.cutoffs[i]):
-                failed_tests.append(i)
-
-        #FIXME
-        return [] if len(failed_tests) == 0 else [(0, failed_tests)] 
+        return discrepancies
         
     def more_info(self, discrepancy, description, X, indent = "", pipe = sys.stdout):
         pass #TODO

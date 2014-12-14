@@ -113,14 +113,11 @@ class Histogram:
         discrepancies = []
         
         for field_id, (x, m, s) in enumerate(zip(X, self.counters, self.sizes)):
-            failed_tests = []
-            for test_id, (xi, mi, si) in enumerate(zip(x, m, s)):
+            for feature_id, (xi, mi, si) in enumerate(zip(x, m, s)):
                 if mi == None:
                     continue
                 if mi.get(xi, 0) < self.outlier_threshold * si:
-                    failed_tests.append(test_id)
-            if failed_tests != []:
-                discrepancies.append((field_id, failed_tests))
+                    discrepancies.append(((field_id, feature_id),))
 
         return discrepancies
 

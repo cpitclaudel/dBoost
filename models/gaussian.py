@@ -51,11 +51,8 @@ class Simple:
         ret = []
  
         for field_id, (x, m) in enumerate(zip(X, self.model)):
-            failed_tests = [test_id for (test_id, (xi, mi))
-                                    in enumerate(zip(x, m))
-                                    if not self.test_one(xi, mi)]
-            if len(failed_tests) != 0:
-                ret.append((field_id, failed_tests))
+            ret.extend(((field_id, test_id),) for (test_id, (xi, mi))
+                       in enumerate(zip(x, m)) if not self.test_one(xi, mi))
 
         return ret
 

@@ -6,8 +6,6 @@ def parse_line(line, fs, floats_only):
     return tuple(autoconv(field, floats_only) for field in line)
     
 def stream_tuples(input, fs, floats_only, preload):
-    call_count = 0
-    
     def stream():
         if stream.call_count > 0:
             input.seek(0)
