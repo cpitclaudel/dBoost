@@ -1,6 +1,6 @@
 def autoconv_step(field, converters, offset):
     if offset >= len(converters):
-        return value
+        return field
 
     try:
         field = converters[offset](field)
