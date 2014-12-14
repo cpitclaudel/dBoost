@@ -59,7 +59,8 @@ class Mixture:
                 failed_tests.append(i)
 
         #FIXME
-        return [] if len(failed_tests) == 0 else [(0, [])] 
+        return [] if len(failed_tests) == 0 else [(0, failed_tests)] 
         
     def more_info(self, discrepancy, description, X, indent = "", pipe = sys.stdout):
         pass #TODO
+
