@@ -19,7 +19,7 @@ class Mixture:
         self.keep    = None
         
     @staticmethod
-    def register(parser): #TODO (Z): fix the doc. Add an extra arg?
+    def register(parser): #TODO (Z): fix the doc.
         parser.add_argument("--" + Mixture.ID, nargs = 2, metavar = ("n_subpops", "threshold"),
                             help = "Use a gaussian mixture model, reporting values whose probability is " +
                             "below the threshold percentile, as predicted by a model of the data comprised of n_subpops "+
@@ -44,6 +44,9 @@ class Mixture:
             self.gmms.append(gmm)
 
             lp, _ = self.gmms[c].score_samples(to_fit)
+            #from matplotlib import pyplot
+            #pyplot.hist(lp)
+            #pyplot.show()
             #FIXME: change cutoff value
             self.cutoffs.append(percentile(array(lp), self.cutoff))
 
