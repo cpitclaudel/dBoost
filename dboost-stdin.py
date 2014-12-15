@@ -13,13 +13,13 @@ from utils.print import print_rows
 parser = cli.get_sdtin_parser()
 args, models, preprocessors, rules = cli.parsewith(parser)
 
-testset_generator = stream_tuples(args.input, args.fs, args.floats_only, args.inmemory)
+testset_generator = stream_tuples(args.input, args.fs, args.floats_only, args.inmemory, args.maxrecords)
 
 if args.trainwith == None:
     args.trainwith = args.input
     trainset_generator = testset_generator
 else:
-    trainset_generator = stream_tuples(args.trainwith, args.fs, args.floats_only, args.inmemory)
+    trainset_generator = stream_tuples(args.trainwith, args.fs, args.floats_only, args.inmemory, args.maxrecords)
 
 if not args.inmemory and not args.trainwith.seekable():
     raise ArgumentError("Input does not support streaming. Try using --inmemory?")
@@ -28,7 +28,7 @@ if not args.inmemory and not args.trainwith.seekable():
 for model in models:
     for preprocessor in preprocessors:
         outliers = list(dboost.outliers(trainset_generator, testset_generator,
-                                        preprocessor, model, rules))
+                                        preprocessor, model, rules, args.maxrecords))
 
         if len(outliers) == 0:
             print("   All clean!")

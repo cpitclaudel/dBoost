@@ -28,6 +28,10 @@ def get_base_parser():
                              action = "store_const", const = True, default = False,
                              help = "Parse all numerical fields as floats.")
 
+    base_parser.add_argument("--max-records", dest = "maxrecords", metavar = "N",
+                             action = "store", default = float("+inf"), type = int,
+                             help = "Stop processing after reading at most N records.")
+    
     base_parser.set_defaults(disabled_rules = [])
 
     register_modules(base_parser, REGISTERED_MODELS)
@@ -43,7 +47,7 @@ def get_sdtin_parser():
 
     parser.add_argument("--train-with", dest = "trainwith", metavar = "input",
                         action = "store", default = None, type = argparse.FileType('r'),
-                        help = "Look for correlations and train the model on a different dataset. ")
+                        help = "Use a separate dataset for correlation detection and model training. ")
     
     parser.add_argument("-m", "--in-memory",  dest = "inmemory",
                         action = "store_const", const = True, default = False,
