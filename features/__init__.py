@@ -48,6 +48,18 @@ def length(s: str) -> ("length",):
 def signature(s: str) -> ("signature",):
     return (",".join(map(unicodedata.category, s)),)
 
+import re
+import email.utils 
+
+HTML5_EMAIL_VALIDATOR = re.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+
+print(HTML5_EMAIL_VALIDATOR.match("johndoe@csail.mit.edu"))
+
+@rule
+def email_checks(s: str) -> ("simple email check", "RFC822 email check"):
+    return (HTML5_EMAIL_VALIDATOR.match(s) != None), (email.utils.parseaddr(s) != ('', ''))
+#TODO: This should be asymmetric
+
 @rule
 def id(s: str) -> ("id",):
     return (s,)
