@@ -22,7 +22,7 @@ else:
     trainset_generator = stream_tuples(args.trainwith, args.fs, args.floats_only, args.inmemory, args.maxrecords)
 
 if not args.inmemory and not args.trainwith.seekable():
-    raise ArgumentError("Input does not support streaming. Try using --inmemory?")
+    parser.error("Input does not support streaming. Try using --inmemory or loading input from a file?")
 
 # TODO: Input should be fed to all models in one pass.
 for model in models:
