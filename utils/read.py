@@ -1,22 +1,24 @@
 from utils.autoconv import autoconv
-import sys
+import sys, csv
 
-def parse_line(line, fs, floats_only):
-    line = line.strip().split(fs)
-    return tuple(autoconv(field, floats_only) for field in line)
+def parse_line(row, floats_only):
+    return tuple(autoconv(field, floats_only) for field in row)
     
-def stream_tuples(input, fs, floats_only, preload):
+def stream_tuples(input, fs, floats_only, preload, maxrecords = float("+inf")):
     def stream():
         if stream.call_count > 0:
             input.seek(0)
         stream.call_count += 1
         
         row_length = None
-        for line in input:
-            row = parse_line(line, fs, floats_only)
+        for id, row in enumerate(csv.reader(input, delimiter = fs)):
+            if id > maxrecords:
+                break
+
+            row = parse_line(row, floats_only)
             
             if row_length != None and len(row) != row_length:
-                sys.stderr.write("Discarding {}\n".format(line))
+                sys.stderr.write("Discarding {}\n".format(row))
                 continue
 
             row_length = len(row)
