@@ -1,21 +1,15 @@
-*  Poster stuff (see picture) [DONE]
-*  Correlation detection issues [DONE]
-*  Paper writing tasks
-   *   Diagrams:
-       - CSAIL evaluation [DONE]
-       - Pipeline diagram (edits) [DONE]
-       - Tuple expansion diagram [DONE]
-   *   Conclusion / previous work [DONE]
-   *   A pass on section 3 [DONE]
-   *   Pass through section 1 and 2 [DONE]
-   *   Fill in section 3 [DONE]
-   *   Pass on the abstract [DONE]
-*  Evaluation [DONE]
-*  Fix href parameters [DONE]
-*  Litterature search [DONE]
-*  s/Outlier row/Outlying row/g [DONE]
-
-Long term:
-*  Mixture model thresholds [CZ / later]
-*  Look at correlations inside the expansion of a given field
-*  Make the plots more reproducible (integrate in the Makefile)
+-   Research:
+    *   Mixture model thresholds [Z] [PAPER]
+    *   Histogram-based correlations [C] [PAPER]
+    *   Think about asymmetric features (like email addresses: we don't want to detect things that do not have '@' signs)
+    *   Evaluate against other papers and real world annotated datasets [R] [PAPER]
+    *   Identifying other outlier detection strategies / correlation detection strategies
+    *   Closer look at references [R] [PAPER]
+    *   Mixed discrete/continuous models, e.g. different distributions based on value of one field
+-   Code:
+    *   Make the plots more reproducible (integrate in the Makefile) [R]
+    *   Look at correlations inside the expansion of a given field [LATER]
+    *   Unit tests [Z, LATER]
+    *   Adjust Gaussian to use data from statistical analysis [C, LATER]
+    *   Train all models in one pass (instead of one per model) [C]
+    *   New features: email validation [DONE], strings & floats to dates & times, ... [C/R]
