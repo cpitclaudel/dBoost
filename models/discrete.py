@@ -1,37 +1,10 @@
 from utils import tupleops
 from utils.color import term, highlight
+import bisect
 import collections
 import sys
 
 BLOCK = "█"
-
-#TODO: Use or get rid of.
-def histplot(counter, height = None):
-    import os, sys
-    W, H = os.get_terminal_size()
-
-    if height == None:
-        height = H
-        
-    if 2 * len(counter) > W - 1:
-        sys.stderr.print("Console too narrow to show {} values".format(len(counter)))
-        return None
-        
-    data = sorted(counter.items())
-    scale = height / max(counter.values())
-    
-    legends = ["{:.2f}".format(rowid / scale) for rowid in range(height)]
-    widest_legend = max(map(len, legends))
-    legend_formatter = "{:>" + str(widest_legend) + "} "
-
-    for rowid in reversed(range(height)):
-        sys.stdout.write(legend_formatter.format(legends[rowid]))
-        for _, v in data:
-            v *= scale
-            sys.stdout.write("█ " if v >= rowid + 0.5
-                             else "▄ " if v > rowid else "  ")
-        sys.stdout.write("\n")
-
 
 def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
     import os, sys
@@ -41,7 +14,10 @@ def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
     plot_w = min(w, W - 10 - len(indent))
     scale = plot_w / max(counter.values())
     data = sorted(counter.items())
-    
+
+    if highlighted not in counter:
+        bisect.insort_left(data, (highlighted, 0))
+        
     for key, value in data:
         label = str(key)
         bar_size = int(value * scale)
@@ -108,16 +84,24 @@ class Histogram:
 
         self.all_counters = self.counters
         self.counters = tupleops.merge(self.counters, self.counters, self.is_peaked, tupleops.keep_if)
-        
+
+    def find_discrepancies_in_features(self, field_id, features, counters, sizes, discrepancies):
+        for feature_id, (xi, mi, si) in enumerate(zip(features, counters, sizes)):
+            if mi == None:
+                continue
+            if mi.get(xi, 0) < self.outlier_threshold * si:
+                discrepancies.append(((field_id, feature_id),))
+
     def find_discrepancies(self, X, index):
         discrepancies = []
-        
+
         for field_id, (x, m, s) in enumerate(zip(X, self.counters, self.sizes)):
-            for feature_id, (xi, mi, si) in enumerate(zip(x, m, s)):
-                if mi == None:
-                    continue
-                if mi.get(xi, 0) < self.outlier_threshold * si:
-                    discrepancies.append(((field_id, feature_id),))
+            if field_id > 0:
+                self.find_discrepancies_in_features(field_id, x, m, s, discrepancies)
+
+        if len(discrepancies) == 0:
+            self.find_discrepancies_in_features(0, X[0], self.counters[0],
+                                                self.sizes[0], discrepancies)
 
         return discrepancies
 
