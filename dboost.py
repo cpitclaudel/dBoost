@@ -30,6 +30,7 @@ def outliers(trainset_generator, testset_generator, preprocessor, model, rules, 
 
     print(">> Finding correlations")
     preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
+    #print(preprocessor.hints)
     
     print(">> Building model...")
     model.fit(expand_stream(trainset_generator, rules, False, preprocessor.hints, maxrecords))
