@@ -4,6 +4,8 @@ import time
 import utils
 import sys
 import unicodedata
+import re
+import email.utils 
 
 # Rules are functions that take a value (field), and return a tuple of features
 # derived from that value. 
@@ -48,16 +50,17 @@ def length(s: str) -> ("length",):
 def signature(s: str) -> ("signature",):
     return (",".join(map(unicodedata.category, s)),)
 
-import re
-import email.utils 
+NUMBERS = re.compile("\d+")
+
+@rule
+def erasenumbers(s: str) -> ("erase numbers",):
+    return (NUMBERS.sub("<num>", s),)
 
 HTML5_EMAIL_VALIDATOR = re.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
-print(HTML5_EMAIL_VALIDATOR.match("johndoe@csail.mit.edu"))
-
 @rule
-def email_checks(s: str) -> ("simple email check", "RFC822 email check"):
-    return (HTML5_EMAIL_VALIDATOR.match(s) != None), (email.utils.parseaddr(s) != ('', ''))
+def email_checks(s: str) -> ("simple email check",): # "RFC822 email check"):
+    return (HTML5_EMAIL_VALIDATOR.match(s) != None,) #, (email.utils.parseaddr(s) != ('', ''))
 #TODO: This should be asymmetric
 
 @rule
@@ -84,6 +87,11 @@ def _mod(*mods):
         return (i % mod for mod in mods)
     return mod
 
+def _div(*mods):
+    def div(i: int) -> tuple("div {}".format(mod) for mod in mods):
+        return (i % mod == 0 for mod in mods)
+    return div
+
 DATE_PROPS = "tm_year", "tm_mon", "tm_mday", "tm_hour", "tm_min", "tm_sec", "tm_wday", "tm_yday"
 
 @rule
@@ -92,4 +100,5 @@ def unix2date(timestamp: int) -> DATE_PROPS:
     return map(lambda a: getattr(t, a), DATE_PROPS)
 
 rule(_bits(0, 1, 2, 3, 4, 5))
+rule(_div(3, 5))
 rule(_mod(10))
