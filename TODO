@@ -1,6 +1,6 @@
 -   Research:
     *   Mixture model thresholds [Z] [PAPER]
-    *   Histogram-based correlations [C] [PAPER]
+    *   Histogram-based correlations [C] [DONE, PAPER]
     *   Think about asymmetric features (like email addresses: we don't want to detect things that do not have '@' signs)
     *   Evaluate against other papers and real world annotated datasets [R] [PAPER]
     *   Identifying other outlier detection strategies / correlation detection strategies
@@ -13,3 +13,4 @@
     *   Adjust Gaussian to use data from statistical analysis [C, LATER]
     *   Train all models in one pass (instead of one per model) [C]
     *   New features: email validation [DONE], strings & floats to dates & times, ... [C/R]
+    *   Artificial datasets for testing
