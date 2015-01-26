@@ -1,4 +1,11 @@
 -   Research:
+    *   Add cardinality to preprocessor [R]
+    *   Report all (low cardinality, high cardinality) columns as correlated [C]
+    *   Create synthetic data set; suggest as new benchmarks in case of non numerical data [C]
+    *   Test outlier analysis on subset of intel dataset where elements aren't correlated [Z]
+    *   Ensure that there is only one type per column -- later
+    *   Further analysis of intel dataset [Z]
+    *   Comparison to other algorithms (Census DB, TPCH) [Z]
     *   Mixture model thresholds [Z] [PAPER]
     *   Histogram-based correlations [C] [DONE, PAPER]
     *   Think about asymmetric features (like email addresses: we don't want to detect things that do not have '@' signs)
