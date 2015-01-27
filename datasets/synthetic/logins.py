@@ -9,26 +9,39 @@ import random
 import utils
 
 class User:
-    def __init__(self, userid, countries):
+    def __init__(self, userid):
         self.uid = userid
-        self.countries = [country[0] for country in countries]
+        self.has_outliers = True
+        self.countries = [country[0] for country in utils.choose_n(2, COUNTRY_DATA)]
 
-users = [User(uid, utils.choose_n(10, COUNTRY_DATA)) for uid in range(3)]
+    def random_login(self):
+        tsp = utils.random_timestamp()
+        outlier = random.random() < OUTLIERS_RATE
+        row = (self.uid, tsp, self.random_country(tsp, outlier))
+        return outlier, row
 
-OUTLIERS_RATE = 0.01
+    def random_country(self, tsp, outlier):
+        pass
 
-def random_login():
-    user = random.choice(users)
-    tsp = utils.random_timestamp()
-    outlier = random.random() < OUTLIERS_RATE
+class Sedentary(User):
+    def random_country(self, _, outlier):
+        return self.countries[outlier]
 
-    if user.uid == 0:
-        country = user.countries[outlier]
-    elif user.uid == 1:
-        country = user.countries[outlier ^ utils.isweekend(tsp)]
-    elif user.uid == 2:
-        country = random.choice(user.countries)
-    
-    return (outlier, user.uid, tsp, country)
+class BusinessTraveler(User):
+    def random_country(self, tsp, outlier):
+        # print(utils.isweekend(tsp), self.countries[outlier ^ utils.isweekend(tsp)]) # use with | sort | uniq -c | sort -nr
+        return self.countries[outlier ^ utils.isweekend(tsp)]
 
-utils.write_lines("logins", 10000, random_login)
+class FrequentFlyer(User):
+    def __init__(self, userid):
+        super().__init__(userid)
+        self.has_outliers = False
+
+    def random_country(self, tsp, outlier):
+        return random.choice(self.countries)
+
+OUTLIERS_RATE = 0.02
+
+for uid, init in enumerate((Sedentary, BusinessTraveler, FrequentFlyer)):
+    user = init(uid)
+    utils.write_lines("logins{}".format(user.uid), 2000, user.random_login, user.has_outliers)
