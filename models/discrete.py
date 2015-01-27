@@ -8,20 +8,22 @@ BLOCK = "█"
 
 def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
     import os, sys
-    
+
     W, H = os.get_terminal_size()
-    
+
     plot_w = min(w, W - 10 - len(indent))
     scale = plot_w / max(counter.values())
     data = sorted(counter.items())
 
     if highlighted not in counter:
         bisect.insort_left(data, (highlighted, 0))
-        
+
+    header_width = max(len(str(value)) for _, value in data)
+
     for key, value in data:
         label = str(key)
         bar_size = int(value * scale)
-        header = indent
+        header = indent + "[" + str(value).rjust(header_width) + "] "
         bar = BLOCK * bar_size + " " if bar_size > 0 else ""
 
         label_avail_space = W - 2 - len(bar) - len(header)
@@ -36,7 +38,7 @@ def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
 
 class Histogram:
     ID = "histogram"
-    
+
     def __init__(self, peak_threshold, outlier_threshold):
         self.peak_threshold = peak_threshold
         self.outlier_threshold = outlier_threshold
@@ -45,8 +47,8 @@ class Histogram:
     def reset(self):
         self.all_counters = None
         self.counters = None
-        self.sizes = None        
-        
+        self.sizes = None
+
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Histogram.ID, nargs = 2,
@@ -55,11 +57,11 @@ class Histogram:
                             "have a peaked distribution (peakiness is determined using the peak_s " +
                             "parameter), and reporting values that fall in classes totaling less than "
                             "outlier_s of the corresponding histogram. Suggested values: 0.8 0.2.")
-        
+
     @staticmethod
     def from_parse(params):
         return Histogram(*map(float, params))
-        
+
     @staticmethod
     def add(counter, x):
         counter[x] += 1
@@ -74,7 +76,7 @@ class Histogram:
             total_weight = sum(distribution.values())
             peaks_weight = sum(heapq.nlargest(nb_peaks, distribution.values()))
             return peaks_weight > self.peak_threshold * total_weight
-    
+
     def fit(self, Xs):
         for X in Xs:
             self.counters = tupleops.defaultif(self.counters, X, collections.Counter)
@@ -112,4 +114,3 @@ class Histogram:
         counter = self.all_counters[field_id][feature_id]
         pipe.write(indent + "• histogram for {}:\n".format(description))
         hhistplot(counter, highlighted, indent + "  ", pipe)
-
