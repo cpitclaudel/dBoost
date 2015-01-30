@@ -7,10 +7,6 @@
 
 This example shows how adding a few extraction rules manages to capture relatively complex behavior; this provides a much nicer way to specify rules than explicitly encoding the rules of FizzBuzz.
 
-## Intel
-
-    ./dboost-stdin.py -F ' ' --statistical .6 --mixture 2 .3 datasets/real/intel/sensors-1000_dataonly.txt                 
-
 ## Logins
 
     ./datasets/synthetic/logins.py
@@ -26,3 +22,9 @@ The three invocations test for proper detection of outliers on the three users, 
     ./dboost-stdin.py --histogram 0.9 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1}) -d div -d mod --in-memory
 
 This one merges user 0 and user 1.
+
+# Continuous correlations
+
+## Intel
+
+    ./dboost-stdin.py -F ' ' --statistical .6 --mixture 2 .3 datasets/real/intel/sensors-1000_dataonly.txt
