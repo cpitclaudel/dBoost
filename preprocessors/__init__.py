@@ -1,4 +1,5 @@
 def ALL():
     from . import statistical
     from . import discrete 
-    return (statistical.Pearson, discrete.DiscreteStats)
+    from . import cords 
+    return (statistical.Pearson, discrete.DiscreteStats, cords.Cords)

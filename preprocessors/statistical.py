@@ -46,6 +46,7 @@ class Pearson:
         
     def fit(self, Xs):
         S,S2,C,SXY = None, None, None,None
+        print("hello world!")
 
         for (nb, X_) in enumerate(Xs):
             # discard first tuple, since this is empty hints tuple
@@ -98,4 +99,5 @@ class Pearson:
         self.avg2 = AVGSQX 
         self.var = VARX 
         self.pearson = PR
+        print(self.hints)
 
