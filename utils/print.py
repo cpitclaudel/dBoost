@@ -8,6 +8,10 @@ def debug(*args, **kwargs):
     kwargs["file"] = sys.stderr
     print(*args, **kwargs)
 
+def report_progress(nb):
+    if nb % 1000 == 0:
+        print(nb, end="\r", file=sys.stderr)
+
 def expand_hints(fields_group, hints):
     expanded_group = []
 
