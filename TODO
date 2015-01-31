@@ -11,7 +11,6 @@
     *   Identifying other outlier detection strategies / correlation detection strategies
 
 -   Code:
-    *   Add cardinality to preprocessor [R]
     *   Artificial datasets for testing [C, PARTIALLY DONE]
     *   Check correlation detection on the Intel dataset [R/C]
     *   Make the plots more reproducible (integrate in the Makefile) [R]
@@ -32,3 +31,4 @@
 -   Code:
     *   Create a list of examples [C, DONE]
     *   New features: email validation [C] [DONE]
+    *   Add cardinality to preprocessor [R] [DONE]
