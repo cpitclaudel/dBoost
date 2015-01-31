@@ -29,7 +29,7 @@ class Mixture:
     def from_parse(params):
         return Mixture(*map(autoconv, params))
 
-    def mahalanoblis(self, x, gmm, component):
+    def mahalanobis(self, x, gmm, component):
         mean = gmm.means_[component]
         covar = gmm.covars_[component]
         u = x - mean
@@ -61,7 +61,7 @@ class Mixture:
 
     def test_one(self, xi, gmm_pos):
         gmm = self.gmms[gmm_pos]
-        hx = zip(gmm.weights_, [1-erf(self.mahalanoblis(xi, gmm, i))/sqrt(2) for i in range(self.n_components)])
+        hx = zip(gmm.weights_, [1-erf(self.mahalanobis(xi, gmm, i))/sqrt(2) for i in range(self.n_components)])
         return sum([w*h for (w,h) in hx])
 	
     def find_discrepancies(self, X, index):
