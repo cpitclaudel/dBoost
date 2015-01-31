@@ -100,5 +100,4 @@ class Pearson:
         self.avg2 = AVGSQX
         self.var = VARX
         self.pearson = PR
-#print(self.hints)
 

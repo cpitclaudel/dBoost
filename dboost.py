@@ -5,6 +5,7 @@ import features
 from utils import tupleops
 from utils.print import debug
 from itertools import chain
+from preprocessors import statistical
 
 def expand_field(f, rules):
     rls = rules[type(f)]
@@ -30,7 +31,12 @@ def outliers(trainset_generator, testset_generator, preprocessor, model, rules, 
     #TODO: Models shouldn't be applied one by one
 
     debug(">> Finding correlations")
-    preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
+    if preprocessor.ID is "cords":
+      stats = statistical.Pearson(1)
+      stats.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
+      preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords),stats)
+    else:
+      preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
     debug(preprocessor.hints)
 
     debug(">> Building model...")

@@ -10,6 +10,20 @@ def defaultif(S, X, default):
 def zeroif(S, X):
     return S if S != None else tuple(tuple(0 for _ in x) for x in X)
 
+def addlist(S, n, d):
+    if S is None: S = []
+    if len(S) > n: return S
+    S.append(list(0 for _ in range(d)))
+    assert(len(S) >= n)
+    return S
+
+def addlist2d(S, n, d1, d2):
+    if S is None: S = []
+    if len(S) > n: return S
+    S.append(list(list(0 for _ in range(d2)) for d in range(d1)))
+    assert(len(S) >= n)
+    return S
+
 def root(X):
     return deepmap(sqrt, X) #TODO remove
 
