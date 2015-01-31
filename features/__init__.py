@@ -100,7 +100,15 @@ def unix2date(timestamp: int) -> DATE_PROPS:
     return map(lambda a: getattr(t, a), DATE_PROPS)
 
 @rule
-def is_weekend(timestamp: int) -> ("is_weekend",):
+def unix2date_float(timestamp: float) -> DATE_PROPS:
+    return unix2date(int(timestamp))
+
+@rule
+def fracpart(x: float) -> ("frac part",):
+    return (x - int(x),)
+
+@rule
+def is_weekend(timestamp: int) -> ("is weekend",):
     wday = time.gmtime(timestamp).tm_wday
     wkend = wday in [5, 6]
     return (wkend,)
