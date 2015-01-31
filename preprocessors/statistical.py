@@ -33,6 +33,7 @@ class Pearson:
       self.maxm = []
       self.minm = []
       self.ttl = []
+      self.card = [] 
 
     @staticmethod
     def register(parser):
@@ -46,13 +47,15 @@ class Pearson:
 
     def fit(self, Xs):
         S,S2,C,SXY = None, None, None,None
+        CardC = None
 
         for (nb, X_) in enumerate(Xs):
             X_ = filter_abc(X_, numbers.Number)
-            S, S2, C= zeroif(S, X_), zeroif(S2, X_), zeroif(C, X_)
+            S, S2, C, CardC = zeroif(S, X_), zeroif(S2, X_), zeroif(C, X_), zeroif(CardC, X_)
             S = merge(S, X_, id, plus)
             S2 = merge(S2, X_, sqr, plus)
             C = merge(C, X_, not_null, plus)
+            CardC = merge(CardC, X_,id, addtoset)
             XY_ = ()
             idx = -1
             for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
@@ -89,6 +92,7 @@ class Pearson:
               assert(math.fabs(PR[idx]) <= 1)
               self.hints.append(((nx,nnx),(ny,nny)))
 
+        self.card = deepmap(len,CardC)
         self.cnt = C
         self.sum = S
         self.sum2 = S2
@@ -96,3 +100,5 @@ class Pearson:
         self.avg2 = AVGSQX
         self.var = VARX
         self.pearson = PR
+#print(self.hints)
+
