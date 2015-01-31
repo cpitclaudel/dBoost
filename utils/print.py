@@ -1,7 +1,12 @@
+import os
 import sys
+import bisect
 from . import color
+from utils.color import term, highlight
 
-[[(1, 3)], [(2,4), (4,5)], [(0,1)]] 
+def debug(*args, **kwargs):
+    kwargs["file"] = sys.stderr
+    print(*args, **kwargs)
 
 def expand_hints(fields_group, hints):
     expanded_group = []
@@ -16,7 +21,7 @@ def expand_hints(fields_group, hints):
 
 def describe_discrepancy(fields_group, rules_descriptions, hints, x):
     expanded = expand_hints(fields_group, hints)
-    
+
     field_ids, values, features = zip(*((field_id, x[field_id],
                                          rules_descriptions[type(x[field_id])][feature_id])
                                         for field_id, feature_id in expanded))
@@ -31,45 +36,75 @@ def describe_discrepancy(fields_group, rules_descriptions, hints, x):
     return msg, features
 
 def print_rows(outliers, model, hints, rules_descriptions, verbosity = 0, max_w = 40, header = "   "):
-    SPACE = 2
-
     if len(outliers) == 0:
         return
 
     # each outlier is (x, X, discrepancies)
-    nb_fields = len(outliers[0][0])
+    nb_fields = len(outliers[0][1][0])
     widths = (0,) * nb_fields
 
-    # Compute the ideal column width for each column 
-    for x, _, _ in outliers:
+    # Compute the ideal column width for each column
+    for _, (x, _, _) in outliers:
         widths = tuple(max(w, min(max_w, len(str(f))))
                        for w, f in zip(widths, x))
 
-    for x, X, discrepancies in outliers:
+    for linum, (x, X, discrepancies) in outliers:
         highlight = [field_id for fields_group in discrepancies
                               for field_id, _ in expand_hints(fields_group, hints)]
-        
+
         truncated_x = tuple(str(f)[:w] for f, w in zip(x, widths))
         padding = tuple(w - len(f) for f, w in zip(truncated_x, widths))
         colorized_x = colorize(truncated_x, highlight)
         colorized_x = " ".join(f + " " * p for f, p in zip(colorized_x, padding))
-        
-        sys.stdout.write(header + colorized_x + "\n")
 
-        if verbosity > 0:
-            for fields_group in discrepancies:
-                msg, features_desc = describe_discrepancy(fields_group,
-                                                          rules_descriptions,
-                                                          hints, x)
-                sys.stdout.write(msg + "\n")
-                
-                if verbosity > 1:
-                    model.more_info(fields_group, features_desc, X, "     ")
+        if verbosity < 0:
+            sys.stdout.write(str(linum) + "\n")
+        else:
+            sys.stdout.write(header + colorized_x + "\n")
 
-            sys.stdout.write("\n")
-            
+            if verbosity > 0:
+                for fields_group in discrepancies:
+                    msg, features_desc = describe_discrepancy(fields_group,
+                                                              rules_descriptions,
+                                                              hints, x)
+                    sys.stdout.write(msg + "\n")
+
+                    if verbosity > 1:
+                        model.more_info(fields_group, features_desc, X, "     ")
+
+                sys.stdout.write("\n")
+
 def colorize(row, indices):
     row = [str(f) for f in row]
     for index in indices:
         row[index] = color.highlight(row[index], color.term.UNDERLINE)
     return row
+
+def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
+    BLOCK = "█"
+    W, H = os.get_terminal_size()
+
+    plot_w = min(w, W - 10 - len(indent))
+    scale = plot_w / max(counter.values())
+    data = sorted(counter.items())
+
+    if highlighted  != None and highlighted not in counter:
+        bisect.insort_left(data, (highlighted, 0))
+
+    header_width = max(len(str(value)) for _, value in data)
+
+    for key, value in data:
+        label = str(key)
+        bar_size = int(value * scale)
+        header = indent + "[" + str(value).rjust(header_width) + "] "
+        bar = BLOCK * bar_size + " " if bar_size > 0 else ""
+
+        label_avail_space = W - 2 - len(bar) - len(header)
+        if len(label) > label_avail_space:
+            label = label[:label_avail_space - 3] + "..."
+
+        line = bar + label
+        if key == highlighted:
+            line = highlight(line, term.PLAIN, term.RED)
+
+        pipe.write(header + line + "\n")

@@ -31,12 +31,16 @@ def get_base_parser():
     base_parser.add_argument("--max-records", dest = "maxrecords", metavar = "N",
                              action = "store", default = float("+inf"), type = int,
                              help = "Stop processing after reading at most N records.")
-    
+
+    base_parser.add_argument("--minimal", dest = "verbosity",
+                             action = "store_const", const = -1,
+                             help = "Trim output down to the bare minimum, reporting only the indices of outliers on stdout.")
+
     base_parser.set_defaults(disabled_rules = [])
 
     register_modules(base_parser, REGISTERED_MODELS)
     register_modules(base_parser, REGISTERED_PREPROCESSORS)
-    
+
     return base_parser
 
 def get_sdtin_parser():
@@ -48,11 +52,11 @@ def get_sdtin_parser():
     parser.add_argument("--train-with", dest = "trainwith", metavar = "input",
                         action = "store", default = None, type = argparse.FileType('r'),
                         help = "Use a separate dataset for correlation detection and model training. ")
-    
+
     parser.add_argument("-m", "--in-memory",  dest = "inmemory",
                         action = "store_const", const = True, default = False,
                         help = "Load the entire dataset in memory before running. Required if input does not come from a seekable file.")
-    
+
     parser.add_argument("-F", "--field-separator", dest = "fs",
                         action = "store", default = "\t", metavar = "fs",
                         help = "Use fs as the input field separator (default: tab).")
@@ -72,11 +76,11 @@ def load_modules(namespace, parser, registered_modules):
         params = getattr(namespace, module.ID)
         if params != None:
             modules.append(module.from_parse(params))
-            
+
     if len(modules) == 0:
         args = ["'--" + module.ID + "'" for module in registered_modules]
         parser.error("Please specify one of [{}]".format(", ".join(args)))
-            
+
     return modules
 
 def parsewith(parser):
@@ -84,7 +88,7 @@ def parsewith(parser):
 
     models = load_modules(args, parser, REGISTERED_MODELS)
     preprocessors = load_modules(args, parser, REGISTERED_PREPROCESSORS)
-    
+
     disabled_rules = set(args.disabled_rules)
     available_rules = set(r.__name__ for rs in features.rules.values() for r in rs)
     invalid_rules = disabled_rules - available_rules

@@ -5,17 +5,17 @@ import utils
 import sys
 import unicodedata
 import re
-import email.utils 
+import email.utils
 
 # Rules are functions that take a value (field), and return a tuple of features
-# derived from that value. 
+# derived from that value.
 
 rules = defaultdict(list)
 
 def rule(rule):
     sig = inspect.signature(rule)
     params = list(sig.parameters.values())
-    
+
     if len(params) != 1:
         sys.stderr.write("Invalid rule {}".format(rule.__name__))
         sys.exit(1)
@@ -31,7 +31,7 @@ def descriptions(ruleset):
         descriptions[type] = []
         for rule in ruleset[type]:
             descriptions[type].extend(inspect.signature(rule).return_annotation)
-            
+
     return descriptions
 
 @rule
@@ -98,6 +98,12 @@ DATE_PROPS = "tm_year", "tm_mon", "tm_mday", "tm_hour", "tm_min", "tm_sec", "tm_
 def unix2date(timestamp: int) -> DATE_PROPS:
     t = time.gmtime(timestamp)
     return map(lambda a: getattr(t, a), DATE_PROPS)
+
+@rule
+def is_weekend(timestamp: int) -> ("is_weekend",):
+    wday = time.gmtime(timestamp).tm_wday
+    wkend = wday in [5, 6]
+    return (wkend,)
 
 rule(_bits(0, 1, 2, 3, 4, 5))
 rule(_div(3, 5))

@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# Generates a fizzbuzz, with some mistakes
+
 MAX = 1000
 OUTPUT = "fizzbuzz"
 FORMAT = "{}\t{}\n"
@@ -17,9 +20,9 @@ with open(OUTPUT, mode = "w") as output:
             writeout(output, num, "Fizz")
             continue
         if num == 30:
-            writeout(output, num, "Buzz")    
+            writeout(output, num, "Buzz")
             continue
-        
+
         if three and five:
             writeout(output, num, "FizzBuzz")
         elif three:

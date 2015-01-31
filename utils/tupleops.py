@@ -1,7 +1,6 @@
 import sys
 from math import sqrt
 from itertools import chain
-from numbers import Number
 
 def defaultif(S, X, default):
     return S if S != None else tuple(tuple(default() for _ in x) for x in X)

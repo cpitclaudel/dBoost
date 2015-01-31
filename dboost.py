@@ -3,6 +3,7 @@ import sys
 import utils
 import features
 from utils import tupleops
+from utils.print import debug
 from itertools import chain
 
 def expand_field(f, rules):
@@ -23,21 +24,21 @@ def expand_stream(generator, rules, keep_x, hints, maxrecords = float("+inf")):
         X = expand(x, rules)
         if hints != None:
             X = expand_hints(X, hints)
-        yield (x, X) if keep_x else X 
-        
+        yield (x, X) if keep_x else X
+
 def outliers(trainset_generator, testset_generator, preprocessor, model, rules, maxrecords = float("+inf")):
     #TODO: Models shouldn't be applied one by one
 
-    print(">> Finding correlations")
+    debug(">> Finding correlations")
     preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
-    #print(preprocessor.hints)
-    
-    print(">> Building model...")
+    debug(preprocessor.hints)
+
+    debug(">> Building model...")
     model.fit(expand_stream(trainset_generator, rules, False, preprocessor.hints, maxrecords))
 
-    print(">> Finding outliers...")
+    debug(">> Finding outliers...")
     for index, (x, X) in enumerate(expand_stream(testset_generator, rules,
                                                  True, preprocessor.hints, maxrecords)):
         discrepancies = model.find_discrepancies(X, index)
         if len(discrepancies) > 0:
-            yield(x, X, discrepancies)
+            yield index, (x, X, discrepancies)
