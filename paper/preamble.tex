@@ -1,0 +1,32 @@
+\usepackage{graphicx}
+\usepackage{balance}  % for  \balance command ON LAST PAGE  (only there!)
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{calc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage{upquote}
+
+\lstset{ %
+  basicstyle=\ttfamily\small,  %
+  breaklines=true, %
+  keywordstyle=\textbf, %
+  literate={█}{{$\blacksquare$}}1{•}{{$\bullet$}}1,
+  moredelim=[is][\color{red}]{\$}{\$}, %
+  upquote=true %
+}
+
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Covar}{Covar}
