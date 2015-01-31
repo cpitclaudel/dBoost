@@ -1,6 +1,6 @@
 % PREPROCESSOR
 
-Before being used to generate a model of the data, the tuples are cleaned up and expanded in order to extract relevant information. 
+Before being used to generate a model of the data, the tuples are cleaned up and expanded in order to extract relevant information.
 
 \subsubsection{Tuple Expansion}
 
@@ -16,7 +16,7 @@ Before being used to generate a model of the data, the tuples are cleaned up and
   \textit{High-Performance MySQL}, 3\textsuperscript{rd} edition (2012), p.~127
 \end{flushright}
 
-Data stored in databases often has rich semantics, encompassing dates and times, highly stuctured datatypes such as phone numbers or addresses, or GIS data. The semantics of plain SQL, however, are not expressive enough to properly store these rich data types. Programmers are thus forced to revert to simpler types, relying on application logic to parse the data. 
+Data stored in databases often has rich semantics, encompassing dates and times, highly stuctured datatypes such as phone numbers or addresses, or GIS data. The semantics of plain SQL, however, are not expressive enough to properly store these rich data types. Programmers are thus forced to revert to simpler types, relying on application logic to parse the data.
 
 Unfortunately, information on the structure of this data is also what an outlier detection engine would most benefit from. For example, the day of the week in a date may be relevant information in a banking application in which transactions are only completed on weekdays, but unless the programmer explicitly duplicates this information in a separate column, it remains inaccessible to an automated outlier detector.
 
@@ -29,10 +29,12 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \texttt{\parbox{\widthof{1418222134.325}}{"32-G414"}}
   \end{stackedlines} \longrightarrow
   \begin{cases}
+    \text{id: } & \texttt{32-G414}\\
     \text{length: } & \texttt{7}\\
-    \text{pattern: } & \texttt{NNPLNNN}\\
+    \text{signature: } & \texttt{NNPLNNN}\\
     \text{uppercase: } & \texttt{True (1)}\\
     \text{lowercase: } & \texttt{False (0)}\\
+    \text{erase numbers: } & \texttt{<num>-G<num>}\\
     \text{\parbox{\widthof{base-10 residue:}}{title case:} } & \texttt{True (1)}
   \end{cases}$
 
@@ -45,8 +47,9 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \text{time: } & \texttt{(14,35)}\\
     \text{weekday: } & \texttt{Wed (2)}\\
     \text{day of year: } & \texttt{344}\\
+    \text{weekend: } & \texttt{False (0)}\\
     \text{binary: } & \texttt{0b10101\ldots010}\\
-    \text{base-10 residue: } & \texttt{4}
+    \text{mod-10 residue: } & \texttt{4}
   \end{cases}$
 
    $\begin{stackedlines}
@@ -55,11 +58,11 @@ To reconstruct potentially lost information we expand tuples, breaking down each
   \end{stackedlines} \longrightarrow
   \begin{cases}
     \text{intpart: } & \texttt{1418222134}\\
-    \text{decpart: } & \texttt{0.325}\\
+    \text{fracpart: } & \texttt{0.325}\\
     \text{millis: } & \texttt{325}\\
     \text{\parbox{\widthof{base-10 residue:}}{date, \ldots:} } & \texttt{\ldots}
   \end{cases}$
 
-  \caption{Summary of tuple expansion rules currently implemented.}
+  \caption{Examples of tuple expansion rules currently implemented.}
   \label{fig:tuple-expansion}
 \end{figure}
