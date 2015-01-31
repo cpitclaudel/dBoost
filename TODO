@@ -6,15 +6,18 @@ TODO
 * Closer look at references [R] [PAPER]
 * Comparison to other datasets from the COORDS (Census DB, TPCH) [Z] [PAPER]
 * Test outlier analysis on subset of intel dataset where elements aren't correlated (further analysis of intel dataset) [Z]
-* Mixed discrete/continuous models, e.g. different distributions based on value of one field (i.e. report all (low cardinality, high cardinality) columns as correlated) [C]
+* Mixed discrete/continuous models, e.g. different distributions based on value of one field (i.e. report all (low cardinality, high cardinality) columns as correlated) [C/R]
 
 ## Code
 
 * Make the plots more reproducible (integrate in the Makefile) [R]
+* Add a clean target to the Makefile
 
 ## Paper
 
 * Change title?
+* The work preprocessor designates a statistical analyzer in the code and the tuple expander in the paper
+* Git email and usernames
 
 LATER
 =====

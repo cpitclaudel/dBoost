@@ -29,9 +29,9 @@ def expand_stream(generator, rules, keep_x, hints, maxrecords = float("+inf")):
 def outliers(trainset_generator, testset_generator, preprocessor, model, rules, maxrecords = float("+inf")):
     #TODO: Models shouldn't be applied one by one
 
-    debug(">> Finding correlations")
+    debug(">> Finding correlations...")
     preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
-    debug(preprocessor.hints)
+    # debug(preprocessor.hints)
 
     debug(">> Building model...")
     model.fit(expand_stream(trainset_generator, rules, False, preprocessor.hints, maxrecords))

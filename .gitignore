@@ -1,7 +1,10 @@
+# Compiled files
 /paper/paper.pdf
+/group-list.pdf
+
+# Datasets
 /datasets/real/csail-tiny.txt
 /datasets/real/csail.txt
-/fizzbuzz
 /datasets/synthetic/logins0
 /datasets/synthetic/logins0-outliers
 /datasets/synthetic/logins1
@@ -10,6 +13,8 @@
 /datasets/synthetic/logins2-outliers
 /datasets/synthetic/logins
 /datasets/synthetic/fizzbuzz
+
+# Temp files
 *.aux
 *.bbl
 *.blg

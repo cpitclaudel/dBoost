@@ -13,13 +13,13 @@ This example shows how adding a few extraction rules manages to capture relative
 
 An example of suspect behavior detection. User 0 always logs in from the same country; user 1 logs in from different countries on week-days and week-ends. User 2 doesn't follow any particular pattern.
 
-    ./dboost-stdin.py --histogram 0.9 0.05 --discretestats 8 2 datasets/synthetic/logins0
-    ./dboost-stdin.py --histogram 0.9 0.05 --discretestats 8 2 datasets/synthetic/logins1
-    ./dboost-stdin.py --histogram 0.9 0.05 --discretestats 8 2 datasets/synthetic/logins2
+    ./dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins0
+    ./dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins1
+    ./dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins2
 
 The three invocations test for proper detection of outliers on the three users, individually
 
-    ./dboost-stdin.py --histogram 0.9 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1}) -d div -d mod --in-memory
+    ./dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1}) -d div -d mod --in-memory
 
 This one merges user 0 and user 1.
 

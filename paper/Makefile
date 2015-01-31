@@ -14,3 +14,5 @@ paper.pdf: $(TEXFILES) ../graphics/models-plots-crop.pdf
 	pdflatex paper.tex
 	pdflatex paper.tex
 
+clean:
+	echo TODO
