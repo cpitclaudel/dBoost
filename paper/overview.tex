@@ -18,12 +18,16 @@ From a high level view, our pipeline is implemented as a three-pass streaming al
 The different stages of our pipeline are summarized as follows and described in detail in the following sections:
 
 \begin{enumerate}
-	\item Preprocessing -- During this phase, tuples are expanded using knowledge about the database schema and field types. This process is described in detail in Section~\ref{sec:preproc}.
+	\item Preprocessing -- Tuples are expanded using knowledge about the database schema and field types. This process is described in detail in Section~\ref{sec:preproc}.
 
-	\item Statistical analysis -- During this stage, we collect statistics on the expanded data. These statistics are used during data modeling and outlier detection. During this analysis, information about linear correlations between expanded tuples are also gathered for the data modeling phase. This process is detailed in Section~\ref{sec:stat_anal}.
- 
-	\item Data modeling -- We apply several machine-learning algorithms to build models of the data. We describe this phase in Section~\ref{sec:model_creation}
+	\item Statistical analysis -- The expanded data is analysed to gather basic statistics, along with correlation information. These statistics are used for modeling and outlier detection. The process is detailed in Section~\ref{sec:stat_anal}.
 
-	\item Outlier detection -- Using the models built in the previous stage, the outlier detector identifies data that lies outside of specified parameters. This process is detailed in Section~\ref{sec:outlier_detection}.
+	\item Data modeling -- We apply various user-selected machine-learning algorithms to build models of the data. We describe this phase in Section~\ref{sec:model_creation}
+
+	\item Outlier detection -- Using the models built in the previous stage and user-provided sensitivity thresholds, we report outliers identified by the models trained during the previous stage. This process is detailed in Section~\ref{sec:outlier_detection}.
 \end{enumerate}
 
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
