@@ -2,6 +2,8 @@ import sys
 from math import sqrt
 from itertools import chain
 
+MAX_CARD = 10
+
 def defaultif(S, X, default):
     return S if S != None else tuple(tuple(default() for _ in x) for x in X)
 
@@ -46,6 +48,14 @@ def mul(a, b):
 
 def div0(a, b):
     return a / b if a != None and b != 0 else 0
+
+def addtoset(a, b):
+    if type(a) is not set:
+      return {b}
+    if len(a) >= MAX_CARD:
+      return a
+    a.add(b)
+    return a
 
 def incrkey(a, b):
     if a != None:
