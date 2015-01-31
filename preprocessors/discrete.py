@@ -3,6 +3,7 @@ from collections import Counter
 from itertools import combinations
 from utils import tupleops
 from utils.print import debug
+import sys
 
 class DiscreteStats:
     ID = "discretestats"
@@ -27,7 +28,7 @@ class DiscreteStats:
         sample = None
 
         for id, X in enumerate(Xs):
-            if id % 10 == 0:
+            if id % 10 == 0 and sys.stdout.isatty():
                 debug(id, end='\r')
 
             subtuples = tuple(combinations(tupleops.flatten(X), self.fundep_size))

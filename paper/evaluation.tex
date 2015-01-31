@@ -1,6 +1,7 @@
-% Evaluation
+\section{Evaluation}
+\label{sec:evaluation}
 
-We implemented dBoost in approximately 2000 lines of python3 code.
+We implemented dBoost in approximately 2000 lines of \texttt{python3} code.
 Our code is publicly available on GitHub under version 3 of the GNU Public License~\footnote{\url{https://github.com/cpitclaudel/6.830}}.
 The program loads tuples from a text file (column separators can be specified on the command line, so many formats are possible), analyzes the data, and reports outliers on the command line.
 Table~\ref{table:flags} shows the usage options to run the models supported by dBoost.
@@ -27,3 +28,8 @@ Flag & Options & Explanation \\
 \end{table*}
 
 We ran our tool on two real-world data sets: a lab directory and a collection of sensor data. The lab directory represents a heterogeneous data set with a significant amount of rich string data; we used it to evaluate the use of the Histogram model. The sensor data was used to evaluate the effectiveness of the statistical analyzer and the Gaussian and Mixture models.
+
+\input{csail-directory-evaluation}
+\input{intel-lab-data-evaluation}
+%\input{presidential-campaign-evaluation}
+%\input{mimic2-evaluation}

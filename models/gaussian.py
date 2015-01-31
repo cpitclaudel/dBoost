@@ -1,27 +1,28 @@
 import numbers
+from utils.print import report_progress
 from utils.tupleops import *
 from utils.autoconv import autoconv
 
 class Simple:
     ID = "gaussian"
-    
+
     def __init__(self, tolerance):
         self.tolerance = tolerance
         self.reset()
-        
+
     def reset(self):
         self.model = None
-        
+
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Simple.ID, nargs = 1, metavar = "n_stdev",
                             help = "Use a gaussian model, reporting values that fall more than " +
                             "n_stdev standard deviations away from the mean. Suggested value: 3.")
-        
+
     @staticmethod
     def from_parse(params):
         return Simple(*map(autoconv, params))
-        
+
     def fit(self, Xs):
         S, S2, C = None, None, None
 
@@ -49,7 +50,7 @@ class Simple:
 
     def find_discrepancies(self, X, index):
         ret = []
- 
+
         for field_id, (x, m) in enumerate(zip(X, self.model)):
             ret.extend(((field_id, test_id),) for (test_id, (xi, mi))
                        in enumerate(zip(x, m)) if not self.test_one(xi, mi))

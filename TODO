@@ -1,34 +1,57 @@
-# TODO
+TODO
+====
 
--   Research:
-    *   Closer look at references [R] [PAPER]
-    *   Comparison to other datasets from the COORDS (Census DB, TPCH) [Z] [PAPER]
-    *   Create synthetic data set; suggest as new benchmarks in case of non numerical data [C, PARTIALLY DONE] [PAPER]
-    *   Test outlier analysis on subset of intel dataset where elements aren't correlated (further analysis of intel dataset) [Z]
-    *   Mixed discrete/continuous models, e.g. different distributions based on value of one field (i.e. report all (low cardinality, high cardinality) columns as correlated) [C]
+## Research
 
-    *   Think about asymmetric features (like email addresses: we don't want to detect things that do not have '@' signs)
-    *   Identifying other outlier detection strategies / correlation detection strategies
+* Closer look at references [R] [PAPER]
+* Comparison to other datasets from the COORDS (Census DB, TPCH) [Z] [PAPER]
+* Test outlier analysis on subset of intel dataset where elements aren't correlated (further analysis of intel dataset) [Z]
+* Mixed discrete/continuous models, e.g. different distributions based on value of one field (i.e. report all (low cardinality, high cardinality) columns as correlated) [C/R]
 
--   Code:
-    *   Artificial datasets for testing [C, PARTIALLY DONE]
-    *   Check correlation detection on the Intel dataset [R/C]
-    *   Make the plots more reproducible (integrate in the Makefile) [R]
-    *   New features: strings & floats to dates & times, ... [C/R]
-    *   Train all models in one pass (instead of one per model) [C, LATER]
-    *   Adjust Gaussian to use data from statistical analysis [C, LATER]
-    *   Unit tests [Z, LATER]
-    *   Look at correlations inside the expansion of a given field [LATER]
-    *   Ensure that there is only one type per column [LATER]
-    *   Change the outlier reporting strategy to make it easier to report outliers [LATER]
+## Code
 
-# Done
+* Make the plots more reproducible (integrate in the Makefile) [R]
+* Add a clean target to the Makefile
 
--   Research:
-    *   Histogram-based correlations [C] [DONE, PAPER]
-    *   Mixture model thresholds [Z] [KINDA DONE, PAPER]
+## Paper
 
--   Code:
-    *   Create a list of examples [C, DONE]
-    *   New features: email validation [C] [DONE]
-    *   Add cardinality to preprocessor [R] [DONE]
+* Change title?
+* The work preprocessor designates a statistical analyzer in the code and the tuple expander in the paper
+* Git email and usernames
+
+LATER
+=====
+
+## Code
+
+* Properly support multiple models
+  - Train all models in one pass (instead of one per model) [C] [LATER]
+  - Combine outlier reports from multiple models
+* Adjust Gaussian model to use data from statistical analysis [C] [LATER]
+* Add unit tests [Z, LATER]
+* Look at correlations inside the expansion of a given field [LATER] [EASY]
+* Ensure that there is only one type per column [LATER]
+* Change the outlier reporting strategy to make it easier to report outliers [LATER]
+
+## Research
+
+* Think about asymmetric features (like email addresses: we don't want to detect things that do not have '@' signs)
+
+DONE
+====
+
+## Research
+
+* Create synthetic data set; suggest as new benchmarks in case of non numerical data [C] [DONE?] [PAPER]
+* Mixture model thresholds [Z] [KINDA DONE, PAPER]
+* Identifying other outlier detection strategies / correlation detection strategies [DONE C?]
+
+## Code
+
+* New features: floats to dates & times, ... [C/R] [DONE C]
+* Add cardinality to preprocessor [R] [DONE]
+* Create a list of examples [C] [DONE]
+* New features: email validation [C] [DONE]
+* Histogram-based correlations [C] [DONE, PAPER]
+* Check correlation detection on the Intel dataset [R/C] [DONE C]
+* Artificial datasets for testing [C] [DONE?]
