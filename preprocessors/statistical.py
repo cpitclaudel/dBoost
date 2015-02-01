@@ -1,103 +1,74 @@
-import numbers
-from utils.tupleops import *
-from utils.autoconv import autoconv
-import math,itertools
+"""Statistical analyzer that collects various statistics for use by other
+models.
 
-# Preprocessor that collects dataset statistics over columns for use by other models.
-#   It also detects correlations between columns using the Pearson R coefficient.
-#   If the absolute value of the R value is greater than epsilon, the coordinates of
-#   the two columns are added as pairs to hints in the format
-#   ( (x-index, x-subcolumn-index), (y-index, y-subcolumn-index))
-# Collects the following stats:
-#   avg -- average value of the column
-#   cnt -- total number of value in the column
-#   maxm -- maximum value in the column
-#   minm -- minimum value in the column
-#   ttl -- sum of values in the column
-#   var -- variance
-#
+It also detects correlations between columns using the Pearson R coefficient.
+If the absolute value of the R value is greater than the epsilon
+(corr_threshold) parameter, the two columns are reported as correlated.
+
+Public members:
+
+* stats: a tuple respecting the structure of the expanded input, with one Stats
+         object per expanded field.
+
+* pearsons: a dictionary mapping pairs of nested indices to correlation
+            coefficients.
+
+* hints: a list of correlated expanded fields ((x, subx), (y, suby))
+
+"""
+
+import numbers
+from math import fabs
+from utils.tupleops import filter_abc, defaultif, deepapply, pair_ids
+from preprocessors.utils import Stats
+
+# Preprocessor that collects dataset statistics
 
 class Pearson:
     ID = "statistical"
-    #def __init__(self, proj1, proj2):
-    def __init__(self,eps):
-        self.eps = eps
-        self.reset()
 
-    def reset(self):
-      self.hints = []
-      self.sum = []
-      self.avg = []
-      self.var = []
-      self.cnt = []
-      self.maxm = []
-      self.minm = []
-      self.ttl = []
-      self.card = [] 
+    def __init__(self, corr_threshold):
+        self.corr_threshold = corr_threshold
+
+        self.hints = []
+        self.stats = None
+        self.pearsons = {}
+        self.pairwise_prods = None
 
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Pearson.ID, nargs = 1, metavar = "epsilon",
-                            help = "Use a statistical model preprocessor, reporting correlated values " +
-                            "with a pearson r value greater than epsilon.")
+                            help = "Use a statistical model preprocessor, " +
+                            "reporting correlated values with a pearson r" +
+                            "value greater than epsilon.")
 
     @staticmethod
     def from_parse(params):
         return Pearson(*map(float, params))
 
+    def pearson(self, pair_id):
+        (idx, sidx), (idy, sidy) = pair_id
+        return Stats.pearson(self.stats[idx][sidx], self.stats[idy][sidy],
+                             self.pairwise_prods[pair_id])
+
     def fit(self, Xs):
-        S,S2,C,SXY = None, None, None,None
-        CardC = None
+        for X in Xs:
+            X = filter_abc(X, numbers.Number)
 
-        for (nb, X_) in enumerate(Xs):
-            X_ = filter_abc(X_, numbers.Number)
-            S, S2, C, CardC = zeroif(S, X_), zeroif(S2, X_), zeroif(C, X_), zeroif(CardC, X_)
-            S = merge(S, X_, id, plus)
-            S2 = merge(S2, X_, sqr, plus)
-            C = merge(C, X_, not_null, plus)
-            CardC = merge(CardC, X_,id, addtoset)
-            XY_ = ()
-            idx = -1
-            for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
-              for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
-                idx = idx + 1
-                #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny))
-                XY_ = XY_ + ((x[0]*y[0],),)
-            SXY = zeroif(SXY, XY_)
-            SXY = merge(SXY, XY_, id, plus)
+            self.stats = defaultif(self.stats, X, Stats)
+            deepapply(self.stats, X, Stats.update)
 
-        AVGX = merge(S,C,id,div0)
-        AVGSQX = merge(S2,C,id,div0)
-        VARX = merge(AVGSQX,AVGX,sqr,minus)
+            if self.pairwise_prods == None:
+                self.pairwise_prods = {pid: 0 for pid in pair_ids(X)}
 
-        idx = -1
-        PR = ()
-        VARXY = ()
+            for (id1, id2) in self.pairwise_prods:
+                (idx, sidx), (idy, sidy) = id1, id2
+                self.pairwise_prods[(id1, id2)] += X[idx][sidx] * X[idy][sidy]
 
-        for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
-          #for (nnx,nny) in itertools.product(range(len(X)),range(len(Y))):
-          for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
-            idx = idx + 1
+        for pair_id in self.pairwise_prods:
+            pearson = self.pearson(pair_id)
+            if pearson != None and fabs(pearson) > self.corr_threshold:
+                self.hints.append(pair_id)
+            self.pearsons[pair_id] = pearson
 
-            #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny))
-            VARXY = VARXY + ((SXY[idx][0]/C[nx][nnx] - (AVGX[nx][nnx] * AVGX[ny][nny])),)
-            if VARX[nx][nnx] == 0 or VARX[ny][nny] == 0:
-              PR = PR + (float('nan'),)
-            else:
-              PR = PR + ((VARXY[idx] / math.sqrt(VARX[nx][nnx] * VARX[ny][nny])),)
-
-            #print(str(idx) + " " + str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + " " + str(C[nx][nnx]) + " " + str(AVGX[nx][nnx]) + " " + str(AVGX[ny][nny]) + " " + str(SXY[idx][0]) + " " + str(VARX[nx][nnx]) + " " + str(VARX[ny][nny]) + " " + str(PR[idx]))
-
-            if not math.isnan(PR[idx]) and math.fabs(PR[idx]) > self.eps:
-              assert(math.fabs(PR[idx]) <= 1)
-              self.hints.append(((nx,nnx),(ny,nny)))
-
-        self.card = deepmap(len,CardC)
-        self.cnt = C
-        self.sum = S
-        self.sum2 = S2
-        self.avg = AVGX
-        self.avg2 = AVGSQX
-        self.var = VARX
-        self.pearson = PR
-
+        self.hints.sort()

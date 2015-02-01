@@ -1,8 +1,12 @@
 import sys
 from math import sqrt
-from itertools import chain
+from itertools import chain, combinations, product
 
-MAX_CARD = 10
+def pair_ids(X):
+    for idx, idy in combinations(range(len(X)), 2):
+        x, y = X[idx], X[idy]
+        for idxi, idyi in product(range(len(x)), range(len(y))):
+            yield (idx, idxi), (idy, idyi)
 
 def defaultif(S, X, default):
     return S if S != None else tuple(tuple(default() for _ in x) for x in X)
@@ -71,7 +75,7 @@ def div0(a, b):
 def addtoset(a, b):
     if type(a) is not set:
       return {b}
-    if len(a) >= MAX_CARD:
+    if len(a) >= 16:
       return a
     a.add(b)
     return a
