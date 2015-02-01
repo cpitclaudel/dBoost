@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Generates synthetic datasets of online logins
 
-# Schema: Outlier, User, Timestamp, Country
+# Schema: User, Timestamp, Country
 # There are three users: 0, 1, and 2. User 1 always logs in from the same country. User 2 logs in from one country on weekdays, and another on weekends. User 3 logs in from various countries.
 
 from countrydata import COUNTRY_DATA

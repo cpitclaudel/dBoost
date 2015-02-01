@@ -23,7 +23,7 @@ class Simple:
     def from_parse(params):
         return Simple(*map(autoconv, params))
 
-    def fit(self, Xs):
+    def fit(self, Xs, stats):
         S, S2, C = None, None, None
 
         # TODO: Adjust this to use values from the statistical analysis

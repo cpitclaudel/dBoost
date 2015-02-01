@@ -28,19 +28,12 @@ def expand_stream(generator, rules, keep_x, hints, maxrecords = float("+inf")):
         yield (x, X) if keep_x else X
 
 def outliers(trainset_generator, testset_generator, preprocessor, model, rules, maxrecords = float("+inf")):
-    #TODO: Models shouldn't be applied one by one
-
     debug(">> Finding correlations")
-    if preprocessor.ID is "cords":
-      stats = statistical.Pearson(1)
-      stats.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
-      preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords),stats)
-    else:
-      preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
-    debug(preprocessor.hints)
+    preprocessor.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
+    # debug(preprocessor.hints)
 
     debug(">> Building model...")
-    model.fit(expand_stream(trainset_generator, rules, False, preprocessor.hints, maxrecords))
+    model.fit(expand_stream(trainset_generator, rules, False, preprocessor.hints, maxrecords), preprocessor.stats)
 
     debug(">> Finding outliers...")
     for index, (x, X) in enumerate(expand_stream(testset_generator, rules,
