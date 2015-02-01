@@ -13,14 +13,14 @@ import email.utils
 rules = defaultdict(list)
 
 def rule(rule):
-    sig = inspect.signature(rule)
-    params = list(sig.parameters.values())
+    # TODO use inspect.getfullargspec instead for 3.2 compatibility
+    spec = inspect.getfullargspec(rule)
 
-    if len(params) != 1:
+    if len(spec.args) != 1:
         sys.stderr.write("Invalid rule {}".format(rule.__name__))
         sys.exit(1)
 
-    input_type = params[0].annotation
+    input_type = spec.annotations[spec.args[0]]
     rules[input_type].append(rule)
     return rule
 
@@ -30,7 +30,7 @@ def descriptions(ruleset):
     for type in ruleset:
         descriptions[type] = []
         for rule in ruleset[type]:
-            descriptions[type].extend(inspect.signature(rule).return_annotation)
+            descriptions[type].extend(inspect.getfullargspec(rule).annotations['return'])
 
     return descriptions
 
