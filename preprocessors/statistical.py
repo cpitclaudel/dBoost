@@ -17,9 +17,9 @@ Public members:
 
 """
 
-import numbers
+from numbers import Number
 from math import fabs
-from utils.tupleops import filter_abc, defaultif, deepapply, pair_ids
+from utils.tupleops import filter_abc, defaultif, deepapply, pair_ids, make_mask_abc, filter_mask
 from preprocessors.utils import Stats
 
 # Preprocessor that collects dataset statistics
@@ -52,14 +52,19 @@ class Pearson:
                              self.pairwise_prods[pair_id])
 
     def fit(self, Xs):
+        mask = None
+
         for X in Xs:
-            X = filter_abc(X, numbers.Number)
+            if mask == None:
+                mask = make_mask_abc(X, Number)
+
+            X = filter_mask(X, mask)
 
             self.stats = defaultif(self.stats, X, Stats)
             deepapply(self.stats, X, Stats.update)
 
             if self.pairwise_prods == None:
-                self.pairwise_prods = {pid: 0 for pid in pair_ids(X)}
+                self.pairwise_prods = {pid: 0 for pid in pair_ids(X, mask)}
 
             for (id1, id2) in self.pairwise_prods:
                 (idx, sidx), (idy, sidy) = id1, id2

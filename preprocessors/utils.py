@@ -11,7 +11,7 @@ class Stats:
         self.min = float("+inf")
         self.max = float("-inf")
         self.count = 0
-        self.elems = None
+        self.elems = set()
 
     def update(self, x):
         if self == None:

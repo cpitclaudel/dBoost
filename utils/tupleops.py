@@ -2,17 +2,21 @@ import sys
 from math import sqrt
 from itertools import chain, combinations, product
 
-def pair_ids(X):
+def pair_ids(X, mask):
     for idx, idy in combinations(range(len(X)), 2):
         x, y = X[idx], X[idy]
         for idxi, idyi in product(range(len(x)), range(len(y))):
-            yield (idx, idxi), (idy, idyi)
+            if mask[idx][idxi] and mask[idy][idyi]:
+                yield (idx, idxi), (idy, idyi)
 
 def defaultif(S, X, default):
     return S if S != None else tuple(tuple(default() for _ in x) for x in X)
 
 def zeroif(S, X):
     return S if S != None else tuple(tuple(0 for _ in x) for x in X)
+
+def make_mask_abc(X, abc):
+    return deepmap(lambda xi: isinstance(xi, abc), X)
 
 def addlist(S, n, d):
     if S is None: S = []
@@ -36,6 +40,9 @@ def deepmap(f, X):
 
 def filter(f, X):
     return tuple(tuple((xi if (xi != None and f(xi)) else None) for xi in x) for x in X)
+
+def filter_mask(X, mask):
+    return tuple(tuple((xi if mi else None) for xi, mi in zip(x, m)) for x, m in zip(X, mask))
 
 def merge(S, X, f, phi):
     return tuple(tuple(phi(si, f(xi)) for si, xi in zip(s, x)) for s, x in zip(S, X))
