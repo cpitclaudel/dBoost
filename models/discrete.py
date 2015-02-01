@@ -48,7 +48,7 @@ class Histogram:
     def is_peaked(self, distribution):
         return Histogram.IsPeaked(distribution, self.peak_threshold)
 
-    def fit(self, Xs):
+    def fit(self, Xs, stats):
         for X in Xs:
             self.fit_one(X)
         self.finish_fit()

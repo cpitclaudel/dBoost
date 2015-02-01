@@ -12,6 +12,7 @@ class DiscreteStats:
         self.max_buckets = max_buckets
         self.fundep_size = fundep_size
         self.histograms = None
+        self.stats = None
 
     @staticmethod
     def register(parser):
