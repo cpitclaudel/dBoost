@@ -3,24 +3,45 @@ TODO
 
 ## Research
 
-* Closer look at references [R] [PAPER]
+* Closer look at references [R] [ONGOING] [PAPER]
+* Add stuff to related work section [Z]
+* Find a good continuous multi-dimensional dataset [Z]
 * Comparison to other datasets from the COORDS (Census DB, TPCH) [Z] [PAPER]
 * Test outlier analysis on subset of intel dataset where elements aren't correlated (further analysis of intel dataset) [Z]
-* Mixed discrete/continuous models, e.g. different distributions based on value of one field (i.e. report all (low cardinality, high cardinality) columns as correlated) [C/R]
 
 ## Code
 
+* Add csail examples to invocation.md [C]
 * Make the plots more reproducible (integrate in the Makefile) [R]
-* Add a clean target to the Makefile
+* Add a clean target to the Makefile [R]
+* Optimize the statistical preprocessor [C]
+  - TPCH [Z]
+* Pass the output of the preprocessor to models [C]
+  - Make CORDS a model [R]
 
 ## Paper
 
-* Change title?
-* The work preprocessor designates a statistical analyzer in the code and the tuple expander in the paper
-* Git email and usernames
+* Change title? [LATER]
+* Add missing stuff
+  - Outlier detection description for mixture models [Z]
+  - Update Intel graphs [R]
+  - Peaky histograms [C]
+  - Partitioning functor [C]
+  - Discrete preprocessor [C]
+  - Synthetic datasets [C]
+  - Review the history to find new stuff [C]
+* At the beginning of evaluation, add a high-level overview of all the datasets [LATER]
+* Change the names in CSAIL [R]
+* Numerical benchmarks in the evaluation section [LATER]
+* The work preprocessor designates a statistical analyzer in the code and the tuple expander in the paper [C]
 
 LATER
 =====
+
+## Research
+
+* Mixed discrete/continuous models, e.g. different distributions based on value of one field (i.e. report all (low cardinality, high cardinality) columns as correlated) [C/R]
+* Think about asymmetric features (like email addresses: we don't want to detect things that do not have '@' signs)
 
 ## Code
 
@@ -33,18 +54,14 @@ LATER
 * Ensure that there is only one type per column [LATER]
 * Change the outlier reporting strategy to make it easier to report outliers [LATER]
 
-## Research
-
-* Think about asymmetric features (like email addresses: we don't want to detect things that do not have '@' signs)
-
 DONE
 ====
 
 ## Research
 
-* Create synthetic data set; suggest as new benchmarks in case of non numerical data [C] [DONE?] [PAPER]
-* Mixture model thresholds [Z] [KINDA DONE, PAPER]
-* Identifying other outlier detection strategies / correlation detection strategies [DONE C?]
+* Create synthetic data set; suggest as new benchmarks in case of non numerical data [C] [DONE] [PAPER]
+* Mixture model thresholds [Z] [DONE] [PAPER]
+* Identifying other outlier detection strategies / correlation detection strategies [DONE C]
 
 ## Code
 
@@ -52,6 +69,7 @@ DONE
 * Add cardinality to preprocessor [R] [DONE]
 * Create a list of examples [C] [DONE]
 * New features: email validation [C] [DONE]
-* Histogram-based correlations [C] [DONE, PAPER]
+* Histogram-based correlations [C] [DONE] [PAPER]
 * Check correlation detection on the Intel dataset [R/C] [DONE C]
-* Artificial datasets for testing [C] [DONE?]
+* Artificial datasets for testing [C] [DONE]
+* Git email and usernames [DONE]
