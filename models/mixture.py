@@ -14,7 +14,6 @@ class Mixture:
         
     def reset(self):
         self.gmms    = None
-        self.cutoffs = None
         self.cutoff  = None
         self.keep    = None
         
@@ -52,9 +51,8 @@ class Mixture:
             gmm.fit(to_fit)
             self.gmms.append(gmm)
             
-            lp, resp = self.gmms[c].score_samples(to_fit)
-            lp_model = mixture.GMM(n_components = 2)
-
+            # lp, resp = self.gmms[c].score_samples(to_fit)
+ 
             # ps = [self.test_one(x, c) for x in to_fit]
             # pyplot.hist(ps, bins = 30)
             # pyplot.show()
