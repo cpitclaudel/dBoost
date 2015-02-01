@@ -12,6 +12,9 @@ def pair_ids(X, mask):
 def defaultif(S, X, default):
     return S if S != None else tuple(tuple(default() for _ in x) for x in X)
 
+def defaultif_masked(S, X, default, mask):
+    return S if S != None else tuple(tuple(default() if mi else None for (_, mi) in zip(x, m)) for x, m in zip(X, mask))
+
 def zeroif(S, X):
     return S if S != None else tuple(tuple(0 for _ in x) for x in X)
 
@@ -51,6 +54,12 @@ def deepapply(S, X, f):
     for s, x in zip(S, X):
         for si, xi in zip(s, x):
             f(si, xi)
+
+def deepapply_masked(S, X, f, mask):
+    for s, x, m in zip(S, X, mask):
+        for si, xi, mi in zip(s, x, m):
+            if mi:
+                f(si, xi)
 
 def number(X):
     return tuple(tuple((i, j) for j, _ in enumerate(x)) for i, x in enumerate(X))

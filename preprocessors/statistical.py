@@ -19,7 +19,7 @@ Public members:
 
 from numbers import Number
 from math import fabs
-from utils.tupleops import filter_abc, defaultif, deepapply, pair_ids, make_mask_abc, filter_mask
+from utils.tupleops import filter_abc, defaultif_masked, deepapply_masked, pair_ids, make_mask_abc, filter_mask
 from preprocessors.utils import Stats
 
 # Preprocessor that collects dataset statistics
@@ -58,10 +58,8 @@ class Pearson:
             if mask == None:
                 mask = make_mask_abc(X, Number)
 
-            X = filter_mask(X, mask)
-
-            self.stats = defaultif(self.stats, X, Stats)
-            deepapply(self.stats, X, Stats.update)
+            self.stats = defaultif_masked(self.stats, X, Stats, mask)
+            deepapply_masked(self.stats, X, Stats.update, mask)
 
             if self.pairwise_prods == None:
                 self.pairwise_prods = {pid: 0 for pid in pair_ids(X, mask)}
