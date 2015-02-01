@@ -75,10 +75,11 @@ class Cords:
             v = (d1 - 1) * (d2 - 1)
             n = (math.sqrt(-16 * v * math.log(self.p * math.sqrt(2*math.pi))) - 8 * math.log(self.p * math.sqrt(2*math.pi)) ) / (1.69 * self.delta * (d - 1) * pow(v,-0.071))
             lda = n * (d - 1) * self.delta
-            t = norm.ppf(norm.cdf( ((1 - self.p) - (v + lda)) / (math.sqrt( 2*v + 4*lda)) )) 
+            t = 1 / (0.5 * ( 1+ math.erf( ((1 - self.p) - (v + lda)) / (math.sqrt( 2*v + 4*lda)) ))) 
+            #t = norm.ppf(norm.cdf( ((1 - self.p) - (v + lda)) / (math.sqrt( 2*v + 4*lda)) )) 
             print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + ": ")
             print(chi_sqrd)
-            print(t)
+            print(str(t) + " "+ str(d) +" "+  str(v) +" "+  str(n))
             if chi_sqrd > t:
               self.hints.append(((nx,nnx),(ny,nny)))
             num = num+1
