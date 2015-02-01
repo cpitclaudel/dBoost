@@ -88,14 +88,6 @@ def mul(a, b):
 def div0(a, b):
     return a / b if a != None and b != 0 else 0
 
-def addtoset(a, b):
-    if type(a) is not set:
-      return {b}
-    if len(a) >= 16:
-      return a
-    a.add(b)
-    return a
-
 def incrkey(a, b):
     if a != None:
         a[b] += 1
