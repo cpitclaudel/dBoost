@@ -14,9 +14,9 @@ TODO
 * Add csail examples to invocation.md [C] [DONE]
 * Make the plots more reproducible (integrate in the Makefile) [R]
 * Add a clean target to the Makefile [R]
-* Optimize the statistical preprocessor [C] [DONE]
+* Optimize the statistical analyzer [C] [DONE]
   - TPCH [Z]
-* Pass the output of the preprocessor to models [C] [DONE]
+* Pass the output of the analyzer to models [C] [DONE]
   - Make CORDS a model [R]
 * Check PyPy compatibility [C] [DONE]
 
@@ -28,13 +28,13 @@ TODO
   - Update Intel graphs [R]
   - Peaky histograms [C]
   - Partitioning functor [C]
-  - Discrete preprocessor [C]
+  - Discrete analyzer [C]
   - Synthetic datasets [C]
   - Review the history to find new stuff [C]
 * At the beginning of evaluation, add a high-level overview of all the datasets [LATER]
 * Change the names in CSAIL [R]
 * Numerical benchmarks in the evaluation section [LATER]
-* The word "preprocessor" designates a statistical analyzer in the code and the tuple expander in the paper [C]
+* The word "preprocessor" designates a statistical analyzer in the code and the tuple expander in the paper [C] [DONE]
 
 LATER
 =====
@@ -68,7 +68,7 @@ DONE
 ## Code
 
 * New features: floats to dates & times, ... [C/R] [DONE C]
-* Add cardinality to preprocessor [R] [DONE]
+* Add cardinality to analyzer [R] [DONE]
 * Create a list of examples [C] [DONE]
 * New features: email validation [C] [DONE]
 * Histogram-based correlations [C] [DONE] [PAPER]
