@@ -1,7 +1,8 @@
 # No correlations
 
-    ./dboost-stdin.py --histogram 0.8 0.2 --statistical 1 datasets/real/csail.txt
-    ./dboost-stdin.py --histogram 0.8 0.2 --statistical 1 datasets/real/csail-tiny.txt
+    ./dboost-stdin.py --statistical 1 --histogram 0.8 0.2 datasets/real/csail.txt
+    ./dboost-stdin.py --statistical 1 --histogram 0.8 0.2 datasets/real/csail-tiny.txt
+    ./dboost-stdin.py --statistical 1 --gaussian 3 datasets/real/csail-tiny.txt -vv
 
 These find suspicious-looking values in {a subset of,} the CSAIL directory
 

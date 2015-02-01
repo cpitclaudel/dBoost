@@ -45,3 +45,7 @@ class Stats:
         sigmas = s1.sigma * s2.sigma
         return ((pw_prod / s1.count - s1.avg * s2.avg) / sigmas
                 if sigmas != 0 else None)
+
+    def __repr__(self):
+        FMT = "sum: {}, sum2: {}, min: {}, max: {}, count: {}, elems: {}, avg: {}, sigma: {}, card: {}"
+        return FMT.format(self.sum, self.sum2, self.min, self.max, self.count, self.elems, self.avg, self.sigma, self.cardinality)

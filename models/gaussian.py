@@ -24,36 +24,21 @@ class Simple:
         return Simple(*map(autoconv, params))
 
     def fit(self, Xs, stats):
-        S, S2, C = None, None, None
+        if stats == None:
+            print("Gaussian modelling requires a statistical preprocessing phase", file=sys.stderr)
+            import sys; sys.exit(1)
+        self.model = stats
+        from pprint import pprint; pprint(stats)
 
-        # TODO: Adjust this to use values from the statistical analysis
-        for (nb, X) in enumerate(Xs):
-            report_progress(nb)
-            X = filter_abc(X, numbers.Number)
-            S, S2, C = zeroif(S, X), zeroif(S2, X), zeroif(C, X)
-            S = merge(S, X, id, plus)
-            S2 = merge(S2, X, sqr, plus)
-            C = merge(C, X, not_null, plus)
-
-        SAVG = merge(S, C, id, div0)
-        SAVG2 = merge(SAVG, SAVG, id, mul)
-        S2AVG = merge(S2, C, id, div0)
-
-        VAR = merge(S2AVG, SAVG2, id, minus)
-        SIGMA = root(VAR)
-
-        self.model = merge(SAVG, SIGMA, id, tuplify)
-
-    def test_one(self, xi, gaussian):
-        avg, sigma = gaussian
-        return abs(xi - avg) <= self.tolerance * sigma
+    def test_one(self, xi, stats):
+        return stats == None or abs(xi - stats.avg) <= self.tolerance * stats.sigma
 
     def find_discrepancies(self, X, index):
         ret = []
 
-        for field_id, (x, m) in enumerate(zip(X, self.model)):
-            ret.extend(((field_id, test_id),) for (test_id, (xi, mi))
-                       in enumerate(zip(x, m)) if not self.test_one(xi, mi))
+        for field_id, (x, s) in enumerate(zip(X, self.model)):
+            ret.extend(((field_id, test_id),) for (test_id, (xi, si))
+                       in enumerate(zip(x, s)) if not self.test_one(xi, si))
 
         return ret
 
@@ -67,7 +52,9 @@ class Simple:
 
         t = self.tolerance
         xi = X[field_id][feature_id]
-        mu, sigma = self.model[field_id][feature_id]
+        stats = self.model[field_id][feature_id]
+        assert(stats != None)
+        mu, sigma = stats.avg, stats.sigma
         lo, hi = mu - t * sigma, mu + t * sigma
 
         pipe.write(indent + Simple.INFO_FMT.format(**locals()))

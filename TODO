@@ -49,7 +49,7 @@ LATER
 * Properly support multiple models
   - Train all models in one pass (instead of one per model) [C] [LATER]
   - Combine outlier reports from multiple models
-* Adjust Gaussian model to use data from statistical analysis [C] [LATER]
+* Adjust Gaussian model to use data from statistical analysis [C] [LATER] [DONE]
 * Add unit tests [Z, LATER]
 * Look at correlations inside the expansion of a given field [LATER] [EASY]
 * Ensure that there is only one type per column [LATER]
