@@ -75,3 +75,6 @@ class Pearson:
             self.pearsons[pair_id] = pearson
 
         self.hints.sort()
+
+    def expand_stats(self):
+        self.stats = ((None,) * len(self.hints),) + self.stats

@@ -36,7 +36,7 @@ class Mixture:
 
         return sqrt(v.dot(((1 / covar) * u).transpose()))
 
-    def fit(self, Xs, stats):
+    def fit(self, Xs, analyzer):
         self.gmms = []
         self.evt = []
         self.cutoffs = []

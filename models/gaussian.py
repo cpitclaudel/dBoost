@@ -23,12 +23,11 @@ class Simple:
     def from_parse(params):
         return Simple(*map(autoconv, params))
 
-    def fit(self, Xs, stats):
-        if stats == None:
+    def fit(self, Xs, analyzer):
+        if analyzer.stats == None:
             print("Gaussian modelling requires a statistical preprocessing phase", file=sys.stderr)
             import sys; sys.exit(1)
-        self.model = stats
-        from pprint import pprint; pprint(stats)
+        self.model = analyzer.stats
 
     def test_one(self, xi, stats):
         return stats == None or abs(xi - stats.avg) <= self.tolerance * stats.sigma

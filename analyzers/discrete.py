@@ -50,3 +50,6 @@ class DiscreteStats:
                            if hist != None)
         #print(len(all_hints))
         #print(len(self.hints))
+
+    def expand_stats(self):
+        pass

@@ -33,8 +33,8 @@ def outliers(trainset_generator, testset_generator, analyzer, model, rules, maxr
     # debug(analyzer.hints)
 
     debug(">> Building model...")
-    expanded_stats = ((None,) * len(analyzer.hints),) + analyzer.stats
-    model.fit(expand_stream(trainset_generator, rules, False, analyzer.hints, maxrecords), expanded_stats)
+    analyzer.expand_stats()
+    model.fit(expand_stream(trainset_generator, rules, False, analyzer.hints, maxrecords), analyzer)
 
     debug(">> Finding outliers...")
     for index, (x, X) in enumerate(expand_stream(testset_generator, rules,
