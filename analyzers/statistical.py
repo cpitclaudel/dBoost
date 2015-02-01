@@ -20,9 +20,9 @@ Public members:
 from numbers import Number
 from math import fabs
 from utils.tupleops import filter_abc, defaultif_masked, deepapply_masked, pair_ids, make_mask_abc, filter_mask
-from preprocessors.utils import Stats
+from analyzers.utils import Stats
 
-# Preprocessor that collects dataset statistics
+# Analyzer that collects dataset statistics
 
 class Pearson:
     ID = "statistical"
@@ -38,7 +38,7 @@ class Pearson:
     @staticmethod
     def register(parser):
         parser.add_argument("--" + Pearson.ID, nargs = 1, metavar = "epsilon",
-                            help = "Use a statistical model preprocessor, " +
+                            help = "Use a statistical model analyzer, " +
                             "reporting correlated values with a pearson r" +
                             "value greater than epsilon.")
 

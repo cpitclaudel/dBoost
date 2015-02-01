@@ -11,7 +11,7 @@ from utils.autoconv import autoconv
 from utils.print import print_rows, debug
 
 parser = cli.get_sdtin_parser()
-args, models, preprocessors, rules = cli.parsewith(parser)
+args, models, analyzers, rules = cli.parsewith(parser)
 
 testset_generator = stream_tuples(args.input, args.fs, args.floats_only, args.inmemory, args.maxrecords)
 
@@ -26,13 +26,13 @@ if not args.inmemory and not args.trainwith.seekable():
 
 # TODO: Input should be fed to all models in one pass.
 for model in models:
-    for preprocessor in preprocessors:
+    for analyzer in analyzers:
         outliers = list(dboost.outliers(trainset_generator, testset_generator,
-                                        preprocessor, model, rules, args.maxrecords))
+                                        analyzer, model, rules, args.maxrecords))
 
         if len(outliers) == 0:
             debug("   All clean!")
         else:
-            print_rows(outliers, model, preprocessor.hints,
+            print_rows(outliers, model, analyzer.hints,
                        features.descriptions(rules), args.verbosity)
             debug("   {} outliers found".format(len(outliers)))

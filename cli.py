@@ -1,10 +1,10 @@
 import argparse
 import features
-import preprocessors
-from models import gaussian, discrete, mixture
+import analyzers
+from models import gaussian, discrete, mixture # discretepart
 
-REGISTERED_MODELS = (gaussian.Simple, mixture.Mixture, discrete.Histogram)
-REGISTERED_PREPROCESSORS = preprocessors.ALL()
+REGISTERED_MODELS = (gaussian.Simple, discrete.Histogram, mixture.Mixture) #, discretepart.PartitionedHistogram)
+REGISTERED_ANALYZERS = analyzers.ALL()
 
 def register_modules(parser, modules):
     for module in modules:
@@ -39,7 +39,7 @@ def get_base_parser():
     base_parser.set_defaults(disabled_rules = [])
 
     register_modules(base_parser, REGISTERED_MODELS)
-    register_modules(base_parser, REGISTERED_PREPROCESSORS)
+    register_modules(base_parser, REGISTERED_ANALYZERS)
 
     return base_parser
 
@@ -87,7 +87,7 @@ def parsewith(parser):
     args = parser.parse_args()
 
     models = load_modules(args, parser, REGISTERED_MODELS)
-    preprocessors = load_modules(args, parser, REGISTERED_PREPROCESSORS)
+    analyzers = load_modules(args, parser, REGISTERED_ANALYZERS)
 
     disabled_rules = set(args.disabled_rules)
     available_rules = set(r.__name__ for rs in features.rules.values() for r in rs)
@@ -97,4 +97,4 @@ def parsewith(parser):
     rules = {t: [r for r in rs if r.__name__ not in disabled_rules]
              for t, rs in features.rules.items()}
 
-    return args, models, preprocessors, rules
+    return args, models, analyzers, rules

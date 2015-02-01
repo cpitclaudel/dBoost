@@ -79,7 +79,7 @@ Our abnormal data detection method proceeds in three steps:
 
 ## Architecture
 
-Our software has three core components: a preprocessor, a training
+Our software has three core components: an analyzer, a training
 module, and a classification module. These are relatively independent,
 as long as they obey clearly defined interfaces. We can thus divide the
 bulk of the work between the three members of the team in a relatively
