@@ -14,7 +14,7 @@ TODO
 * Add csail examples to invocation.md [C]
 * Make the plots more reproducible (integrate in the Makefile) [R]
 * Add a clean target to the Makefile [R]
-* Optimize the statistical preprocessor [C]
+* Optimize the statistical preprocessor [C] [DONE]
   - TPCH [Z]
 * Pass the output of the preprocessor to models [C]
   - Make CORDS a model [R]
@@ -33,7 +33,7 @@ TODO
 * At the beginning of evaluation, add a high-level overview of all the datasets [LATER]
 * Change the names in CSAIL [R]
 * Numerical benchmarks in the evaluation section [LATER]
-* The work preprocessor designates a statistical analyzer in the code and the tuple expander in the paper [C]
+* The word "preprocessor" designates a statistical analyzer in the code and the tuple expander in the paper [C]
 
 LATER
 =====
@@ -53,6 +53,7 @@ LATER
 * Look at correlations inside the expansion of a given field [LATER] [EASY]
 * Ensure that there is only one type per column [LATER]
 * Change the outlier reporting strategy to make it easier to report outliers [LATER]
+  - Use `namedtuples`
 
 DONE
 ====
