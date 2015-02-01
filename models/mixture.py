@@ -1,8 +1,6 @@
 import numbers
 from utils.tupleops import *
 from utils.autoconv import autoconv
-from sklearn import mixture
-from matplotlib import pyplot
 from math import erf
 
 class Mixture:
@@ -37,6 +35,8 @@ class Mixture:
         return sqrt(v.dot(((1 / covar) * u).transpose()))
 
     def fit(self, Xs, analyzer):
+        from sklearn import mixture
+
         self.gmms = []
         self.evt = []
         self.cutoffs = []
