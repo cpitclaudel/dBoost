@@ -1,3 +1,10 @@
+# No correlations
+
+    ./dboost-stdin.py --histogram 0.8 0.2 --statistical 1 datasets/real/csail.txt
+    ./dboost-stdin.py --histogram 0.8 0.2 --statistical 1 datasets/real/csail-tiny.txt
+
+    These find suspicious-looking values in {a subset of,} the CSAIL directory
+
 # Discreet correlations
 
 ## FizzBuzz

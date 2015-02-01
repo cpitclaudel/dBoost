@@ -11,13 +11,14 @@ TODO
 
 ## Code
 
-* Add csail examples to invocation.md [C]
+* Add csail examples to invocation.md [C] [DONE]
 * Make the plots more reproducible (integrate in the Makefile) [R]
 * Add a clean target to the Makefile [R]
 * Optimize the statistical preprocessor [C] [DONE]
   - TPCH [Z]
-* Pass the output of the preprocessor to models [C]
+* Pass the output of the preprocessor to models [C] [DONE]
   - Make CORDS a model [R]
+* Check PyPy compatibility [C] [DONE]
 
 ## Paper
 
