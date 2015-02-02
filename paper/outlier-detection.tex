@@ -3,7 +3,7 @@
 
 Models, once properly trained, are used for classification and detection of outliers -- either on incoming INSERT operations on a running system, or on existing rows (typically, the ones used during the model training phase). % LATER: Citation about databases sizes?
 
-Given that databases can contain tables with several hundred columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, the tool should automatically indicate which values in the row caused it to be flagged as an outlier.
+Given that databases can contain tables with several hundred columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, the tool automatically indicates which values in the row caused it to be flagged as an outlier.
 
 \subsubsection{Simple Gaussian Modeling}
 The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\epsilon$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
@@ -13,7 +13,7 @@ The simple Gaussian model measures how much each value differs from the mean com
 \end{align}
 where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
 
-In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\ref{eqn:gaussian-outlier}.
+In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\ref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account.
 
 \subsubsection{Mixture Modeling}
 The Gaussian Mixture model uses the correlation hints provided by the statistical analysis phase to break down each row into small set of tuples of presumably correlated values.
@@ -38,10 +38,28 @@ First, after running through the learning phase, it decides for each histogram w
 \end{itemize}
 
 After identifying a relevant set of histograms (this operation only needs to run once, at the very beginning of the last pass), we proceed to the actual detection phase. We classify an expanded tuple $X$ as an outlier if any of its values (or set of values, as grouped according to the correlation hints previously obtained) $x_a$ verifies:
-\begin{equation}
+\begin{align}
 h_a(x_a) \le \epsilon \sum_k h_a(k)
-\end{equation}
-where $h_a(x)$ is the number of tuples with value $x$ for field $a$, and $\epsilon$ is a user-chosen sensitivity parameter.
+\label{eqn:hist-outlier}
+\end{align}
+where $h_a(x)$ designates the number of tuples with value $x$ for field $a$, and $\epsilon$ is a user-chosen sensitivity parameter.
 
-\subsubsection{Data partitioning}
-%TODO
+In this model, identifying and reporting the outlying attributes is simply a matter of remembering which values $x_a$ failed test \ref{eqn:hist-outlier}.
+
+\subsubsection{Meta-modeling through attribute-based partitioning}
+The models presented above treat attributes and sets of correlated attributes as a whole. In some cases, however, it is possible to identify sub-populations by scrutinizing certain expanded attributes of the data; these sub-populations can then be studied separately, yielding more insight and better outlier classification performance.
+
+The general approach, given a dataset and a pre-existing model, consists in extracting sets of attributes based on correlation hints provided by earlier stages of the pipeline, and splitting these set of attributes between a single key, and one or more sub-population attributes. One instance of the selected model is then built for each value of the key. 
+
+This type of approach is useful when the distribution for an attribute or set of attributes is multi-modal. A high-level non-partitioned analysis will reveal values that fall in none of the classes; a partitioned approach, on the other hand, may more easily reveal discrepancies by suppressing interference between each class.
+
+As an example, consider the case of an airline adjusting status levels for its frequent fliers, using the number of flights for each passenger as well as their status level. A non-partitioned analysis may not return any interesting information, but a partitioned analysis could single out passengers in lower status levels traveling significantly more than average, or instead passengers with higher status traveling rarely. This would work even if statuses are stored as textual data, with no indication of their relative rankings.
+
+In addition to better classification performance, partitioning may lead to better runtime performance by diminishing the size of the dataset that each model covers. These benefits are most important when model construction performance does not scale linearly, and when data volumes are too large to be analyzed on a single machine. 
+
+Finally attribute-based partitioning enabled analysis that was previously impossible. Assuming for example that a dataset with two columns has 4 classes identified by the value in the first column, each with 10 distinct expected values in the second column, a generic histogram-based analysis would discard the histogram for the pair of values as having too many-buckets (40). A partitioned analysis, on the other hand, would allow the construction of four histograms, each with 10 normal bins, and potentially a few outliers.
+
+In our prototype implementation, we focused on partitioning applied to the discrete histogram case; the technique, however, generalizes to all the models presented above.
+
+% As an example, consider a store that accepts multiple forms of payment. Instead of considering the data as a whole, one may segment it by payment medium, and model transactions that fall in each model separately. This may yield insight into the spending behaviours 
+% A class instructor, for example, might provide students with two grades: one mid-term, letter-based grade, and one end-of-term numerical score. Modeling the data as a whole would 
