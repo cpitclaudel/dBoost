@@ -45,21 +45,3 @@ h_a(x_a) \le \epsilon \sum_k h_a(k)
 where $h_a(x)$ designates the number of tuples with value $x$ for field $a$, and $\epsilon$ is a user-chosen sensitivity parameter.
 
 In this model, identifying and reporting the outlying attributes is simply a matter of remembering which values $x_a$ failed test \ref{eqn:hist-outlier}.
-
-\subsubsection{Meta-modeling through attribute-based partitioning}
-The models presented above treat attributes and sets of correlated attributes as a whole. In some cases, however, it is possible to identify sub-populations by scrutinizing certain expanded attributes of the data; these sub-populations can then be studied separately, yielding more insight and better outlier classification performance.
-
-The general approach, given a dataset and a pre-existing model, consists in extracting sets of attributes based on correlation hints provided by earlier stages of the pipeline, and splitting these set of attributes between a single key, and one or more sub-population attributes. One instance of the selected model is then built for each value of the key. 
-
-This type of approach is useful when the distribution for an attribute or set of attributes is multi-modal. A high-level non-partitioned analysis will reveal values that fall in none of the classes; a partitioned approach, on the other hand, may more easily reveal discrepancies by suppressing interference between each class.
-
-As an example, consider the case of an airline adjusting status levels for its frequent fliers, using the number of flights for each passenger as well as their status level. A non-partitioned analysis may not return any interesting information, but a partitioned analysis could single out passengers in lower status levels traveling significantly more than average, or instead passengers with higher status traveling rarely. This would work even if statuses are stored as textual data, with no indication of their relative rankings.
-
-In addition to better classification performance, partitioning may lead to better runtime performance by diminishing the size of the dataset that each model covers. These benefits are most important when model construction performance does not scale linearly, and when data volumes are too large to be analyzed on a single machine. 
-
-Finally attribute-based partitioning enabled analysis that was previously impossible. Assuming for example that a dataset with two columns has 4 classes identified by the value in the first column, each with 10 distinct expected values in the second column, a generic histogram-based analysis would discard the histogram for the pair of values as having too many-buckets (40). A partitioned analysis, on the other hand, would allow the construction of four histograms, each with 10 normal bins, and potentially a few outliers.
-
-In our prototype implementation, we focused on partitioning applied to the discrete histogram case; the technique, however, generalizes to all the models presented above.
-
-% As an example, consider a store that accepts multiple forms of payment. Instead of considering the data as a whole, one may segment it by payment medium, and model transactions that fall in each model separately. This may yield insight into the spending behaviours 
-% A class instructor, for example, might provide students with two grades: one mid-term, letter-based grade, and one end-of-term numerical score. Modeling the data as a whole would 
