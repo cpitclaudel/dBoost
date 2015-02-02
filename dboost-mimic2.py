@@ -2,7 +2,7 @@
 import sqlite3
 import sys
 from utils import db
-from utils.print import print_rows
+from utils.printing import print_rows
 import dboost
 import features
 import cli

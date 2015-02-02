@@ -3,7 +3,7 @@ import sys
 import utils
 import features
 from utils import tupleops
-from utils.print import debug
+from utils.printing import debug
 from itertools import chain
 from analyzers import statistical
 

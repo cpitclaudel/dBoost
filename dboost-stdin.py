@@ -8,7 +8,7 @@ import cli
 import itertools
 from utils.read import stream_tuples
 from utils.autoconv import autoconv
-from utils.print import print_rows, debug
+from utils.printing import print_rows, debug
 
 parser = cli.get_sdtin_parser()
 args, models, analyzers, rules = cli.parsewith(parser)

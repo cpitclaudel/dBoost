@@ -2,7 +2,7 @@ from utils import tupleops
 import collections
 import sys
 import heapq
-from utils.print import hhistplot
+from utils.printing import hhistplot
 
 class Histogram:
     ID = "histogram"
