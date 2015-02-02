@@ -1,27 +1,31 @@
 \subsection{Statistical Analysis}
 \label{sec:statistical-analysis}
 
-Following the tuple expansion phase, the new expanded tuples go through a statistical analysis phase. This phase collects two kinds of information: simple statistics on each column's values, and data on possible inter-column correlations.
+Following the tuple expansion phase, the newly expanded tuples go through a statistical analysis phase. This phase collects two kinds of information: simple statistics on each column's values, and data on possible inter-column correlations.
 
-The statistical information includes the average value of each column, its variance and its standard deviation. These statistics can then be used by the outlier models to improve their performance.
+The statistical information includes the average, variance standard deviation and extremes of each numerical column, as well as approximate cardinality measurements for all columns. These statistics can then be used by models to speed up their training phase, or at the end of the statistical analysis to refine correlation hints.
 
-Furthermore, if there is more than one column in the original dataset, we run an additional analysis to determine whether there are correlations between columns in the expanded sub-tuples.
+Possible inter-column correlations can be detected in a number of ways; we focused with two strategies: 
 
-This analysis is done using the Pearson product-moment correlation. This simple statistical method is commonly used to find correlation between multiple values. It relies on the Pearson product-moment correlation coefficient, which measures linear correlation between two vectors.
+\begin{itemize}
+\item For mostly-numeric datasets, we used Pearson's product-moment
+  correlation. This simple statistical test is commonly used to find correlation
+  between multiple values. It relies on the Pearson correlation coefficient,
+  which measures linear correlation between two vectors.
 
-Given two column vectors $X$ and $Y$, Pearson's coefficient $R$ is given by the following formula:
+  Given two column vectors $X$ and $Y$, Pearson's coefficient $R$ is given by the following formula:
+  \begin{align} 
+    \label{eqn:pearson}
+    R = \frac{\Covar(X,Y)}{\sqrt{\Var(X)\Var(Y)}}
+  \end{align}
+  
+  $R$'s value always lies between -1 and 1. An $R$ value close to 0 indicates little or no correlation, while values close to 1 or 1 indicate strong positive or negative correlations. Pairs of columns with a value of \(R\) above a user-specified threshold were added to a list of correlation hints, for use by models. 
+\item For mostly non-numeric datasets, we used a cardinality-based measure, flagging groups of columns as correlated when the cardinality of their product was below a user-specified threshold. 
+\end{itemize}
 
-\begin{equation} 
-\label{eqn:pearson}
-R = \frac{\Covar(X,Y)}{\sqrt{\Var(X)\Var(Y)}}
-\end{equation}
-
-$R$'s value always lies between -1 and 1. An $R$ value close to 0 indicates little or no correlation. The closer the coefficient is to 1, the more closely correlated the columns are; the closer it is to -1, the more inversely correlated the columns are.
-
-If a sufficient correlation or inverse correlation is found, the statistical analyzer sends information (``hints'') about the tuples and sub-tuples that are correlated to the outlier models.
-
+\fxnote{It would be really easy to support correlations inside of fields. Do we add it and remove this paragraph?}
 Currently, we only detect correlations between expanded fields of different columns, as they are more likely to be meaningful. However, although some correlations in expanded fields of the same column are redundant (\texttt{isUppercase} and \texttt{isLowercase} for a string), some might be relevant (for example, a correlation between \texttt{weekday} and \texttt{month} for a date). We leave this exploration to future work.
 
-In our implementation, all statistics and correlations are computed in memory using a single pass over the data; the expanded tuples are analyzed one row at a time, and the final statistics and correlation coefficients are computed after the last tuple has been processed.
+In our implementation, all statistics and correlations are computed in memory using a single pass over the data; the expanded tuples are analyzed one row at a time, and the final statistics and correlation coefficients are computed after the last tuple has been processed. 
 
 The analyzer's results are accessible by any models used at later stages in the tool.

@@ -26,12 +26,12 @@
 ** Paper
 
 - [ ] ? Change title?
-- [ ] Add missing stuff
+- [-] Add missing stuff
   - [ ] Z Outlier detection description for mixture models
   - [ ] R Update Intel graphs
-  - [ ] C Peaky histograms
-  - [ ] C Partitioning functor
-  - [ ] C Discrete analyzer
+  - [X] C Peaky histograms
+  - [X] C Partitioning functor
+  - [X] C Discrete analyzer
   - [ ] C Synthetic datasets
   - [ ] C Review the history to find new stuff
 - [-] ? At the beginning of evaluation, add a high-level overview of all the datasets
