@@ -1,8 +1,7 @@
 import os
 import sys
 import bisect
-from . import color
-from utils.color import term, highlight
+from utils import color
 
 def debug(*args, **kwargs):
     kwargs["file"] = sys.stderr
@@ -109,6 +108,6 @@ def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
 
         line = bar + label
         if key == highlighted:
-            line = highlight(line, term.PLAIN, term.RED)
+            line = color.highlight(line, term.PLAIN, term.RED)
 
         pipe.write(header + line + "\n")

@@ -1,4 +1,3 @@
-import numbers
 from collections import Counter
 from itertools import combinations
 from utils import tupleops
@@ -9,27 +8,27 @@ class DiscreteStats:
     ID = "discretestats"
 
     def __init__(self, max_buckets, fundep_size):
+        assert(fundep_size > 1)
         self.max_buckets = max_buckets
         self.fundep_size = fundep_size
         self.histograms = None
         self.stats = None
+        self.hints = None
 
     @staticmethod
     def register(parser):
         parser.add_argument("--" + DiscreteStats.ID, nargs = 2, metavar = ("max_buckets", "fundep_size"),
                             help = "Find correlations using discrete histograms to count occurences of subtuples. Considers subtuples of size fundep_size, histograms are only retained if they total less than max_buckets distinct classes.")
 
-        #TODO check that fundep_size > 1
-
     @staticmethod
     def from_parse(params):
-        return DiscreteStats(*map(int, params))
+        return DiscreteStats(*(int(param) for param in params))
 
     def fit(self, Xs):
         sample = None
 
-        for id, X in enumerate(Xs):
-            if id % 10 == 0 and sys.stdout.isatty():
+        for idX, X in enumerate(Xs):
+            if idX % 10 == 0 and sys.stdout.isatty():
                 debug(id, end='\r')
 
             subtuples = tuple(combinations(tupleops.flatten(X), self.fundep_size))
@@ -38,12 +37,12 @@ class DiscreteStats:
                 sample = X
                 self.histograms = [Counter() for _ in subtuples]
 
-            for id, subtuple in enumerate(subtuples):
-                hist = self.histograms[id]
+            for ids, subtuple in enumerate(subtuples):
+                hist = self.histograms[ids]
                 if hist != None:
                     hist[subtuple] += 1
                     if len(hist) > self.max_buckets:
-                        self.histograms[id] = None
+                        self.histograms[ids] = None
 
         all_hints = tuple(combinations(tupleops.flatten(tupleops.number(sample)), self.fundep_size))
         self.hints = tuple(hint for hint, hist in zip(all_hints, self.histograms)

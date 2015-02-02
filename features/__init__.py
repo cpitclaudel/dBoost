@@ -13,7 +13,6 @@ import email.utils
 rules = defaultdict(list)
 
 def rule(rule):
-    # TODO use inspect.getfullargspec instead for 3.2 compatibility
     spec = inspect.getfullargspec(rule)
 
     if len(spec.args) != 1:
@@ -56,7 +55,7 @@ NUMBERS = re.compile("\d+")
 def erasenumbers(s: str) -> ("erase numbers",):
     return (NUMBERS.sub("<num>", s),)
 
-HTML5_EMAIL_VALIDATOR = re.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+HTML5_EMAIL_VALIDATOR = re.compile(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
 @rule
 def email_checks(s: str) -> ("simple email check",): # "RFC822 email check"):
