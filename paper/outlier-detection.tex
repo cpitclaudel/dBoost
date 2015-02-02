@@ -6,7 +6,7 @@ Models, once properly trained, are used for classification and detection of outl
 Given that databases can contain tables with several hundred columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, the tool should automatically indicate which values in the row caused it to be flagged as an outlier.
 
 \subsubsection{Simple Gaussian Modeling}
-The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\epsilon$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that 
+The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\epsilon$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
 \begin{align}
   |v_a - \mu_a| \ge \epsilon \cdot \sigma_a
   \label{eqn:gaussian-outlier}
@@ -14,13 +14,13 @@ The simple Gaussian model measures how much each value differs from the mean com
 where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
 
 In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\ref{eqn:gaussian-outlier}.
- 
+
 \subsubsection{Mixture Modeling}
 The Gaussian Mixture model uses the correlation hints provided by the statistical analysis phase to break down each row into small set of tuples of presumably correlated values.
 
 Each resulting tuple is then evaluated using the corresponding GMM; if the correlated values' $v_c$ probability is smaller than the user-defined threshold parameter $\theta$ -- that is, if
 \begin{align}
-  \Pr(v_c | \pi_c, \mu_c, \Sigma_c) \leq \theta 
+  \Pr(v_c | \pi_c, \mu_c, \Sigma_c) \leq \theta
   \label{eqn:mixture-outlier}
 \end{align}
  -- then the row is flagged as an outlier.
@@ -28,16 +28,20 @@ Each resulting tuple is then evaluated using the corresponding GMM; if the corre
 As in the Gaussian Model, providing the user with a list of attributes that caused the row to be flagged as an outlier is simply a matter of tracking correlations that failed test~\ref{eqn:mixture-outlier}.
 
 \subsubsection{Histogram Modeling}
-The histogram-based modeling strategy proceeds in two phases to detect outliers. 
+The histogram-based modeling strategy proceeds in two phases to detect outliers.
 
-First, after running through the learning phase, it decides for each histogram whether that histogram is peaked enough that it may be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar numbers of values. In practice, we use the following simple statistical test to determine whether a histogram is ``peaked'' (modal) enough: given a histogram with $N$ bins, we count the number $n_{top}$ of values in the top $N'$ bins, where $N'$ is $1$ for $1 \leq N \leq 3$, $2$ for $4 \leq N \leq 5$, and $3$ for $3 \leq N \leq 16$ (histograms with $N > 16$ bins were previously discarded). A histogram is deemed relevant to outlier detection if
-\begin{equation}
- \frac{n_{top}}{n} \geq \theta 
-\end{equation}
-where $\theta$ is a user-chosen threshold. 
+First, after running through the learning phase, it decides for each histogram whether that histogram is peaked enough that it may be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar numbers of values. In practice, we use a simple statistical test to determine whether a histogram is ``peaked'' (modal) enough: we count the number of elements that fall into the most populated bins, and discard the histogram if this count totals less than a user-specified proportion of values. Finding how many bins to include in the set of ``most populated'' bins is the most challenging part, and for this paper we explored two avenues:
+
+\begin{itemize}
+\item \emph{Distribution-independent} -- Given a histogram with $N$ bins, we count the values in the top $1$ bins if $1 \leq N \leq 3$, $2$ bins if $4 \leq N \leq 5$, and $3$ bins for $3 \leq N \leq 16$ (histograms with $N > 16$ bins were previously discarded). This method is stable when the set of bins is static (week days, boolean values, \ldots), but it is sensitive to the addition of new bins.
+\item \emph{Distribution-dependent} -- We sort the bins in decreasing order of bin size $b_i$, and find the index $i_{\max}$ such that the ratio $\sfrac{b_i}{b_{i+1}$ is maximal (this calculation is safe, because the bin sizes are non-zero integers). We then count the values that falls in bins $[0 .. i_{\max}]$. In this case, we also reject histograms whose ``maximum jump'' is below a given threshold.
+\end{itemize}
 
 After identifying a relevant set of histograms (this operation only needs to run once, at the very beginning of the last pass), we proceed to the actual detection phase. We classify an expanded tuple $X$ as an outlier if any of its values (or set of values, as grouped according to the correlation hints previously obtained) $x_a$ verifies:
 \begin{equation}
 h_a(x_a) \le \epsilon \sum_k h_a(k)
 \end{equation}
 where $h_a(x)$ is the number of tuples with value $x$ for field $a$, and $\epsilon$ is a user-chosen sensitivity parameter.
+
+\subsubsection{Data partitioning}
+%TODO
