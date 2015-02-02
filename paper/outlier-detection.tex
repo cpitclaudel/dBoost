@@ -34,7 +34,7 @@ First, after running through the learning phase, it decides for each histogram w
 
 \begin{itemize}
 \item \emph{Distribution-independent} -- Given a histogram with $N$ bins, we count the values in the top $1$ bins if $1 \leq N \leq 3$, $2$ bins if $4 \leq N \leq 5$, and $3$ bins for $3 \leq N \leq 16$ (histograms with $N > 16$ bins were previously discarded). This method is stable when the set of bins is static (week days, boolean values, \ldots), but it is sensitive to the addition of new bins.
-\item \emph{Distribution-dependent} -- We sort the bins in decreasing order of bin size $b_i$, and find the index $i_{\max}$ such that the ratio $\sfrac{b_i}{b_{i+1}$ is maximal (this calculation is safe, because the bin sizes are non-zero integers). We then count the values that falls in bins $[0 .. i_{\max}]$. In this case, we also reject histograms whose ``maximum jump'' is below a given threshold.
+\item \emph{Distribution-dependent} -- We sort the bins in decreasing order of bin size $b_i$, and find the index $i_{\max}$ such that the ratio $\sfrac{b_i}{b_{i+1}}$ is maximal (this calculation is safe, because the bin sizes are non-zero integers). We then count the values that falls in bins $[0 .. i_{\max}]$. In this case, we also reject histograms whose ``maximum jump'' is below a given threshold.
 \end{itemize}
 
 After identifying a relevant set of histograms (this operation only needs to run once, at the very beginning of the last pass), we proceed to the actual detection phase. We classify an expanded tuple $X$ as an outlier if any of its values (or set of values, as grouped according to the correlation hints previously obtained) $x_a$ verifies:
