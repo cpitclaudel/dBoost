@@ -1,7 +1,9 @@
 import numbers
-from utils.tupleops import *
+from utils.tupleops import sys, filter_abc
 from utils.autoconv import autoconv
 from math import erf
+from matplotlib import pyplot
+from numpy import argmax
 
 class Mixture:
     ID = "mixture"
@@ -50,17 +52,18 @@ class Mixture:
             gmm = mixture.GMM(n_components = self.n_components)
             gmm.fit(to_fit)
             self.gmms.append(gmm)
-
+            
+            # TODO: add command line option to show graph
             # lp, resp = self.gmms[c].score_samples(to_fit)
-
             # ps = [self.test_one(x, c) for x in to_fit]
             # pyplot.hist(ps, bins = 30)
             # pyplot.show()
 
     def test_one(self, xi, gmm_pos):
         gmm = self.gmms[gmm_pos]
-        hx = zip(gmm.weights_, [1-erf(self.mahalanobis(xi, gmm, i))/sqrt(2) for i in range(self.n_components)])
-        return sum([w*h for (w,h) in hx])
+        _, resp = gmm.score_samples([xi])
+        explain = argmax(resp)
+        return gmm.weights_[explain] * resp[0][explain]
 
     def find_discrepancies(self, X, index):
         correlations = X[0]
