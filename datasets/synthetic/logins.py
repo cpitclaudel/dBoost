@@ -29,7 +29,6 @@ class Sedentary(User):
 
 class BusinessTraveler(User):
     def random_country(self, tsp, outlier):
-        # print(utils.isweekend(tsp), self.countries[outlier ^ utils.isweekend(tsp)]) # use with | sort | uniq -c | sort -nr
         return self.countries[outlier ^ utils.isweekend(tsp)]
 
 class FrequentFlyer(User):

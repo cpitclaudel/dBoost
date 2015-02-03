@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # Generates a fizzbuzz, with some mistakes
 
+import utils
+
 MAX = 1000
 OUTPUT = "fizzbuzz"
 FORMAT = "{}\t{}\n"
@@ -8,13 +10,13 @@ FORMAT = "{}\t{}\n"
 def writeout(output, num, msg):
     output.write(FORMAT.format(num, msg))
 
-with open(OUTPUT, mode = "w") as output:
+with open(utils.abspath(OUTPUT), mode = "w") as output:
     for num in range(MAX + 1):
         three = (num % 3) == 0
         five = (num % 5) == 0
 
         if num == 28:
-            writeout(output, num, "Fizzo!")
+            writeout(output, num, "Woof!")
             continue
         if num == 25:
             writeout(output, num, "Fizz")
