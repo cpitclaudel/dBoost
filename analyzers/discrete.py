@@ -46,4 +46,4 @@ class DiscreteStats:
         self.hints = tuple(self.histograms.keys())
 
     def expand_stats(self):
-        pass
+        pass # This analyzer does not actually product stats
