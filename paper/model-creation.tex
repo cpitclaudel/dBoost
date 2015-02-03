@@ -15,9 +15,9 @@ Despite its simplicity, this model presents the attractive property of requiring
 The multivariate Gaussian Mixture model takes advantage of the correlation hints supplied by the statistical analysis part to model sub-tuples of the expanded tuples as samples from multivariate Gaussian mixtures (GMMs), creating one model per set or correlated columns.
 
 For example, if the statistical analysis phase outlines a pair of fields $(f_1, f_2)$ as good candidate for joint modeling, then the Mixture modeling strategy will learn a particular GMM to model this correlation. Pairs of values $(X_1, X_2)$ are here assumed to have been produced by random sampling off a distribution of the form
-\begin{equation}
+\begin{align*}
 \sum_{j=1}^{N} \pi_j \mathcal N(\mu_j, \Sigma_j)
-\end{equation}
+\end{align*}
 
 where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined implementation value, but abundant literature exists on the subject of choosing $N$~\cite{Schwartz1978}~\cite{Akaike1974}), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learned as part of the modeling pass. This was implemented using the community-developed package \texttt{scikit-learn}. 
 
