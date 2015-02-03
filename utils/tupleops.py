@@ -9,6 +9,11 @@ def pair_ids(X, mask):
             if mask[idx][idxi] and mask[idy][idyi]:
                 yield (idx, idxi), (idy, idyi)
 
+def subtuple_ids(X, fundep_size):
+    for ids in combinations(range(len(X)), fundep_size):
+        for subids in product(*(range(len(X[idx])) for idx in ids)):
+            yield tuple(zip(ids, subids))
+
 def defaultif(S, X, default):
     return S if S != None else tuple(tuple(default() for _ in x) for x in X)
 
