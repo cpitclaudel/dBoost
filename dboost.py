@@ -29,6 +29,7 @@ def expand_stream(generator, rules, keep_x, hints, maxrecords = float("+inf")):
 
 def outliers(trainset_generator, testset_generator, analyzer, model, rules, maxrecords = float("+inf")):
     debug(">> Finding correlations")
+
     analyzer.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
     # debug(analyzer.hints)
 

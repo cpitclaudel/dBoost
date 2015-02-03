@@ -1,18 +1,26 @@
+
+FIGDIR = ../graphics/plots
 TEXFILES=$(wildcard *.tex)
+PLOTS = sensors_gm sensors_mm
+PDFFIGS := $(PLOTS:%=$(FIGDIR)/%.pdf)
+
+print-%:
+	@echo $* = $($*)
 
 all: paper.pdf
 
-../graphics/models-plots.pdf:
-	cd ../graphics/ && python3 models-plots.py
+$(FIGDIR)/%.pdf:
+	cd $(FIGDIR) && python3 plots.py
+	pdfcrop $@ $@
 
-../graphics/models-plots-crop.pdf: ../graphics/models-plots.pdf
-	cd ../graphics/ && pdfcrop models-plots.pdf
-
-paper.pdf: $(TEXFILES) ../graphics/models-plots-crop.pdf
+paper.pdf: $(TEXFILES) $(PDFFIGS)
 	pdflatex -shell-escape paper.tex
 	bibtex paper.aux
 	pdflatex -shell-escape paper.tex
 	pdflatex -shell-escape paper.tex
 
+view: paper.pdf
+	open paper.pdf
+
 clean:
-	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out
+	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out $(CROP_FILES) $(PDFFIGS)

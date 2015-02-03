@@ -29,6 +29,7 @@ An example of suspect behavior detection. User 0 always logs in from the same co
 The three invocations test for proper detection of outliers on the three users, individually
 
     ./dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1}) -d div -d mod --in-memory
+    ./dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1,2}) -d div -d mod --in-memory
 
 This one merges user 0 and user 1.
 

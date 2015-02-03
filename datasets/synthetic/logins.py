@@ -39,8 +39,8 @@ class FrequentFlyer(User):
     def random_country(self, tsp, outlier):
         return random.choice(self.countries)
 
-OUTLIERS_RATE = 0.02
+OUTLIERS_RATE = 0.05
 
 for uid, init in enumerate((Sedentary, BusinessTraveler, FrequentFlyer)):
     user = init(uid)
-    utils.write_lines("logins{}".format(user.uid), 2000, user.random_login, user.has_outliers)
+    utils.write_lines("logins{}".format(user.uid), 500, user.random_login, user.has_outliers)
