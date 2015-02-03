@@ -1,9 +1,9 @@
 import argparse
 import features
 import analyzers
-from models import gaussian, discrete, mixture # discretepart
+from models import gaussian, discrete, mixture, cords # discretepart
 
-REGISTERED_MODELS = (gaussian.Simple, discrete.Histogram, mixture.Mixture) #, discretepart.PartitionedHistogram)
+REGISTERED_MODELS = (gaussian.Simple, discrete.Histogram, mixture.Mixture, cords.Cords) #, discretepart.PartitionedHistogram)
 REGISTERED_ANALYZERS = analyzers.ALL()
 
 def register_modules(parser, modules):
