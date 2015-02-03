@@ -37,4 +37,5 @@ This one merges user 0 and user 1.
 
 ## Intel
 
-    ./dboost-stdin.py -F ' ' --statistical .7 --mixture 1 .3 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float
+    ./dboost-stdin.py -F ' ' --statistical .7 --mixture 2 .1 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float   
+    
