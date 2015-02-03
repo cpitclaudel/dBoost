@@ -29,7 +29,7 @@ class DiscreteStats:
 
         for idX, X in enumerate(Xs):
             if idX % 10 == 0 and sys.stdout.isatty():
-                debug(id, end='\r')
+                debug(idX, end='\r')
 
             subtuples = tuple(combinations(tupleops.flatten(X), self.fundep_size))
 
