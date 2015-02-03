@@ -4,12 +4,15 @@
 \usepackage{hyperref}
 \usepackage{microtype}
 \usepackage{calc}
-\usepackage{listings}
+\usepackage[final]{listings}
 \usepackage{xcolor}
 \usepackage[utf8]{inputenc}
 \usepackage{upquote}
 \usepackage{fixme}
 \usepackage{xfrac}
+\usepackage{minted}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
 
 \fxsetup{nomargin,inline}
 
@@ -24,6 +27,10 @@
   moredelim=[is][\color{red}]{\$}{\$}, %
   upquote=true %
 }
+
+\lstnewenvironment{lstnobreak}[1][]
+{\noindent\minipage{\linewidth}\medskip\lstset{#1}}
+{\endminipage}
 
 \hypersetup{breaklinks=true,
             bookmarks=true,

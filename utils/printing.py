@@ -85,7 +85,10 @@ def colorize(row, indices):
 
 def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
     BLOCK = "█"
-    W, H = os.get_terminal_size()
+    try:
+        W, H = os.get_terminal_size()
+    except OSError:
+        W, H = 80, 24
 
     plot_w = min(w, W - 10 - len(indent))
     scale = plot_w / max(counter.values())
@@ -108,6 +111,6 @@ def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
 
         line = bar + label
         if key == highlighted:
-            line = color.highlight(line, term.PLAIN, term.RED)
+            line = color.highlight(line, color.term.PLAIN, color.term.RED)
 
         pipe.write(header + line + "\n")

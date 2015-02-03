@@ -14,11 +14,14 @@ def choose_n(n, pool):
     random.shuffle(shuffled)
     return shuffled[:n]
 
+def abspath(fname):
+    return os.path.join(BASE, fname)
+
 SEP = "\t"
 def write_lines(fname, nb_lines, generator, report_outliers):
     outliers_fname = fname + "-outliers"
-    with open(os.path.join(BASE, fname), mode='w') as db:
-        with open(os.path.join(BASE, outliers_fname), mode='w') as outliers:
+    with open(abspath(fname), mode='w') as db:
+        with open(abspath(outliers_fname), mode='w') as outliers:
             for linum in range(nb_lines):
                 outlier, row = generator()
                 if report_outliers and outlier:

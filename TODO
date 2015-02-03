@@ -32,9 +32,9 @@
   - [X] C Peaky histograms
   - [X] C Partitioning functor
   - [X] C Discrete analyzer
-  - [ ] C Synthetic datasets
+  - [X] C Synthetic datasets
   - [ ] C Review the history to find new stuff
-- [-] ? At the beginning of evaluation, add a high-level overview of all the datasets
+- [X] C At the beginning of evaluation, add a high-level overview of all the datasets
 - [ ] R Change the names in CSAIL
 - [ ] ? Numerical benchmarks in the evaluation section
 - [X] C The word "preprocessor" designates a statistical analyzer in the code
@@ -66,9 +66,9 @@
 
 ** Research
 
-- [X] Create synthetic data set; suggest as new benchmarks in case of non numerical data
-- [X] Mixture model thresholds
-- [X] Identifying other outlier detection strategies / correlation detection strategies
+- [X] C Create synthetic data set; suggest as new benchmarks in case of non numerical data
+- [X] Z Mixture model thresholds
+- [X] A Identifying other outlier detection strategies / correlation detection strategies
 
 ** Code
 

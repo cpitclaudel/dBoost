@@ -49,10 +49,10 @@ def length(s: str) -> ("length",):
 def signature(s: str) -> ("signature",):
     return (",".join(map(unicodedata.category, s)),)
 
-NUMBERS = re.compile("\d+")
+NUMBERS = re.compile(r"(^s)?\d+")
 
 @rule
-def erasenumbers(s: str) -> ("erase numbers",):
+def strp(s: str) -> ("strp",):
     return (NUMBERS.sub("<num>", s),)
 
 HTML5_EMAIL_VALIDATOR = re.compile(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
