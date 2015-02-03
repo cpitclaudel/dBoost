@@ -34,7 +34,7 @@ To evaluate of our tool, we used a mix of synthetic and real datasets, succinctl
 \item \emph{Synthetic datasets}
   \begin{description}
   \item[Fizz-Buzz] A mixed textual-numerical dataset in which each record contains two entries: a number, and either ``Fizz'' if the number is divisible by 3, ``Buzz'' if the number is divisible by 5, ``FizzBuzz'' if it is divisible by both, and the number itself (as a string) otherwise. Outliers appear when the second column does not respect these rules; this can be a misplaced ``Fizz'', a missing ``Buzz'', or even a totally different string (e.g. ``Woof'').
-  \item[Web logins] A series of three non-numeric datasets in which entries record the time and place of connection for different users. Each user has different connection habits, leading to different types of outliers. % One user always connects from the same country; values that do not match this country are outliers. The second connects from one country during the week, and from another during the week-end; outliers in this case are connections from a country that doesn't match the country for that day of the week. The third user connects from a set of three countries, with no discernible pattern. This should not return any outliers.
+  \item[Web logins] A series of three non-numeric datasets in which entries record the time and place of connection for different users. Each user has different connection habits, leading to different types of outliers.
   \item[TODO] Continuous dataset
   \end{description}
 \item \emph{Real-world datasets}
@@ -49,6 +49,7 @@ These datasets showcase the power of our methods, both in terms of classificatio
 The following subsections describe each of the test sets and associated results in greater detail.
 
 \input{fizzbuzz-evaluation}
+\input{logins-evaluation}
 \input{csail-directory-evaluation}
 \input{intel-lab-data-evaluation}
 %\input{presidential-campaign-evaluation}
