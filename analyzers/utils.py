@@ -37,7 +37,7 @@ class Stats:
 
     @property
     def cardinality(self):
-        return len(self.elems) if self.elems != None else float("+inf")
+        return len(self.elems) if self.elems != None else MAX_CARDINALITY #float("+inf")
 
     # TODO: This is not the most numerically stable formula
     @staticmethod
