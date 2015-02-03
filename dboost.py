@@ -6,6 +6,7 @@ from utils import tupleops
 from utils.printing import debug
 from itertools import chain
 from analyzers import statistical
+from pprint import pprint
 
 def expand_field(f, rules):
     rls = rules[type(f)]

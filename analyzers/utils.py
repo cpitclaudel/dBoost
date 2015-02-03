@@ -3,7 +3,7 @@ from collections import namedtuple
 from itertools import combinations, product
 
 class Stats:
-    MAX_CARDINALITY = 16
+    MAX_CARDINALITY = 25 
 
     def __init__(self):
         self.sum = 0
@@ -37,7 +37,7 @@ class Stats:
 
     @property
     def cardinality(self):
-        return len(self.elems) if self.elems != None else MAX_CARDINALITY #float("+inf")
+        return len(self.elems) if self.elems != None else float("+inf")
 
     # TODO: This is not the most numerically stable formula
     @staticmethod
