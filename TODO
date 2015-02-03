@@ -14,13 +14,13 @@
 ** Code
 
 - [X] C Add csail examples to invocation.md
-- [ ] R Make the plots more reproducible (integrate in the Makefile)
+- [X] R Make the plots more reproducible (integrate in the Makefile)
 - [X] R Add a clean target to the Makefile
 - [-] Optimize the statistical analyzer
   - [X] C Look at performance
   - [ ] Z Test TPCH
 - [X] C Pass the output of the analyzer to models
-- [ ] R Make CORDS a model
+- [X] R Make CORDS a model
 - [X] C Check PyPy compatibility
 
 ** Paper

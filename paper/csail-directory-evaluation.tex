@@ -16,14 +16,14 @@ The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0
 This invocation produces a long list of outliers; a small subset of these is presented below. For privacy reasons, names have been omitted in the following listings. Phone numbers and emails have been removed and anonymized, respectively, and office numbers were exchanged.
 
 \begin{lstlisting}[gobble=2]
-  Doe, Jane, 32-D968, 
-    $jdoe@CSAIL.MIT.EDU$, Postdoctoral Associate
+  Hacker, Alyssa, 32-D968, 
+    $aph@CSAIL.MIT.EDU$, Postdoctoral Associate
 
-  Sholmes, Herlock, $32-221B$,
-    shherlock@csail.mit.edu, Graduate Student
+  Bitdiddle, Ben, $32-221B$,
+    bbitdid@csail.mit.edu, Graduate Student
 
-  $Evans-potter$, Lily, 32-G972, 
-    lep@csail.mit.edu, Research Scientist
+  $Lu-ater$, Eva, 32-G972, 
+    eva@csail.mit.edu, Research Scientist
 \end{lstlisting}
 
 In total, the list covers 451 lines, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. Before diving into the particulars of why these values are returned, we reduce the size of the result set by imposing more stringent thresholds for outlier detection. The new invocation of the tool is shown below: 
@@ -36,24 +36,24 @@ In total, the list covers 451 lines, out of a total of 1000. Office numbers are 
 This reduces the output to $68$ outliers. Most of the outliers due to office numbers disappear. Increasing the peak threshold to $0.9$ did not eliminate the corresponding histogram, but lowering the sensitivity did eliminate some of the questionable office numbers. At this point, it becomes interesting to look into the details of these outliers; adding the \lstinline{--verbose} flag gives us a bit more insight about these results:
 
 \begin{lstlisting}[gobble=2]
-  Sholmes, Herlock, $32-221B$, 
-    shherlock@csail.mit.edu, Graduate Student
+  Bitdiddle, Ben, $32-221B$, 
+    bbitdid@csail.mit.edu, Graduate Student
   > Value $'32-221B'$ (3) doesn't match 
     feature $'signature'$
  
-  $Evans-potter$, Lily, 32-G972, 
-    lep@csail.mit.edu, Research Scientist
-  > Value $'Evans-potter'$ (1) doesn't match 
+  $Lu-ater$, Eva, 32-G972, 
+    eva@csail.mit.edu, Research Scientist
+  > Value $'Lu-ater'$ (1) doesn't match 
     feature $'title case'$  
 \end{lstlisting}
 
-\lstinline{Doe, Jane} disappears from the list, since e-mails with the domain in all capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$.
+\lstinline{Hacker, Alyssa} disappears from the list, since e-mails with the domain in all capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$.
  
 For further information, our tool offers an extra verbosity level, \lstinline{--debug};
 
 \begin{lstlisting}[gobble=2]
-  Sholmes, Herlock, $32-221B$, 
-    shherlock@csail.mit.edu, Graduate Student
+  Bitdiddle, Ben, $32-221B$, 
+    bbitdid@csail.mit.edu, Graduate Student
   > Value $'32-221B'$ (3) doesn't match 
     feature $'signature'$
   • histogram for ($'signature'$,):
@@ -68,9 +68,9 @@ For further information, our tool offers an extra verbosity level, \lstinline{--
     Nd,Nd,Pd,Nd,Nd,Nd,Nd
     Nd,Pd,Nd,Nd,Nd
 
-  $Evans-potter$, Lily, 32-G972, 
-    lep@csail.mit.edu, Research Scientist
-  > Value $'Evans-potter'$ (1) doesn't match 
+  $Lu-ater$, Eva, 32-G972, 
+    eva@csail.mit.edu, Research Scientist
+  > Value $'Lu-ater'$ (1) doesn't match 
     feature $'title case'$  
   • histogram for ($'title case'$,):
     $False$
@@ -82,13 +82,13 @@ Our tool highlights the incorrect field, and prints the corresponding histogram.
 Manual inspection of the results reveal that most of the outliers reported are actually values that require fixing. There are, however, a number of false positives, such as:
 
 \begin{lstlisting}[gobble=2]
-  $MacDonald$, Ronald, 32-D597, 
-    rmacdon@csail.mit.edu, Graduate Student    
-  > Value $'MacDonald'$ (1) doesn't match 
+  $DeFect$, Cy, 32-D597, 
+    cydf@csail.mit.edu, Graduate Student    
+  > Value $'DeFect'$ (1) doesn't match 
     feature $'title case'$  
   • histogram for ($'title case'$,):
     $False$
     ████████████████████ True
 \end{lstlisting}
 
-The case of \lstinline{MacDonald} is correct, but our tool notes that it does not adhere to the standard derived from almost all other tuples, and thus reports it. 
+The case of \lstinline{DeFect} is correct, but our tool notes that it does not adhere to the standard derived from almost all other tuples, and thus reports it. 
