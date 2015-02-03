@@ -25,30 +25,25 @@ class DiscreteStats:
         return DiscreteStats(*(int(param) for param in params))
 
     def fit(self, Xs):
-        sample = None
-
-        for idX, X in enumerate(Xs):
-            if idX % 10 == 0 and sys.stdout.isatty():
-                debug(idX, end='\r')
-
-            subtuples = tuple(combinations(tupleops.flatten(X), self.fundep_size))
+        for X in Xs:
+            # if idX % 10 == 0 and sys.stdout.isatty():
+            #     debug(idX, end='\r')
 
             if self.histograms == None:
-                sample = X
-                self.histograms = [Counter() for _ in subtuples]
+                self.histograms = {k: Counter() for k in tupleops.subtuple_ids(X, self.fundep_size)}
 
-            for ids, subtuple in enumerate(subtuples):
-                hist = self.histograms[ids]
-                if hist != None:
-                    hist[subtuple] += 1
-                    if len(hist) > self.max_buckets:
-                        self.histograms[ids] = None
+            to_remove = []
+            for ids, hist in self.histograms.items():
+                bucketkey = tuple(X[ix][isx] for (ix, isx) in ids)
+                hist[bucketkey] += 1
+                if len(hist) > self.max_buckets:
+                    to_remove.append(ids)
 
-        all_hints = tuple(combinations(tupleops.flatten(tupleops.number(sample)), self.fundep_size))
-        self.hints = tuple(hint for hint, hist in zip(all_hints, self.histograms)
-                           if hist != None)
-        #print(len(all_hints))
-        #print(len(self.hints))
+            for ids in to_remove:
+                del self.histograms[ids]
+
+        print(len(self.histograms))
+        self.hints = tuple(self.histograms.keys())
 
     def expand_stats(self):
         pass
