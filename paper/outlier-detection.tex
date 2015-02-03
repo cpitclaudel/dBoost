@@ -6,9 +6,9 @@ Models, once properly trained, are used for classification and detection of outl
 Given that databases can contain tables with several hundred columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, the tool automatically indicates which values in the row caused it to be flagged as an outlier.
 
 \subsubsection{Simple Gaussian Modeling}
-The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\epsilon$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
+The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
 \begin{align}
-  |v_a - \mu_a| \ge \epsilon \cdot \sigma_a
+  |v_a - \mu_a| \ge \theta \cdot \sigma_a
   \label{eqn:gaussian-outlier}
 \end{align}
 where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
