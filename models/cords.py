@@ -29,10 +29,7 @@ class Cords:
         return Cords(*map(float, params))
 
     def fit(self, Xs,analyzer):
-        print("hello world!")
         self.model = analyzer.stats
-        pprint(self.model)
-        print(self.model[0][0].cardinality())
         # Get stats from statistical preprocessor
         # Collect random sample: skip this for now
         # Contingency tables
@@ -43,9 +40,9 @@ class Cords:
           num = 0
           for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
             for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
-              d1 = analyzer.stats[nx][nnx].cardinality()
-              d2 = analyzer.stats[ny][nny].cardinality()
-              if d1 == 1 or d2 == 1: continue
+              d1 = analyzer.stats[nx][nnx].cardinality
+              d2 = analyzer.stats[ny][nny].cardinality
+              if d1 == 1 or d2 == 1 or d1 == float("+inf") or d2 == float("+inf"): continue
               N,Nx,Ny = addlist2d(N,num,d1,d2),addlist(Nx,num,d1),addlist(Ny,num,d2)
               # FIXME: doing mod means that this may generate some buckets with 0 items
               i = hash(x) % d1 #FIXME: hash just returns x for integers
@@ -59,9 +56,9 @@ class Cords:
         num = 0
         for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
           for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
-            d1 = analyzer.stats[nx][nnx].cardinality()
-            d2 = analyzer.stats[ny][nny].cardinality()
-            if d1 == 1 or d2 == 1: continue
+            d1 = analyzer.stats[nx][nnx].cardinality
+            d2 = analyzer.stats[ny][nny].cardinality
+            if d1 == 1 or d2 == 1 or d1 == float("+inf") or d2 == float("+inf"): continue
             #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + ": " + str(N[num]))
             #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + ": " + str(Nx[num]))
             #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + ": " + str(Ny[num]))
@@ -88,7 +85,8 @@ class Cords:
             if chi_sqrd > t:
               self.hints.append(((nx,nnx),(ny,nny)))
             num = num+1
+        print(self.hints)
 
     def find_discrepancies(self, X, index):
-      ret = self.hints
+      ret = []
       return ret

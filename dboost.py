@@ -6,6 +6,7 @@ from utils import tupleops
 from utils.printing import debug
 from itertools import chain
 from analyzers import statistical
+from pprint import pprint
 
 def expand_field(f, rules):
     rls = rules[type(f)]
@@ -34,7 +35,7 @@ def outliers(trainset_generator, testset_generator, analyzer, model, rules, maxr
 
     debug(">> Building model...")
     analyzer.expand_stats()
-    print(analyzer.stats)
+    pprint(analyzer.stats)
     model.fit(expand_stream(trainset_generator, rules, False, analyzer.hints, maxrecords), analyzer)
 
     debug(">> Finding outliers...")
