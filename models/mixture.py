@@ -2,8 +2,6 @@ import numbers
 from utils.tupleops import sys, filter_abc
 from utils.autoconv import autoconv
 from math import erf
-from matplotlib import pyplot
-from numpy import argmax
 
 class Mixture:
     ID = "mixture"
@@ -37,6 +35,7 @@ class Mixture:
         return sqrt(v.dot(((1 / covar) * u).transpose()))
 
     def fit(self, Xs, analyzer):
+        from matplotlib import pyplot
         from sklearn import mixture
 
         self.gmms = []
@@ -52,7 +51,7 @@ class Mixture:
             gmm = mixture.GMM(n_components = self.n_components)
             gmm.fit(to_fit)
             self.gmms.append(gmm)
-            
+
             # TODO: add command line option to show graph
             # lp, resp = self.gmms[c].score_samples(to_fit)
             # ps = [self.test_one(x, c) for x in to_fit]
@@ -60,6 +59,7 @@ class Mixture:
             # pyplot.show()
 
     def test_one(self, xi, gmm_pos):
+        from numpy import argmax
         gmm = self.gmms[gmm_pos]
         _, resp = gmm.score_samples([xi])
         explain = argmax(resp)
