@@ -9,10 +9,10 @@ all: paper.pdf
 	cd ../graphics/ && pdfcrop models-plots.pdf
 
 paper.pdf: $(TEXFILES) ../graphics/models-plots-crop.pdf
-	pdflatex paper.tex
+	pdflatex -shell-escape paper.tex
 	bibtex paper.aux
-	pdflatex paper.tex
-	pdflatex paper.tex
+	pdflatex -shell-escape paper.tex
+	pdflatex -shell-escape paper.tex
 
 clean:
-	rm *.pdf *.aux *.bbl *.blg *.log *.out
+	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out
