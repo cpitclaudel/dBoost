@@ -12,6 +12,7 @@ These find suspicious-looking values in {a subset of,} the CSAIL directory
 
     ./datasets/synthetic/fizzbuzz.py
     ./dboost-stdin.py --histogram 0.8 0.05 --discretestats 8 2 datasets/synthetic/fizzbuzz -v
+    ./dboost-stdin.py --partitionedhistogram 0.8 0.05 --discretestats 8 2 datasets/synthetic/fizzbuzz -vv
 
 This example shows how adding a few extraction rules manages to capture relatively complex behavior; this provides a much nicer way to specify rules than explicitly encoding the rules of FizzBuzz.
 
