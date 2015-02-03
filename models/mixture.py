@@ -1,7 +1,7 @@
 import numbers
 from utils.tupleops import sys, filter_abc
 from utils.autoconv import autoconv
-from math import erf
+from math import erf,sqrt
 
 class Mixture:
     ID = "mixture"
@@ -63,7 +63,8 @@ class Mixture:
         gmm = self.gmms[gmm_pos]
         _, resp = gmm.score_samples([xi])
         explain = argmax(resp)
-        return gmm.weights_[explain] * resp[0][explain]
+        distance = self.mahalanobis(xi, gmm, explain)
+        return gmm.weights_[explain] *  erf(distance / sqrt(2))
 
     def find_discrepancies(self, X, index):
         correlations = X[0]
