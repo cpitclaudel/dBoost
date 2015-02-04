@@ -24,7 +24,7 @@
 - [X] R Make CORDS a model
 - [X] C Check PyPy compatibility
 - [ ] R Prepare Intel dataset
-- [ ] Z Adjust mixture models to include all fields
+- [X] Z Adjust mixture models to include all fields
 - [ ] ? Test using Coords instead of Pearson
 - [ ] Fill in =more_info= in mixture.py
 
