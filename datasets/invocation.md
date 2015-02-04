@@ -33,9 +33,12 @@ The three invocations test for proper detection of outliers on the three users, 
 
 This one merges user 0 and user 1.
 
+## TCPH
+
+    ./dboost-stdin.py --histogram 0.9 0.01 --discretestats 8 2 datasets/real/tcph/tcph-clean -F "	" -v -d div -d bits -d unix2date_float -d unix2date -d string_case -d is_weekend
+
 # Continuous correlations
 
 ## Intel
 
-    ./dboost-stdin.py -F ' ' --statistical .7 --mixture 2 .1 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float   
-    
+    ./dboost-stdin.py -F ' ' --statistical .7 --mixture 2 .1 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float
