@@ -45,7 +45,7 @@
   - [ ] C Add plots showing peakiness measures
 - [-] Proof-reading
   - [ ] C Mixture models
-  - [ ] R Proofread C's newly written sections
+  - [X] R Proofread C's newly written sections
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
 - [X] R Change the names in CSAIL
 - [ ] ? Numerical benchmarks in the evaluation section
