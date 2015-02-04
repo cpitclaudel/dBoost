@@ -87,7 +87,7 @@ def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
     BLOCK = "█"
     try:
         W, H = os.get_terminal_size()
-    except OSError:
+    except (OSError, AttributeError):
         W, H = 80, 24
 
     plot_w = min(w, W - 10 - len(indent))
