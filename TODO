@@ -18,15 +18,15 @@
 - [X] R Add a clean target to the Makefile
 - [-] Optimize the statistical analyzer
   - [X] C Look at performance
+  - [X] C Fix TPCH
   - [ ] Z Test TPCH
-    - [ ] C Fix TPCH
 - [X] C Pass the output of the analyzer to models
 - [X] R Make CORDS a model
 - [X] C Check PyPy compatibility
 - [ ] R Prepare Intel dataset
 - [X] Z Adjust mixture models to include all fields
 - [ ] ? Test using Coords instead of Pearson
-- [ ] Fill in =more_info= in mixture.py
+- [ ] Z Fill in =more_info= in mixture.py
 
 ** Paper
 
@@ -41,10 +41,10 @@
   - [ ] C Review the history to find new stuff
   - [ ] C Partitioned histograms results on logins dataset
   - [ ] R Add the section on LLF
-- [ ] Proof-reading
-  - [ ] C Mixture models
-  - [ ] C Add the plots explaining the models
+  - [X] C Add the plots explaining the models
   - [ ] C Add plots showing peakiness measures
+- [-] Proof-reading
+  - [ ] C Mixture models
   - [ ] R Proofread C's newly written sections
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
 - [X] R Change the names in CSAIL
