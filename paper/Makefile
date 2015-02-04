@@ -14,9 +14,9 @@ $(FIGDIR)/%.pdf:
 	pdfcrop $@ $@
 
 paper.pdf: $(TEXFILES) $(PDFFIGS)
-	pdflatex -shell-escape paper.tex
+	pdflatex -draftmode -shell-escape paper.tex
 	bibtex paper.aux
-	pdflatex -shell-escape paper.tex
+	pdflatex -draftmode -shell-escape paper.tex
 	pdflatex -shell-escape paper.tex
 
 view: paper.pdf
