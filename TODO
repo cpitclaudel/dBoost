@@ -8,8 +8,8 @@
 - [ ] R PAPER Closer look at references
 - [X] Z Add stuff to related work section
 - [X] Z Find a good continuous multi-dimensional dataset
-- [ ] Z Comparison to other datasets from the COORDS (Census DB, TPCH)
-- [ ] Z Test outlier analysis on subset of intel dataset where elements aren't correlated (further analysis of intel dataset)
+- [ ] Z Comparison to other datasets from the COORDS paper (Census DB, TPCH)
+- [ ] Z Test outlier analysis on subset of intel dataset without obvious outliers
 
 ** Code
 
@@ -19,9 +19,14 @@
 - [-] Optimize the statistical analyzer
   - [X] C Look at performance
   - [ ] Z Test TPCH
+    - [ ] C Fix TPCH
 - [X] C Pass the output of the analyzer to models
 - [X] R Make CORDS a model
 - [X] C Check PyPy compatibility
+- [ ] R Prepare Intel dataset
+- [ ] Z Adjust mixture models to include all fields
+- [ ] ? Test using Coords instead of Pearson
+- [ ] Fill in =more_info= in mixture.py
 
 ** Paper
 
@@ -34,12 +39,18 @@
   - [X] C Discrete analyzer
   - [X] C Synthetic datasets
   - [ ] C Review the history to find new stuff
+  - [ ] C Partitioned histograms results on logins dataset
+  - [ ] R Add the section on LLF
+- [ ] Proof-reading
+  - [ ] C Mixture models
+  - [ ] C Add the plots explaining the models
+  - [ ] C Add plots showing peakiness measures
+  - [ ] R Proofread C's newly written sections
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
 - [X] R Change the names in CSAIL
 - [ ] ? Numerical benchmarks in the evaluation section
 - [X] C The word "preprocessor" designates a statistical analyzer in the code
   and the tuple expander in the paper
-
 
 * LATER
 
