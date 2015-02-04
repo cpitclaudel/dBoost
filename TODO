@@ -26,7 +26,7 @@
 - [ ] R Prepare Intel dataset
 - [X] Z Adjust mixture models to include all fields
 - [ ] ? Test using Coords instead of Pearson
-- [ ] Z Fill in =more_info= in mixture.py
+- [X] Z Fill in =more_info= in mixture.py
 
 ** Paper
 
