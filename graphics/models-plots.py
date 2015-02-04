@@ -1,20 +1,11 @@
 from bisect import bisect_left
 import matplotlib
+from utils import TANGO
 from matplotlib import pyplot, mlab
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 
 matplotlib.rcParams['lines.linewidth'] = 2
-
-TANGO = {"yellow": ("#fce94f", "#edd400", "#c4a000"),
-         "orange": ("#fcaf3e", "#f57900", "#ce5c00"),
-         "brown": ("#e9b96e", "#c17d11", "#8f5902"),
-         "green": ("#8ae234", "#73d216", "#4e9a06"),
-         "blue": ("#729fcf", "#3465a4", "#204a87"),
-         "purple": ("#ad7fa8", "#75507b", "#5c3566"),
-         "red": ("#ef2929", "#cc0000", "#a40000"),
-         "grey": ("#eeeeec", "#d3d7cf", "#babdb6"),
-         "black": ("#888a85", "#555753", "#2e3436")}
 
 def gaussian(x, mu, sigma):
     return mlab.normpdf(x, mu, sigma)
@@ -26,7 +17,7 @@ def cleanup_2d(ax):
 
 def gaussian_plt():
     pyplot.clf()
-    
+
     x = np.linspace(-10, 10, num = 200)
     y = gaussian(x, 0, 1)
 
@@ -49,12 +40,12 @@ def gaussian_plt():
     #pyplot.axhline(y = y[nlo-1], color = TANGO["red"][2], linestyle = '--', linewidth = 1)
 
     cleanup_2d(ax)
-    
+
 def mixture_plt():
     from _multivariate import multivariate_normal
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
-    
+
     centers = ([0.5, 1.5], [-1, -2], [2, -1])
     covs = ([[1.2, 2],[0.7, 1]], [[0.75, 0.6],[0.6, 0.75]], [[2, 0],[0, 2]])
     coeffs = (1,1,1)
@@ -103,7 +94,7 @@ def histogram_plt():
     STROKES = (TANGO["red"][1], TANGO["green"][2])
     colors = [FILLS[yy > T] for yy in y]
     edgecolors = [STROKES[yy > T] for yy in y]
-    
+
     pyplot.clf()
     pyplot.bar(x, y, width=1)
 
@@ -111,10 +102,10 @@ def histogram_plt():
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     ax.set_xlim(-1, 10)
-    
+
     pyplot.bar(x, y, width = 1, color = colors, edgecolor = edgecolors, linewidth = 2)
     pyplot.tight_layout()
-    
+
 pdf = PdfPages("models-plots.pdf")
 
 for id, plotter in enumerate((gaussian_plt, mixture_plt, histogram_plt)):
