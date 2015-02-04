@@ -35,7 +35,7 @@
   - [X] C Synthetic datasets
   - [ ] C Review the history to find new stuff
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
-- [ ] R Change the names in CSAIL
+- [X] R Change the names in CSAIL
 - [ ] ? Numerical benchmarks in the evaluation section
 - [X] C The word "preprocessor" designates a statistical analyzer in the code
   and the tuple expander in the paper

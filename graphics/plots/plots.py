@@ -131,8 +131,8 @@ def get_data(fname):
 
 
 def sensors_gm():
-  data_base = "../../samples/sensors-1000_dataonly.txt"
-  data = "../../samples/gaus_plot_data"
+  data_base = "../../datasets/real/intel/sensors-1000.txt"
+  data = "../../datasets/real/intel/gaus_plot_data"
   t,h,l,v = get_data(data_base)
   fig = pyplot.figure()
   ax = fig.add_subplot(1,1,1)
@@ -145,8 +145,8 @@ def sensors_gm():
   ax.scatter(v,t,color='red')
 
 def sensors_mm():
-  data_base = "../../samples/sensors-1000_dataonly.txt"
-  data = "../../samples/gmm_plot_data"
+  data_base = "../../datasets/real/intel/sensors-1000.txt"
+  data = "../../datasets/real/intel/gmm_plot_data"
   t,h,l,v = get_data(data_base)
   fig = pyplot.figure()
   ax = fig.add_subplot(1,1,1)
