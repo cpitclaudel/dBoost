@@ -6,8 +6,8 @@
 ** Research
 
 - [ ] R PAPER Closer look at references
-- [ ] Z Add stuff to related work section
-- [ ] Z Find a good continuous multi-dimensional dataset
+- [X] Z Add stuff to related work section
+- [X] Z Find a good continuous multi-dimensional dataset
 - [ ] Z Comparison to other datasets from the COORDS (Census DB, TPCH)
 - [ ] Z Test outlier analysis on subset of intel dataset where elements aren't correlated (further analysis of intel dataset)
 
@@ -27,7 +27,7 @@
 
 - [ ] ? Change title?
 - [-] Add missing stuff
-  - [ ] Z Outlier detection description for mixture models
+  - [X] Z Outlier detection description for mixture models
   - [ ] R Update Intel graphs
   - [X] C Peaky histograms
   - [X] C Partitioning functor
