@@ -1,5 +1,5 @@
 import numbers
-from utils.tupleops import sys, filter_abc
+from utils.tupleops import sys
 from utils.autoconv import autoconv
 from math import erf,sqrt
 
@@ -34,29 +34,23 @@ class Mixture:
 
         return sqrt(v.dot(((1 / covar) * u).transpose()))
 
+    def make_gmm(self, to_fit):
+        from sklearn import mixture
+        gmm = mixture.GMM(n_components = self.n_components)
+        gmm.fit(to_fit)
+        return gmm
+        
     def fit(self, Xs, analyzer):
         from matplotlib import pyplot
-        from sklearn import mixture
 
-        self.gmms = []
-        self.evt = []
-        self.cutoffs = []
+        correlations = zip(*(X[0] for X in Xs))
+        self.gmms = [self.make_gmm(to_fit) for to_fit in correlations]
 
-        correlations = []
-        for X in Xs:
-            correlations.append(filter_abc(X[0], numbers.Number))
-
-        for c in range(0, len(correlations[0])):
-            to_fit = list(map(lambda X: list(X[c]), correlations))
-            gmm = mixture.GMM(n_components = self.n_components)
-            gmm.fit(to_fit)
-            self.gmms.append(gmm)
-
-            # TODO: add command line option to show graph
-            # lp, resp = self.gmms[c].score_samples(to_fit)
-            # ps = [self.test_one(x, c) for x in to_fit]
-            # pyplot.hist(ps, bins = 30)
-            # pyplot.show()
+        # TODO: add command line option to show graph
+        # lp, resp = self.gmms[i].score_samples(to_fit)
+        # ps = [self.test_one(x, i) for x in to_fit]
+        # pyplot.hist(ps, bins = 30)
+        # pyplot.show()
 
     def test_one(self, xi, gmm_pos):
         from numpy import argmax
