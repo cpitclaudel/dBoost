@@ -1,7 +1,7 @@
 \subsubsection{Soft constraint specifications: Fizz-Buzz}
-The Fizz-Buzz programming exercise is a typical programming exercise used in programming interviews as a way to filter out non-programmers. The synthetic dataset that we generated obeyed the following rule: for each record \(x, y\), $x$ is a number between 0 and 1000, and $y$ is ``Fizz'' if \(x \mod 3 = 0\), ``Buzz'' if \(x \mod 5 = 0\), ``FizzBuzz'' if \(x \mod 15 == 0\), and \(x\) otherwise. We however introduced three outliers: \texttt{(25, "Fizz")}, \texttt{(28, "Woof!")}, \texttt{(30, "Buzz")}: each demonstrates a different error, namely swapping \texttt{"Fizz"} and \texttt{"Buzz"}, producing entirely incorrect output, and failing to recognize that a number is divisible by both $3$ and $5$.
+The Fizz-Buzz programming exercise is based on a children's game and frequently found in programming interviews. The synthetic dataset we generated obeys the following rules: for each record <x, y>, $x$ is a number between 0 and 1000, and $y$ is ``Fizz'' if \(x \mod 3 = 0\), ``Buzz'' if \(x \mod 5 = 0\), ``FizzBuzz'' if \(x \mod 15 == 0\), and \(x\) otherwise. However, we introduced three outliers to this data: \texttt{(25, "Fizz")}, \texttt{(28, "Woof!")}, \texttt{(30, "Buzz")}. Each demonstrates a different error, namely swapping \texttt{"Fizz"} and \texttt{"Buzz"}, producing entirely incorrect output, and failing to recognize that a number is divisible by both $3$ and $5$.
 
-A traditional way of checking that all tuples verify the production rule outlined above is to encode this rule itself as a database integrity constraint. This requires encoding the full complexity of the exercise in the rule; it is also inflexible, as new cases must be added manually. Instead, a user might want to specify the bare minimum for the system to infer the rules; in this case, it is sufficient to add one extraction rule, mapping integers to two booleans denoting whether they are divisible by $3$, and by $5$. Such a rule could be written like this:
+A traditional way of checking that all tuples verify the production rule outlined above is to encode this rule itself as a database integrity constraint. This requires encoding the full complexity of the exercise in the rule. If the exercise were to change, new cases must be added manually. Instead, a user might want to specify the bare minimum for the system to infer the rules; in this case, it is sufficient to add one extraction rule, mapping integers to two booleans denoting whether they are divisible by $3$ or $5$. Such a rule could be written like this:
 
 \begin{minted}{python3}
 @rule
@@ -16,13 +16,13 @@ Running the discrete statistical analyzer on the synthetic datasets suggests tha
    > Values ($30$, $'Buzz'$) (0, 1) do not match
      features ($'div 3'$, $'erase numbers'$)
      • histogram for ('div 3', 'erase numbers'):
-       [133] █████ (False, 'Buzz')
-       [  1] (False, 'Fizz')
-       [  1] (False, 'Woof!')
-       [532] ██████████████████ (False, '<num>')
-       [  1] $(True, 'Buzz')$
-       [267] ██████████ (True, 'Fizz')
-       [ 66] ██ (True, 'FizzBuzz')
+       █████ (False, 'Buzz')
+       (False, 'Fizz')
+       (False, 'Woof!')
+       ██████████████████ (False, '<num>')
+       $(True, 'Buzz')$
+       ██████████ (True, 'Fizz')
+       ██ (True, 'FizzBuzz')
 \end{lstnobreak}
 
 Using the partitioned histogram model produces similar output:
@@ -32,14 +32,12 @@ Using the partitioned histogram model produces similar output:
    > Values ($30$, $'Buzz'$) (0, 1) do not match
      features ($'div 3'$, $'strp'$)
      • histogram for ('strp',) if 'div 3' = True:
-       [  1] $('Buzz',)$
-       [267] ████████████████████ ('Fizz',)
-       [ 66] ████ ('FizzBuzz',)
+       $('Buzz',)$
+       ████████████████████ ('Fizz',)
+       ████ ('FizzBuzz',)
      ... if 'div 3' = False:
-       [532] ████████████████████ ('<num>',)
-       [133] █████ ('Buzz',)
-       [  1] ('Fizz',)
-       [  1] ('Woof!',)
+       ████████████████████ ('<num>',)
+       █████ ('Buzz',)
+       ('Fizz',)
+       ('Woof!',)
 \end{lstnobreak}
-
-\fxnote{Should we remove the counts from the figures?}
