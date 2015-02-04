@@ -3,8 +3,7 @@
 /group-list.pdf
 
 # Datasets
-/datasets/real/csail-tiny.txt
-/datasets/real/csail.txt
+/datasets/real/*
 /datasets/synthetic/logins0
 /datasets/synthetic/logins0-outliers
 /datasets/synthetic/logins1
@@ -27,7 +26,6 @@ __pycache__/
 
 # Samples
 /samples/
-/datasets/real/intel/
 
 # Project files
 /.ropeproject/
