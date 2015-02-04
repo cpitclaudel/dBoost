@@ -92,7 +92,9 @@ def parsewith(parser):
     available_rules = set(r.__name__ for rs in features.rules.values() for r in rs)
     invalid_rules = disabled_rules - available_rules
     if len(invalid_rules) > 0:
-        parser.error("Unknown rule(s) {}".format(", ".join(sorted(invalid_rules))))
+        parser.error("Unknown rule(s) {}. Known rules: {}".format(
+            ", ".join(sorted(invalid_rules)),
+            ", ".join(sorted(available_rules - disabled_rules))))
     rules = {t: [r for r in rs if r.__name__ not in disabled_rules]
              for t, rs in features.rules.items()}
 
