@@ -8,7 +8,7 @@ class DiscreteStats:
     ID = "discretestats"
 
     def __init__(self, max_buckets, fundep_size):
-        assert(fundep_size >+ 1)
+        assert(fundep_size >= 1)
         self.max_buckets = max_buckets
         self.fundep_size = fundep_size
         self.histograms = None
