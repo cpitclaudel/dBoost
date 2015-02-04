@@ -26,6 +26,17 @@ def zeroif(S, X):
 def make_mask_abc(X, abc):
     return deepmap(lambda xi: isinstance(xi, abc), X)
 
+def extract_types(X):
+    return deepmap(type, X)
+
+def types_consistent(ref, X):
+    return extract_types(X) == ref
+
+def compare_types(T1, T2):
+    for i, (t1, t2) in enumerate(zip(T1, T2)):
+        if t1 != t2:
+            yield i
+
 def addlist(S, n, d):
     if S is None: S = []
     if len(S) > n: return S

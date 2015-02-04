@@ -25,16 +25,25 @@ class DiscreteStats:
         return DiscreteStats(*(int(param) for param in params))
 
     def fit(self, Xs):
-        for X in Xs:
-            # if idX % 10 == 0 and sys.stdout.isatty():
-            #     debug(idX, end='\r')
+        for (Xnum, X) in enumerate(Xs):
+            if Xnum % 10 == 0 and sys.stdout.isatty():
+                debug(Xnum, end='\r')
 
             if self.histograms == None:
+                # types = tupleops.extract_types(X)
                 self.histograms = {k: Counter() for k in tupleops.subtuple_ids(X, self.fundep_size)}
+
+            # if not tupleops.types_consistent(types, X):
+            #     print("line", Xnum, "has inconsistent types")
+            #     for field_id in tupleops.compare_types(types, tupleops.extract_types(X)):
+            #         print("Field", field_id, ":", X[field_id])
+            #         print("...got :", tupleops.extract_types(X)[field_id])
+            #         print("...exp :", types[field_id])
 
             to_remove = []
             for ids, hist in self.histograms.items():
                 bucketkey = tuple(X[ix][isx] for (ix, isx) in ids)
+
                 hist[bucketkey] += 1
                 if len(hist) > self.max_buckets:
                     to_remove.append(ids)
