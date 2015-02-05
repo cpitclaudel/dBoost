@@ -66,6 +66,14 @@ def email_checks(s: str) -> ("simple email check",): # "RFC822 email check"):
 def id(s: str) -> ("id",):
     return (s,)
 
+@rule
+def int_id(x: int) -> ("id",):
+    return (x,)
+
+@rule
+def int_kill(x: int) -> ("nil",):
+    return (None,)
+
 #@rule
 #def float_length(f: float) -> ("length",):
 #  return(len(str(f)),)

@@ -12,7 +12,7 @@ These find suspicious-looking values in {a subset of,} the CSAIL directory
 
     ./datasets/synthetic/fizzbuzz.py
     ./dboost/dboost-stdin.py --histogram 0.8 0.05 --discretestats 8 2 datasets/synthetic/fizzbuzz -v
-    ./dboost/dboost-stdin.py --partitionedhistogram 0.8 0.05 --discretestats 8 2 datasets/synthetic/fizzbuzz -vv
+    ./dboost/dboost-stdin.py --partitionedhistogram 5 0.8 0.05 --discretestats 8 2 datasets/synthetic/fizzbuzz -vv
 
 This example shows how adding a few extraction rules manages to capture relatively complex behavior; this provides a much nicer way to specify rules than explicitly encoding the rules of FizzBuzz.
 
@@ -29,9 +29,9 @@ An example of suspect behavior detection. User 0 always logs in from the same co
 The three invocations test for proper detection of outliers on the three users, individually
 
     ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1}) -d div -d mod --in-memory
-    ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1,2}) -d div -d mod --in-memory
+    ./dboost/dboost-stdin.py --partitionedhistogram 2 0.9 0.03 --discretestats 16 3 <(cat datasets/synthetic/logins{0,1,2}) -d div -d mod -d bits --in-memory -d unix2date
 
-This one merges user 0 and user 1.
+These ones merge multiple datasets
 
 ## TCPH
 

@@ -10,7 +10,7 @@ import utils
 
 class User:
     def __init__(self, userid):
-        self.uid = userid
+        self.uid = userid #"u" + str(
         self.has_outliers = True
         self.countries = [country[0] for country in utils.choose_n(2, COUNTRY_DATA)]
 

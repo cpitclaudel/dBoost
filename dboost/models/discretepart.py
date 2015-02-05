@@ -9,7 +9,8 @@ from ..models.discrete import Histogram
 class PartitionedHistogram:
     ID = "partitionedhistogram"
 
-    def __init__(self, peak_threshold, outlier_threshold):
+    def __init__(self, peak_jmp, peak_threshold, outlier_threshold):
+        self.peak_jmp = peak_jmp
         self.peak_threshold = peak_threshold
         self.outlier_threshold = outlier_threshold
         self.reset()
@@ -21,8 +22,8 @@ class PartitionedHistogram:
 
     @staticmethod
     def register(parser):
-        parser.add_argument("--" + PartitionedHistogram.ID, nargs = 2,
-                            metavar = ("peak_s", "outlier_s"),
+        parser.add_argument("--" + PartitionedHistogram.ID, nargs = 3,
+                            metavar = ("peak_jmp", "peak_s", "outlier_s"),
                             help = "TODO.")
 
     @staticmethod
@@ -66,7 +67,7 @@ class PartitionedHistogram:
             # if len(ys) > 3:
             #     print(ys)
             #     print(delta, min_hi, max_low, start_hi, sum_low, sum_hi)
-            return (5 * max_low < min_hi and sum_hi > peak_threshold * (sum_hi + sum_low))
+            return (delta > 2 and sum_hi > peak_threshold * (sum_hi + sum_low))
 
     def finish_fit(self):
         self.all_counters = self.counters
@@ -74,6 +75,8 @@ class PartitionedHistogram:
                                 in counters.items()
                                 if PartitionedHistogram.IsPeaked(vs, self.peak_threshold) }
                               for counters in self.counters)
+        # from pprint import pprint
+        # pprint(self.all_counters)
 
     def find_discrepancies_in_features(self, field_id, features, counters, sizes, discrepancies):
         for feature_id, (xi, mi, si) in enumerate(zip(features, counters, sizes)):
