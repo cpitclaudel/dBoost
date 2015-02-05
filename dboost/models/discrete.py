@@ -1,8 +1,8 @@
-from utils import tupleops
 import collections
 import sys
 import heapq
-from utils.printing import hhistplot
+from ..utils import tupleops
+from ..utils.printing import hhistplot
 
 class Histogram:
     ID = "histogram"
@@ -36,11 +36,15 @@ class Histogram:
         return counter
 
     @staticmethod
+    def NbPeaks(distribution):
+        return max(1, min(3, len(distribution) // 2)) # TODO
+
+    @staticmethod
     def IsPeaked(distribution, peak_threshold):
         if len(distribution) > 16: # TODO
             return False
         else:
-            nb_peaks = max(1, min(3, len(distribution) // 2)) # TODO
+            nb_peaks = Histogram.NbPeaks(distribution)
             total_weight = sum(distribution.values())
             peaks_weight = sum(heapq.nlargest(nb_peaks, distribution.values()))
             return peaks_weight > peak_threshold * total_weight

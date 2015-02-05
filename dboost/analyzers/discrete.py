@@ -1,7 +1,7 @@
 from collections import Counter
 from itertools import combinations
-from utils import tupleops
-from utils.printing import debug
+from ..utils import tupleops
+from ..utils.printing import debug
 import sys
 
 class DiscreteStats:

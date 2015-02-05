@@ -1,6 +1,6 @@
 import argparse
-import features
-import analyzers, models
+from . import features
+from . import analyzers, models
 
 REGISTERED_MODELS = models.ALL()
 REGISTERED_ANALYZERS = analyzers.ALL()

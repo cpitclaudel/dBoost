@@ -1,14 +1,15 @@
 #! /usr/bin/env python3
-import dboost
 import sys
-import utils
-import features
-import argparse
-import cli
-import itertools
-from utils.read import stream_tuples
-from utils.autoconv import autoconv
-from utils.printing import print_rows, debug
+
+if __name__ == '__main__' and __package__ is None:
+    from os import sys, path
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
+import dboost
+from dboost import features
+from dboost import cli
+from dboost.utils.read import stream_tuples
+from dboost.utils.printing import print_rows, debug
 
 parser = cli.get_sdtin_parser()
 args, models, analyzers, rules = cli.parsewith(parser)

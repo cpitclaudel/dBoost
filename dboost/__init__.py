@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 import sys
-import utils
-import features
-from utils import tupleops
-from utils.printing import debug
+from . import utils
+from . import features
+from .utils import tupleops
+from .utils.printing import debug
 from itertools import chain
-from analyzers import statistical
+from .analyzers import statistical
 from pprint import pprint
 
 def expand_field(f, rules):

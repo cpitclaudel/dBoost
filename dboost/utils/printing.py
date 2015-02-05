@@ -1,7 +1,7 @@
 import os
 import sys
 import bisect
-from utils import color
+from . import color
 
 def debug(*args, **kwargs):
     kwargs["file"] = sys.stderr

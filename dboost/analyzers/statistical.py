@@ -19,8 +19,8 @@ Public members:
 
 from numbers import Number
 from math import fabs
-from utils.tupleops import filter_abc, defaultif_masked, deepapply_masked, pair_ids, make_mask_abc, filter_mask
-from analyzers.utils import Stats
+from ..utils.tupleops import filter_abc, defaultif_masked, deepapply_masked, pair_ids, make_mask_abc, filter_mask
+from ..analyzers.utils import Stats
 
 # Analyzer that collects dataset statistics
 

@@ -1,6 +1,6 @@
 import numbers
-from utils.tupleops import *
-from utils.autoconv import autoconv
+from ..utils.tupleops import *
+from ..utils.autoconv import autoconv
 import math,itertools
 from pprint import pprint
 

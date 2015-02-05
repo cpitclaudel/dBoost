@@ -1,6 +1,5 @@
-import numbers
-from utils.tupleops import sys
-from utils.autoconv import autoconv
+from ..utils.tupleops import sys
+from ..utils.autoconv import autoconv
 from math import erf,sqrt
 
 class Mixture:
@@ -9,11 +8,7 @@ class Mixture:
     def __init__(self, n_components, cutoff):
         self.n_components = n_components
         self.cutoff = cutoff
-
-    def reset(self):
         self.gmms    = None
-        self.cutoff  = None
-        self.keep    = None
 
     @staticmethod
     def register(parser):
@@ -26,7 +21,8 @@ class Mixture:
     def from_parse(params):
         return Mixture(*map(autoconv, params))
 
-    def mahalanobis(self, x, gmm, component):
+    @staticmethod
+    def mahalanobis(x, gmm, component):
         mean = gmm.means_[component]
         covar = gmm.covars_[component]
         u = x - mean
@@ -39,7 +35,7 @@ class Mixture:
         gmm = mixture.GMM(n_components = self.n_components)
         gmm.fit(to_fit)
         return gmm
-        
+
     def fit(self, Xs, analyzer):
         from matplotlib import pyplot
 
@@ -57,7 +53,7 @@ class Mixture:
         gmm = self.gmms[gmm_pos]
         _, resp = gmm.score_samples([xi])
         component = argmax(resp)
-        distance = self.mahalanobis(xi, gmm, component)
+        distance = Mixture.mahalanobis(xi, gmm, component)
         return component, gmm.weights_[component] *  erf(distance / sqrt(2))
 
     def find_discrepancies(self, X, index):
@@ -72,7 +68,7 @@ class Mixture:
         return discrepancies
 
     def format_ndarray(self, array):
-        return '(' +  ', '.join(['{:.2e}'.format(x) for x in array]) +  ')'
+        return '(' +  ', '.join('{:.2e}'.format(x) for x in array) +  ')'
 
     def more_info(self, discrepancy, description, X, indent = "", pipe = sys.stdout):
         field_id, gmm_pos = discrepancy[0]

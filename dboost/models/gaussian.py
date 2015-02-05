@@ -1,7 +1,7 @@
 import numbers
-from utils.printing import report_progress
-from utils.tupleops import *
-from utils.autoconv import autoconv
+from ..utils.printing import report_progress
+from ..utils.tupleops import *
+from ..utils.autoconv import autoconv
 
 class Simple:
     ID = "gaussian"

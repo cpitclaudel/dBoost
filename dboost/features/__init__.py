@@ -1,7 +1,7 @@
 from collections import defaultdict
 import inspect
 import time
-import utils
+from .. import utils
 import sys
 import unicodedata
 import re

@@ -1,10 +1,10 @@
-from utils import tupleops
 import collections
 import sys
 import heapq
 from collections import Counter, defaultdict
-from utils.printing import hhistplot
-from models.discrete import Histogram
+from ..utils import tupleops
+from ..utils.printing import hhistplot
+from ..models.discrete import Histogram
 
 class PartitionedHistogram:
     ID = "partitionedhistogram"
@@ -51,17 +51,22 @@ class PartitionedHistogram:
         # print(self.counters)
 
     @staticmethod
+    def PeakProps(ys):
+        delta, min_hi, max_low, start_hi = max((ys[i+1] / ys[i], ys[i+1], ys[i], i+1) for i in range(len(ys) - 1))
+        return delta, min_hi, max_low, start_hi
+
+    @staticmethod
     def IsPeaked(hist, peak_threshold):
         if len(hist) > 16 or len(hist) < 2:
             return False
         else:
             ys = sorted(hist.values())
-            delta, min_hi, max_low, start_hi = max((ys[i+1] / ys[i], ys[i+1], ys[i], i+1) for i in range(len(ys) - 1))
+            delta, min_hi, max_low, start_hi = PartitionedHistogram.PeakProps(ys)
             sum_low, sum_hi = sum(ys[:start_hi]), sum(ys[start_hi:])
             # if len(ys) > 3:
             #     print(ys)
             #     print(delta, min_hi, max_low, start_hi, sum_low, sum_hi)
-            return (10 * max_low < min_hi and sum_hi > peak_threshold * (sum_hi + sum_low))
+            return (5 * max_low < min_hi and sum_hi > peak_threshold * (sum_hi + sum_low))
 
     def finish_fit(self):
         self.all_counters = self.counters
