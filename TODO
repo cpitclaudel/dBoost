@@ -40,12 +40,14 @@
   - [X] C Synthetic datasets
   - [X] C Review the history to find new stuff
     - [X] New rules: id for ints, email validation
-  - [ ] C Partitioned histograms results on logins dataset
+  - [X] C Partitioned histograms results on logins dataset
   - [ ] R Add the section on LLF
   - [X] C Add the plots explaining the models
   - [X] C Add plots showing peakiness measures
 - [-] Proof-reading
   - [ ] C Mixture models
+    - [ ] Z Fix undefined $j$ in formula
+    - [ ] C Finish proofreading
   - [X] R Proofread C's newly written sections
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
 - [X] R Change the names in CSAIL
