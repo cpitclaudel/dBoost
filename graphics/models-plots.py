@@ -42,7 +42,7 @@ def gaussian_plt():
     cleanup_2d(ax)
 
 def mixture_plt():
-    from _multivariate import multivariate_normal
+    from utils._multivariate import multivariate_normal
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
 
@@ -106,11 +106,14 @@ def histogram_plt():
     pyplot.bar(x, y, width = 1, color = colors, edgecolor = edgecolors, linewidth = 2)
     pyplot.tight_layout()
 
-pdf = PdfPages("models-plots.pdf")
+from utils import filename
+batch_mode, fname = filename("models-plots.pdf")
 
-for id, plotter in enumerate((gaussian_plt, mixture_plt, histogram_plt)):
-    print("Plotting", id+1)
-    plotter()
-    pyplot.savefig(pdf, format = 'pdf', transparent = True)
+if batch_mode:
+    pdf = PdfPages(fname)
 
-pdf.close()
+    for plotter in (gaussian_plt, mixture_plt, histogram_plt):
+        plotter()
+        pyplot.savefig(pdf, format = 'pdf', transparent = True)
+
+    pdf.close()
