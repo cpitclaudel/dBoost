@@ -42,7 +42,7 @@
   - [ ] C Partitioned histograms results on logins dataset
   - [ ] R Add the section on LLF
   - [X] C Add the plots explaining the models
-  - [ ] C Add plots showing peakiness measures
+  - [X] C Add plots showing peakiness measures
 - [-] Proof-reading
   - [ ] C Mixture models
   - [X] R Proofread C's newly written sections

@@ -11,13 +11,13 @@ The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0
 This invocation produces a long list of outliers; a small subset of these is presented below. For privacy reasons, names,  phone numbers, office numbers, and emails have been omitted or anonymized in the following listings.
 
 \begin{lstlisting}[gobble=2]
-  Hacker, Alyssa, 32-D968, 
+  Hacker, Alyssa, 32-D968,
     $aph@CSAIL.MIT.EDU$, Postdoctoral Associate
 
   Bitdiddle, Ben, $32-221B$,
     bbitdid@csail.mit.edu, Graduate Student
 
-  $Lu-ater$, Eva, 32-G972, 
+  $Lu-ater$, Eva, 32-G972,
     eva@csail.mit.edu, Research Scientist
 \end{lstlisting}
 
@@ -25,27 +25,27 @@ In total, 451 entries contain outliers, out of a total of 1000. Office numbers a
 
 
 %\begin{lstlisting}[gobble=2]
-%  Bitdiddle, Ben, $32-221B$, 
+%  Bitdiddle, Ben, $32-221B$,
 %    bbitdid@csail.mit.edu, Graduate Student
-%  > Value $'32-221B'$ (3) doesn't match 
+%  > Value $'32-221B'$ (3) doesn't match
 %    feature $'signature'$
-% 
-%  $Lu-ater$, Eva, 32-G972, 
+%
+%  $Lu-ater$, Eva, 32-G972,
 %    eva@csail.mit.edu, Research Scientist
-%  > Value $'Lu-ater'$ (1) doesn't match 
-%    feature $'title case'$  
+%  > Value $'Lu-ater'$ (1) doesn't match
+%    feature $'title case'$
 %\end{lstlisting}
 
 
-In addition to identifying outliers, dBoost is equipped with tools that provide the user with additional feedback on why features were identified as outliers.  
+In addition to identifying outliers, dBoost is equipped with tools that provide the user with additional feedback on why features were identified as outliers.
 
 \begin{lstlisting}[gobble=2]
-  Bitdiddle, Ben, $32-221B$, 
+  Bitdiddle, Ben, $32-221B$,
     bbitdid@csail.mit.edu, Graduate Student
-  > Value $'32-221B'$ (3) doesn't match 
+  > Value $'32-221B'$ (3) doesn't match
     feature $'signature'$
   • histogram for ($'signature'$,):
-    ██████████ 
+    ██████████
     Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd
     Lu,Nd,Nd,Pd,Nd,Nd,Nd
     Nd,Nd,Lu,Pd,Nd,Nd,Nd
@@ -56,10 +56,10 @@ In addition to identifying outliers, dBoost is equipped with tools that provide 
     Nd,Nd,Pd,Nd,Nd,Nd,Nd
     Nd,Pd,Nd,Nd,Nd
 
-  $Lu-ater$, Eva, 32-G972, 
+  $Lu-ater$, Eva, 32-G972,
     eva@csail.mit.edu, Research Scientist
-  > Value $'Lu-ater'$ (1) doesn't match 
-    feature $'title case'$  
+  > Value $'Lu-ater'$ (1) doesn't match
+    feature $'title case'$
   • histogram for ($'title case'$,):
     $False$
     ████████████████████ True
@@ -70,13 +70,13 @@ Our tool highlights the incorrect field, and prints the corresponding histogram.
 Manual inspection of the results reveal that most of the outliers reported are actually bad inputs. There are, however, a number of false positives, such as:
 
 \begin{lstlisting}[gobble=2]
-  $DeFect$, Cy, 32-D597, 
-    cydf@csail.mit.edu, Graduate Student    
-  > Value $'DeFect'$ (1) doesn't match 
-    feature $'title case'$  
+  $DeFect$, Cy, 32-D597,
+    cydf@csail.mit.edu, Graduate Student
+  > Value $'DeFect'$ (1) doesn't match
+    feature $'title case'$
   • histogram for ($'title case'$,):
     $False$
     ████████████████████ True
 \end{lstlisting}
 
-The case of \lstinline{DeFect} is correct, but our tool notes that it does not adhere to the standard derived from almost all other tuples, and thus reports it. 
+The case of \lstinline{DeFect} is correct, but our tool notes that it does not adhere to the casing standard derived from other tuples, and thus reports it.
