@@ -19,6 +19,7 @@
 *.blg
 *.log
 *.out
+*.bak
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -26,6 +27,10 @@ __pycache__/
 
 # Samples
 /samples/
+
+# Compiled graphics
+/graphics/*.pdf
+/graphics/plots/*.pdf
 
 # Project files
 /.ropeproject/
