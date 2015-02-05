@@ -1,35 +1,33 @@
 import numbers
+from . import Pearson
 from ..utils.tupleops import *
-from ..utils.autoconv import autoconv
 import math,itertools
-from pprint import pprint
 
 #CORDS: Automatic Discovery of Correlations and Soft Functional Dependencies
 
 class Cords:
     ID = "cords"
-    def __init__(self,p):
-      self.reset()
-      self.p = p
-      self.delta = 0.005
-      return
-
-    def reset(self):
-      self.hints = []
-      self.model = None
-      return
+    def __init__(self, corr_threshold, p):
+        self.p = p
+        self.delta = 0.005
+        self.hints = []
+        self.pearson = Pearson(corr_threshold)
+        self.stats = None
 
     @staticmethod
     def register(parser):
-        parser.add_argument("--" + Cords.ID, nargs = 1, metavar = "p",
-                            help = "Use the CORDS method to find correlated values. p is the maximum worst-case probability of incorrectly rejecting the independence hypothesis. Recommended value: 0.001 ")
+        parser.add_argument("--" + Cords.ID, nargs = 2, metavar = ("p", "epsilon"),
+                            help = "Use the CORDS method to find correlated values. p is the maximum worst-case probability of incorrectly rejecting the independence hypothesis. epsilon is passed to --statistical. Recommended value for p: 0.001 ")
 
     @staticmethod
     def from_parse(params):
         return Cords(*map(float, params))
 
-    def fit(self, Xs,analyzer):
-        self.model = analyzer.stats
+    def fit(self, Xs):
+        Xs = list(Xs) # We're going to do two passes, so make sure we don't consume all the data during the first one.
+
+        self.pearson.fit(Xs)
+
         # Get stats from statistical preprocessor
         # Collect random sample: skip this for now
         # Contingency tables
@@ -40,8 +38,8 @@ class Cords:
           num = 0
           for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
             for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
-              d1 = analyzer.stats[nx][nnx].cardinality
-              d2 = analyzer.stats[ny][nny].cardinality
+              d1 = self.pearson.stats[nx][nnx].cardinality
+              d2 = self.pearson.stats[ny][nny].cardinality
               if d1 == 1 or d2 == 1 or d1 == float("+inf") or d2 == float("+inf"): continue
               N,Nx,Ny = addlist2d(N,num,d1,d2),addlist(Nx,num,d1),addlist(Ny,num,d2)
               # FIXME: doing mod means that this may generate some buckets with 0 items
@@ -56,8 +54,8 @@ class Cords:
         num = 0
         for ((X,Y),(nx,ny)) in zip(itertools.combinations(X_,2),itertools.combinations(range(len(X_)),2)):
           for ((x,y),(nnx,nny)) in zip(itertools.product(zip(*[X]),zip(*[Y])),itertools.product(range(len(X)),range(len(Y)))):
-            d1 = analyzer.stats[nx][nnx].cardinality
-            d2 = analyzer.stats[ny][nny].cardinality
+            d1 = self.pearson.stats[nx][nnx].cardinality
+            d2 = self.pearson.stats[ny][nny].cardinality
             if d1 == 1 or d2 == 1 or d1 == float("+inf") or d2 == float("+inf"): continue
             #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + ": " + str(N[num]))
             #print(str(nx) + "." + str(nnx) + " " + str(ny) + "." + str(nny) + ": " + str(Nx[num]))
@@ -87,6 +85,6 @@ class Cords:
             num = num+1
         print(self.hints)
 
-    def find_discrepancies(self, X, index):
-      ret = []
-      return ret
+    def expand_stats(self):
+        self.pearson.expand_stats()
+        self.stats = self.pearson.stats

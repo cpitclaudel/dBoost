@@ -1,3 +1,4 @@
 from .statistical import Pearson
 from .discrete import DiscreteStats
-ALL = lambda: (Pearson, DiscreteStats)
+from .cords import Cords
+ALL = lambda: (Pearson, DiscreteStats, Cords)
