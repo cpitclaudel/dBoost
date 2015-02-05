@@ -38,7 +38,8 @@
   - [X] C Partitioning functor
   - [X] C Discrete analyzer
   - [X] C Synthetic datasets
-  - [ ] C Review the history to find new stuff
+  - [X] C Review the history to find new stuff
+    - [X] New rules: id for ints, email validation
   - [ ] C Partitioned histograms results on logins dataset
   - [ ] R Add the section on LLF
   - [X] C Add the plots explaining the models

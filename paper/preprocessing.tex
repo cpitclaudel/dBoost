@@ -35,6 +35,7 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \text{signature: } & \texttt{NNPLNNN}\\
     \text{uppercase: } & \texttt{True (1)}\\
     \text{lowercase: } & \texttt{False (0)}\\
+    \text{valid email: } & \texttt{False (0)}\\
     \text{erase numbers: } & \texttt{<num>-G<num>}\\
     \text{\parbox{\widthof{base-10 residue:}}{title case:} } & \texttt{True (1)}
   \end{cases}$
@@ -44,6 +45,7 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \texttt{\parbox{\widthof{1418222134.325}}{1418222134}}
   \end{stackedlines} \longrightarrow
   \begin{cases}
+    \text{id: } & \texttt{1418222134}\\
     \text{date: } & \texttt{(2014,12,10)}\\
     \text{time: } & \texttt{(14,35)}\\
     \text{weekday: } & \texttt{Wed (2)}\\
@@ -58,6 +60,7 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \texttt{1418222134.325}
   \end{stackedlines} \longrightarrow
   \begin{cases}
+    \text{id: } & \texttt{1418222134.325}\\
     \text{intpart: } & \texttt{1418222134}\\
     \text{fracpart: } & \texttt{0.325}\\
     \text{millis: } & \texttt{325}\\
