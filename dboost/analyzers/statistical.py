@@ -19,10 +19,8 @@ Public members:
 
 from numbers import Number
 from math import fabs
-from ..utils.tupleops import filter_abc, defaultif_masked, deepapply_masked, pair_ids, make_mask_abc, filter_mask
+from ..utils.tupleops import defaultif_masked, deepapply_masked, pair_ids, make_mask_abc
 from ..analyzers.utils import Stats
-
-# Analyzer that collects dataset statistics
 
 class Pearson:
     ID = "statistical"
@@ -30,6 +28,7 @@ class Pearson:
     def __init__(self, corr_threshold):
         self.corr_threshold = corr_threshold
 
+        self.mask = None
         self.hints = []
         self.stats = None
         self.pearsons = {}
@@ -52,17 +51,15 @@ class Pearson:
                              self.pairwise_prods[pair_id])
 
     def fit(self, Xs):
-        mask = None
-
         for X in Xs:
-            if mask == None:
-                mask = make_mask_abc(X, Number)
+            if self.mask == None:
+                self.mask = make_mask_abc(X, Number)
 
-            self.stats = defaultif_masked(self.stats, X, Stats, mask)
-            deepapply_masked(self.stats, X, Stats.update, mask)
+            self.stats = defaultif_masked(self.stats, X, Stats, self.mask)
+            deepapply_masked(self.stats, X, Stats.update, self.mask)
 
             if self.pairwise_prods == None:
-                self.pairwise_prods = {pid: 0 for pid in pair_ids(X, mask)}
+                self.pairwise_prods = {pid: 0 for pid in pair_ids(X, self.mask)}
 
             for (id1, id2) in self.pairwise_prods:
                 (idx, sidx), (idy, sidy) = id1, id2
