@@ -30,11 +30,18 @@ As in the Gaussian Model, providing the user with a list of attributes that caus
 \subsubsection{Histogram Modeling}
 The histogram-based modeling strategy proceeds in two phases to detect outliers.
 
-First, after running through the learning phase, it decides for each histogram whether that histogram is peaked enough that it may be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar numbers of values. In practice, we use a simple statistical test to determine whether a histogram is ``peaked'' (modal) enough: we count the number of elements that fall into the most populated bins, and discard the histogram if this count totals less than a user-specified proportion of values. Finding how many bins to include in the set of ``most populated'' bins is the most challenging part, and for this paper we explored two avenues:
+First, after running through the learning phase, it decides for each histogram whether that histogram is ``peaked'' (contrasted, i.e. showing one strong mode) enough to be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar numbers of values. In practice, we use a simple statistical test to determine whether a histogram is sufficiently modal: we count the number of elements that fall into the most populated (``top'') bins, and discard the histogram if this count totals less than a user-specified proportion of values. Finding how many bins to include in the set of top bins is the most challenging part, and for this paper we explored two thresholding strategies (Figure~\ref{fig:peakiness}):
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\linewidth]{../graphics/peakiness.pdf}\vspace{0.5em}
+  \caption{Sample histograms, and corresponding decisions with distribution-dependent (\(D\)-independent) and distribution-independent (\(D\)-independent) thresholds. Each figure shows a sorted histogram, with the top bins hatched (in dotted green in the distribution-independent case, and in solid orange in the distribution-dependent case). The vertical arrows show the value of \(r\) in the distribution-dependent case. The weaknesses of the distribution-independent-model show in the third and fourth plots: in the third one the distribution-dependent strategy correctly rejects because of the small \(r\); in the fourth the distribution-independent strategy yields an incorrect threshold.}
+  \label{fig:peakiness}
+\end{figure*}
 
 \begin{itemize}
 \item \emph{Distribution-independent} -- Given a histogram with $N$ bins, we count the values in the top $1$ bins if $1 \leq N \leq 3$, $2$ bins if $4 \leq N \leq 5$, and $3$ bins for $3 \leq N \leq 16$ (histograms with $N > 16$ bins were previously discarded). This method is stable when the set of bins is static (week days, boolean values, \ldots), but it is sensitive to the addition of new bins.
-\item \emph{Distribution-dependent} -- We sort the bins in decreasing order of bin size $b_i$, and find the index $i_{\max}$ such that the ratio $\sfrac{b_i}{b_{i+1}}$ is maximal (this calculation is safe, because the bin sizes are non-zero integers). We then count the values that falls in bins $[0 .. i_{\max}]$. In this case, we also reject histograms whose ``maximum jump'' is below a given threshold.
+\item \emph{Distribution-dependent} -- We sort the bins in decreasing order of bin size $b_i$, and find the index $i_{\max}$ such that the ratio $r = \sfrac{b_i}{b_{i+1}}$ is maximal (this calculation is safe, because the bin sizes are non-zero integers). We then count the values that falls in bins $[0 .. i_{\max}]$. In this case, we also reject histograms whose ``maximum jump'' is below a given threshold.
 \end{itemize}
 
 After identifying a relevant set of histograms (this operation only needs to run once, at the very beginning of the last pass), we proceed to the actual detection phase. We classify an expanded tuple $X$ as an outlier if any of its values (or set of values, as grouped according to the correlation hints previously obtained) $x_a$ verifies:
