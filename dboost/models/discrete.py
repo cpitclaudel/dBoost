@@ -6,13 +6,12 @@ from ..utils.printing import hhistplot
 
 class Histogram:
     ID = "histogram"
+    MAX_HIST_SIZE = 16
 
     def __init__(self, peak_threshold, outlier_threshold):
         self.peak_threshold = peak_threshold
         self.outlier_threshold = outlier_threshold
-        self.reset()
 
-    def reset(self):
         self.all_counters = None
         self.counters = None
         self.sizes = None
@@ -32,7 +31,10 @@ class Histogram:
 
     @staticmethod
     def add(counter, x):
-        counter[x] += 1
+        if counter is not None:
+            counter[x] += 1
+            if len(counter) > Histogram.MAX_HIST_SIZE:
+                counter = None
         return counter
 
     @staticmethod
@@ -41,7 +43,7 @@ class Histogram:
 
     @staticmethod
     def IsPeaked(distribution, peak_threshold):
-        if len(distribution) > 16: # TODO
+        if distribution is None or len(distribution) > Histogram.MAX_HIST_SIZE: # TODO
             return False
         else:
             nb_peaks = Histogram.NbPeaks(distribution)
