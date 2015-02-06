@@ -2,7 +2,7 @@ from .autoconv import autoconv
 from .printing import debug
 import sys, csv
 
-def parse_line(row, floats_only):
+def parse_line_blind(row, floats_only):
     return tuple(autoconv(field, floats_only) for field in row)
 
 def stream_tuples(input, fs, floats_only, preload, maxrecords = float("+inf")):
@@ -11,25 +11,34 @@ def stream_tuples(input, fs, floats_only, preload, maxrecords = float("+inf")):
             input.seek(0)
         stream.call_count += 1
 
-        row_length = None
         for rid, row in enumerate(csv.reader(input, delimiter = fs)):
             if rid > maxrecords:
                 break
 
-            row = parse_line(row, floats_only)
-
-            if row_length == None:
-                row_length = len(row)
-            elif len(row) != row_length:
-                sys.stderr.write("Discarding {}\n".format(row))
+            if stream.row_length == None:
+                stream.row_length = len(row)
+            elif len(row) != stream.row_length:
+                sys.stderr.write("Discarding {} (invalid length)\n".format(row))
                 continue
 
-            if stream.call_count == 1 and rid == 0 and row_length == 1:
+            if stream.types == None:
+                row = parse_line_blind(row, floats_only)
+                stream.types = tuple(map(type, row))
+            else:
+                try:
+                    row = tuple(conv(field) for conv, field in zip(stream.types, row))
+                except ValueError:
+                    sys.stderr.write("Discarding {} (invalid types)\n".format(row))
+                    continue
+
+            if stream.call_count == 1 and rid == 0 and stream.row_length == 1:
                 debug("Your dataset seems to have only one column. Did you need -F?")
 
             yield row
 
     stream.call_count = 0
+    stream.types = None
+    stream.row_length = None
 
     if preload:
         dataset = list(stream())

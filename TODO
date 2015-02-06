@@ -79,7 +79,7 @@
 - [X] C Adjust Gaussian model to use data from statistical analysis
 - [ ] Z Add unit tests
 - [X] C Look at correlations inside the expansion of a given field (trivial: change combination to product in tupleops)
-- [ ] ? Ensure that there is only one type per column (should be done by extracting a tuple of types. Could speed everything up, too)
+- [X] C Ensure that there is only one type per column
 - [ ] ? Change the outlier reporting strategy to make it easier to report
   outliers
   - [ ] C Use =namedtuple=s
