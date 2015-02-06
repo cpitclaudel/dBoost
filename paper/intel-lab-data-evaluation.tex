@@ -4,27 +4,91 @@
 We also evaluated our outlier detection framework on sensor data from the publicly available Intel Lab Data set~\footnote{\url{http://db.csail.mit.edu/labdata/labdata.html}}. The Intel Lab Data contains data collected from 54 sensors spread throughout the Intel Berkeley Research Lab. Each data entry contains information including humidity, temperature, light and voltage taken from a Micro2dot sensor and weatherboard. The dataset contains a total of approximately 2.3 million measurements.
 
 The Intel lab dataset has known outliers from faulty sensor readings due to periods of critically low voltage. During these periods, the sensors go haywire and produce faulty measurements.
+For example, the temperature sky-rockets to over $120$ degrees Celsius.
+The outliers in this dataset are intuitive, as the reader can easily discern points outside the main data cluster.
 
 Due to the numerical nature of this data, the Simple Gaussian and Mixture models are well suited to analyzing it. However, the Histogram model does not fare as well.
 
 % Random Sample 1000 data points
-We analyzed a sample of 1000 data points selected at random from the data set. Figure~\ref{fig:sensors_1k_gm} shows the results from the simple Gaussian model comparing voltage and temperature; we set the tolerance ($\theta$) to 2. Since this model does not use correlation hints, the threshold for the statistical analyzer is irrelevant.
+We analyzed a sample of 1000 data points selected at random from the data set. 
+We set the statistical threshold to $0.7$, which produces two correlations between temperature and humidity and between temperature and voltage.
+Figure~\ref{fig:sensors_0.7_1_0.05_0_1} shows the results from a single Gaussian model comparing these values, with the data plotted in yellow and the outliers in red.
+We see that the Gaussian model is able to detect values with high temperature and low voltage as outliers.
 
-We observed that while this simple model is able to detect the high and low voltage outliers, it also identifies points within the main cluster of the data between 20 and 30 Celsius. These outliers are primarily due to light measurements whose measurements fall more than 2 standard deviations above the norm. When only outliers from temperature and voltage are taken into account, the outliers fall on the highest and lowest temperatures, as expected.
+We show in Figure~\ref{fig:sensors_0_1_0.05_0_1} the benefits of pruning the data via correlations.
+In this experiment, we allow the statistical analyzer to mark all columns as correlated.
+The model produces a Gaussian with so much noise that it detects many random points as outliers, even when the threshold is reduced to $0.5\%$. 
+Thus, using some mechanism to find correlations is useful in narrowing the search space for outliers.
 
-Figure~\ref{fig:sensors_1k_mm} shows the Mixture model results for the same 1000 randomly-selected data points. We used $0.75$ as the threshold $\theta$ to determine correlation, 3 Gaussians to populate our model, and returned $17\%$ of the data as outliers.
-
-The statistical analyzer produces two correlations: one between temperature and voltage with an $R$ coefficient of $-0.75$ and between temperature and humidity with an $R$ of $-0.8$. The resulting Mixture models flags outliers that register temperatures of over 120 degrees. The outliers detected in the main cluster are the result of points that do not follow from the correlation between temperature and humidity.
+Figure~\ref{fig:sensors_0.7_2_0.25_0_1} shows the Mixture model results for the same 1000 randomly-selected data points. 
+We used $0.7$ as the threshold $\theta$ to determine correlation, 2 Gaussians to populate our model, and flagged values that have a likelihood of less than $25\%$ under their dominant Gaussian as outliers.
+Using two Gaussians means that the points clustered around the temperature $120$ degrees Celsius are no longer flagged as outliers because the points are modeled by their own (albeit lowly weighted) Gaussian.
+However, this highlights the points within normal sensor operation that have outlying results.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_gm.pdf}
-\caption{Outliers from sensor data detected by a Gaussian model.}
-\label{fig:sensors_1k_gm}
+\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_0-7_1_0-05_0_1.pdf}
+\caption{Outliers from temperature and humidity data detected by a Gaussian model with a threshold of $5\%$.}
+\label{fig:sensors_0.7_1_0.05_0_1}
 \end{figure}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_mm.pdf}
-\caption{Outliers from sensor data detected by a Mixture model.}
-\label{fig:sensors_1k_mm}
+\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_0-7_1_0-05_0_3.pdf}
+\caption{Outliers from temperature and voltage data detected by a Gaussian model with a threshold of $5\%$.}
+\label{fig:sensors_0.7_1_0.05_0_3}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_0_1_0-005_0_1.pdf}
+\caption{Outliers from temperature and humidity data detected by a Gaussian model using no correlation hints.}
+\label{fig:sensors_0_1_0.05_0_1}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_0_1_0-005_0_3.pdf}
+\caption{Outliers from temperature and voltage data detected by a Gaussian model using no correlation hints.}
+\label{fig:sensors_0_1_0.05_0_3}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_0-7_2_0-25_0_1.pdf}
+\caption{Outliers from temperature and humidity data detected by a Mixture model with a threshold of $25\%$.}
+\label{fig:sensors_0.7_2_0.25_0_1}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/plots/sensors_0-7_2_0-25_0_3.pdf}
+\caption{Outliers from temperature and voltage data detected by a Mixture model with a threshold of $25\%$.}
+\label{fig:sensors_0.7_2_0.25_0_3}
+\end{figure}
+
+\subsubsection{Local Outlier Factors}
+\label{sec:lof-evaluation}
+
+In this section we compare the results of our Gaussian and Mixture models to Local Outlier Factor~\cite{Breunig2000}, a frequently used method for outlier detection.
+Local outlier factor (LOF) measures the degree to which a data point is an outlier by comparing each data point to its $k$ nearest neighbors.
+The higher the LOF, the more isolated the data point and therefore, according to the inventers of LOF, the more likely the point is to be an outlier.
+
+One downside of LOF compared to dBoost is that it can only evaluate two-dimensional data.
+The original algorithm also has significant computation complexity in order to calculate the distance to the nearest neighbors of each data point.
+
+Figure~\ref{fig:lof_2} shows the outliers detected in temperature and humidity data for LOF when the two nearest neighbors to each point are evaluated.
+We observe that contrary to the Gaussian and Mixture models, the outliers detected by LOF are scattered throughout the data.
+The outliers are not necessarily the points one would intuitively assume are outliers.
+This is because points that are within the normal range of the data will be selected as outliers if they are far enough away from any other points.
+Even when the number of nearest neighbors evaluated is increased to $10$ in Figure~\ref{fig:lof_10} the outliers detected are still non-intuitive.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/plots/lof_2.pdf}
+\caption{Outliers from sensor data detected by Local Outlier Factor for the $k$=2 nearest neighbors.}
+\label{fig:lof_2}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{../graphics/plots/lof_10.pdf}
+\caption{Outliers from sensor data detected by Local Outlier Factor for the $k$=10 nearest neighbors.}
+\label{fig:lof_10}
 \end{figure}

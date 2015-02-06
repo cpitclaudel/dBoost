@@ -1,22 +1,21 @@
-import os,math,sys
+import os,math,sys,types
+import csv
 from bisect import bisect_left
 import matplotlib as mpl
 from matplotlib import pyplot, mlab
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
+from  utils import filename, TANGO
 
+sensors_dpath = "../../datasets/real/intel/"
+sensors_opath = "../../results/intel/"
+dfile = "sensors-1000-dirty.txt"
+ofile = "sensors_dirty_"
+
+sensors_schema = ["Temperature (C)","Humidity","Light","Voltage"]
+sensors_title = "Intel Sensors "
 mpl.rcParams['lines.linewidth'] = 2
-
-TANGO = {"yellow": ("#fce94f", "#edd400", "#c4a000"),
-         "orange": ("#fcaf3e", "#f57900", "#ce5c00"),
-         "brown": ("#e9b96e", "#c17d11", "#8f5902"),
-         "green": ("#8ae234", "#73d216", "#4e9a06"),
-         "blue": ("#729fcf", "#3465a4", "#204a87"),
-         "purple": ("#ad7fa8", "#75507b", "#5c3566"),
-         "red": ("#ef2929", "#cc0000", "#a40000"),
-         "grey": ("#eeeeec", "#d3d7cf", "#babdb6"),
-         "black": ("#888a85", "#555753", "#2e3436")}
 
 def gaussian(x, mu, sigma):
     return mlab.normpdf(x, mu, sigma)
@@ -28,7 +27,7 @@ def cleanup_2d(ax):
 
 def gaussian_plt():
     pyplot.clf()
-    
+
     x = np.linspace(-10, 10, num = 200)
     y = gaussian(x, 0, 1)
 
@@ -51,12 +50,12 @@ def gaussian_plt():
     #pyplot.axhline(y = y[nlo-1], color = TANGO["red"][2], linestyle = '--', linewidth = 1)
 
     cleanup_2d(ax)
-    
+
 def mixture_plt():
-    from _multivariate import multivariate_normal
+    from utils._multivariate import multivariate_normal
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
-    
+
     centers = ([0.5, 1.5], [-1, -2], [2, -1])
     covs = ([[1.2, 2],[0.7, 1]], [[0.75, 0.6],[0.6, 0.75]], [[2, 0],[0, 2]])
     coeffs = (1,1,1)
@@ -105,7 +104,7 @@ def histogram_plt():
     STROKES = (TANGO["red"][1], TANGO["green"][2])
     colors = [FILLS[yy > T] for yy in y]
     edgecolors = [STROKES[yy > T] for yy in y]
-    
+
     pyplot.clf()
     pyplot.bar(x, y, width=1)
 
@@ -113,62 +112,102 @@ def histogram_plt():
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     ax.set_xlim(-1, 10)
-    
+
     pyplot.bar(x, y, width = 1, color = colors, edgecolor = edgecolors, linewidth = 2)
     pyplot.tight_layout()
 
 def get_data(fname):
   f = open(fname,'r')
-  t,h,l,v = [],[],[],[]
+  d = [[],[],[],[]]
   for line in f:
     line = line.strip().split()
-    t.append(float(line[0]))
-    h.append(float(line[1]))
-    l.append(float(line[2]))
-    v.append(float(line[3]))
+    for i in range(len(line)):
+      d[i].append(float(line[i]))
   f.close()
-  return t,h,l,v
+  return d
 
+def get_outliers(fname):
+  f = open(fname,'r')
+  d = []
+  for line in f:
+    line = line.strip()
+    d.append(int(line))
+  f.close()
+  return d
 
-def sensors_gm():
-  data_base = "../../datasets/real/intel/sensors-1000-dirty.txt"
-  data = "../../datasets/real/intel/gaus_plot_data"
-  t,h,l,v = get_data(data_base)
-  fig = pyplot.figure()
-  ax = fig.add_subplot(1,1,1)
-  ax.set_title("Intel Lab Sensor Data")
-  ax.set_ylabel("Temperature (C)")
-  ax.set_xlabel("Voltage (V)")
-  ax.scatter(v,t,color='blue')
-  t,h,l,v=get_data(data)
-  ax = fig.add_subplot(1,1,1)
-  ax.scatter(v,t,color='red')
+def sensors(args):
+  e,p,t,y,x = args[1:6]
+  data = sensors_dpath + dfile
+  d = get_data(data)
+  ofile_ = ofile + "stat" + str(e) + "_mix"+str(p) + "_" + str(t) + ".out"
+  outliers = get_outliers(sensors_opath + ofile_)
+  ax = pyplot.gca()
+  title = "Gaussian" if p == 1 else "Mixture"
+  ax.set_title(title + "\n" + sensors_schema[x] + " vs. " + sensors_schema[y])# + "\n" + str(e) + " " + str(t) + " " + str(p))
+  ax.set_ylabel(sensors_schema[y])
+  ax.set_xlabel(sensors_schema[x])
+  o = [[],[],[],[]]
+  for l in range(len(d[y])):
+    if l in outliers:
+      o[y].append(d[y][l])
+      o[x].append(d[x][l])
+  ax.scatter(d[x],d[y],color='yellow',marker="x",alpha = 1)
+  ax.scatter(o[x],o[y],color='red',marker="o")
 
-def sensors_mm():
-  data_base = "../../datasets/real/intel/sensors-1000-dirty.txt"
-  data = "../../datasets/real/intel/gmm_plot_data"
-  t,h,l,v = get_data(data_base)
-  fig = pyplot.figure()
-  ax = fig.add_subplot(1,1,1)
-  ax.set_title("Intel Lab Sensor Data")
-  ax.set_ylabel("Temperature (C)")
-  ax.set_xlabel("Voltage (V)")
-  ax.scatter(v,t,color='yellow')
-  t,h,l,v=get_data(data)
-  ax = fig.add_subplot(1,1,1)
-  ax.scatter(v,t,color='red')
+def lof(args):
+  k = args[1]
+  data = sensors_dpath + dfile
+  d = get_data(data)
+  ofile_ = "k" + str(k) + "data01.out" 
+  ax = pyplot.gca()
+  ax.set_title("Local Outlier Factor k=" + str(k) + "\n" + str(sensors_schema[1]) + " vs. " + str(sensors_schema[0]))
+  ax.set_xlabel(sensors_schema[1])
+  ax.set_ylabel(sensors_schema[0])
+  ax.scatter(d[1],d[0],marker='x',color='yellow',alpha = 1)
+  with open(sensors_opath + ofile_,'r') as f:
+    rdr = csv.reader(f,delimiter=' ')
+    for l in rdr:
+      l = [float(x) for x in l]
+      if l[0] < 1.5: continue
+      ax.scatter(l[2],l[1],marker='o',color='red',s=(l[0]*10))
 
+def tostring(arg):
+  if isinstance(arg,types.FunctionType):
+    return arg.__name__
+  return str(arg)
 
 # Add the name of your plotting function here
-plots = (sensors_gm,sensors_mm)
-#plots = (gaussian_plt, mixture_plt, histogram_plt,sensors_gm,sensors_mm)
+plots = [
+  (sensors,0,1,0.005,0,1),
+  (sensors,0,1,0.005,0,3),
+  (sensors,0.7,1,0.05,0,1),
+  (sensors,0.7,1,0.05,0,3),
+  (sensors,0.7,2,0.25,0,1),
+  (sensors,0.7,2,0.25,0,3),
+  (lof,2),
+  (lof,10)]
 
-# Plot each graph
-for id, plotter in enumerate(plots):
-    print("Plotting", id+1)
-    pdf = PdfPages(plotter.__name__ + ".pdf")
+#batch_mode, fname = filename("models-plots.pdf")
+
+#if batch_mode:
+fname = "models-plots.pdf"
+pdf = PdfPages(fname)
+
+for plotter in (gaussian_plt, mixture_plt, histogram_plt):
     plotter()
     pyplot.savefig(pdf, format = 'pdf', transparent = True)
+
+pdf.close()
+
+# Plot each graph
+pyplot.figure()
+for id, plotter in enumerate(plots):
+    name = "_".join((tostring(x).replace('.','-') for x in plotter))
+    print("Plotting", id+1,"/",len(plots),": ",name)
+    pdf = PdfPages(name + ".pdf")
+    plotter[0](plotter)
+    pyplot.savefig(pdf, format = 'pdf', transparent = True)
     pdf.close()
+    pyplot.clf()
 
 

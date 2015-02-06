@@ -43,10 +43,10 @@ class Mixture:
         self.gmms = [self.make_gmm(to_fit) for to_fit in correlations]
 
         # TODO: add command line option to show graph
-        # lp, resp = self.gmms[i].score_samples(to_fit)
-        # ps = [self.test_one(x, i) for x in to_fit]
-        # pyplot.hist(ps, bins = 30)
-        # pyplot.show()
+        #  lp, resp = self.gmms[i].score_samples(to_fit)
+        #  ps = [self.test_one(x, i) for x in to_fit]
+        #  pyplot.hist(ps, bins = 30)
+        #  pyplot.show()
 
     def test_one(self, xi, gmm_pos):
         from numpy import argmax
@@ -54,7 +54,7 @@ class Mixture:
         _, resp = gmm.score_samples([xi])
         component = argmax(resp)
         distance = Mixture.mahalanobis(xi, gmm, component)
-        return component, gmm.weights_[component] *  erf(distance / sqrt(2))
+        return component, 1 - (gmm.weights_[component] *  erf(distance / sqrt(2)))
 
     def find_discrepancies(self, X, index):
         correlations = X[0]
@@ -62,6 +62,7 @@ class Mixture:
 
         for id, (correlation, gmm_pos, cutoff) in enumerate(zip(correlations, range(len(self.gmms)), range(len(self.gmms)))):
             _, probability = self.test_one(correlation, gmm_pos)
+            #print(correlation," ",probability)
             if probability < self.cutoff:
                 discrepancies.append(((0, id),))
 

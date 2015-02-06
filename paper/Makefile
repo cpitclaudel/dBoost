@@ -1,6 +1,6 @@
 FIGDIR = ../graphics/plots
 TEXFILES=$(wildcard *.tex)
-PLOTS = sensors_gm sensors_mm
+PLOTS = models-plots lof_2 lof_10 sensors_0-7_1_0-05_0_1 sensors_0-7_1_0-05_0_3 sensors_0_1_0-005_0_1 sensors_0_1_0-005_0_3 sensors_0-7_2_0-25_0_1 sensors_0-7_2_0-25_0_3
 PDFFIGS := $(PLOTS:%=$(FIGDIR)/%.pdf)
 
 PYPLOTS=$(wildcard ../graphics/*.py)
@@ -11,15 +11,19 @@ print-%:
 
 all: paper.pdf
 
-$(FIGDIR)/%.pdf:
-	cd $(FIGDIR) && python3 plots.py
+plots: $(PDFFIGS)
+
+$(FIGDIR)/%.pdf: plots.py 
 	pdfcrop $@ $@
 
-$(PYPLOTS_PDFS): %.pdf: %.py
-	python3 $< $@
-	pdfcrop $@ $@
+plots.py:
+	cd $(FIGDIR) && python3 plots.py 
 
-paper.pdf: $(TEXFILES) $(PDFFIGS) $(PYPLOTS_PDFS)
+#$(PYPLOTS_PDFS): %.pdf: %.py
+#	python3 $< $@
+#	pdfcrop $@ $@
+
+paper.pdf: $(TEXFILES) 
 	pdflatex -draftmode -shell-escape paper.tex
 	bibtex paper.aux
 	pdflatex -draftmode -shell-escape paper.tex
