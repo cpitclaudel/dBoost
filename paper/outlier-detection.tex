@@ -23,7 +23,7 @@ The likelihood of each resulting tuple is then evaluated using the corresponding
   \Pr(t, c | \pi_j, \mu_j, \Sigma_j) = \Pr(t | c, \pi_j, \mu_j, \Sigma_j) * \Pr(c | \pi_j)  \leq \theta
   \label{eqn:mixture-outlier}
 \end{align}
- -- then the row is flagged as an outlier.\fxnote{I rephrased this a bit; $j$ should still be checked}
+ -- then the row is flagged as an outlier.\fxtodo{I rephrased this a bit; $j$ should still be checked}
 
 As in the Gaussian Model, providing the user with a list of attributes that caused the row to be flagged as an outlier is simply a matter of tracking correlations that failed test~\eqref{eqn:mixture-outlier}.
 

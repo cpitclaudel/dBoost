@@ -32,7 +32,7 @@ def outliers(trainset_generator, testset_generator, analyzer, model, rules, maxr
     debug(">> Finding correlations")
 
     analyzer.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
-    debug(analyzer.hints)
+    # debug(analyzer.hints)
 
     debug(">> Building model...")
     analyzer.expand_stats()
