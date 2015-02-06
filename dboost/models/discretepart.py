@@ -67,7 +67,7 @@ class PartitionedHistogram:
             # if len(ys) > 3:
             #     print(ys)
             #     print(delta, min_hi, max_low, start_hi, sum_low, sum_hi)
-            return (delta > 2 and sum_hi > peak_threshold * (sum_hi + sum_low))
+            return (delta > 5 and sum_hi > peak_threshold * (sum_hi + sum_low)) # Fixme use user-provided jump setting
 
     def finish_fit(self):
         self.all_counters = self.counters
