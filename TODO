@@ -36,7 +36,7 @@
 - [ ] Should we add more discussion of the rules?
 - [X] Rephrase the outline so that it is more compact  [DISCUSS]
 - [X] Mention soft functional dependencies in the intro
-- [ ] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
+- [X] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
 - [ ] Find more convincing examples for the CSAIL dataset
 - [-] Add missing stuff
   - [X] Z Outlier detection description for mixture models
