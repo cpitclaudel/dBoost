@@ -1,6 +1,6 @@
 \subsection{Logins: a more realistic partitioned dataset}
 
-Our web activity synthetic datasets are comprised of two columns: a \emph{Unix} timestamp, stored as an \texttt{INT}, and a country. Each dataset is supposed to track the connections of a registered user on a website; such a dataset could be obtained by selecting the relevant rows out of a large table listing all connections of all users. Each user in the datasets exhibits a different pattern:
+Our web activity synthetic datasets are comprised of two columns: a Unix timestamp stored as an \texttt{INT}, and a country. Each dataset is supposed to track the connections of a registered user on a website; such a dataset could be obtained by selecting the relevant rows out of a large table listing all connections of all users. Each user in the datasets exhibits a different pattern:
 
 \begin{itemize}
 \item One user always connects from the same country; values that do not match this country are outliers.
@@ -12,7 +12,7 @@ The datasets are randomly generated sets of the 2000 most recent connections, li
 
 \newcommand{\prop}[2]{#1\,\#\,#2}
 
-Just like in the \emph{Fizz-Buzz} example, numerical models are useless here. In the first case, a histogram-based model with no correlation analysis is sufficient to flag the outliers. In the second case, the discrete statistical analysis phase singles out interesting pairs of correlated columns, including \texttt{\prop{date}{day of week}, country)} and \texttt{(\prop{date}{is weekend}, country)}. A histogram-based model is sufficient to successfully flag outliers, without resorting to partitioning.
+Just like in the \emph{Fizz-Buzz} example, numerical models are useless here, and histogram-based models fare well. In the first case, a histogram-based model with no correlation analysis is sufficient to flag the outliers. In the second case, the discrete statistical analysis phase singles out interesting pairs of correlated columns, including \texttt{(\prop{date}{day of week}, country)} and \texttt{(\prop{date}{is weekend}, country)}. A histogram-based model is sufficient to successfully flag outliers, without resorting to partitioning.
 
 \fxnote{Exclude self-correlations from the discrete analyzer to speed it up and get better results}
 

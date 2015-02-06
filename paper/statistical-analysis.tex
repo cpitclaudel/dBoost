@@ -3,29 +3,28 @@
 
 Following the tuple expansion phase, the newly expanded tuples go through a statistical analysis phase. This phase collects two kinds of information: simple statistics on each column's values, and data on possible inter-column correlations.
 
-The statistical information includes the average, variance standard deviation and extremes of each numerical column, as well as approximate cardinality measurements for all columns. These statistics can then be used by models to speed up their training phase, or at the end of the statistical analysis to refine correlation hints.
+The statistical information includes the average, variance standard deviation and extremes of each numerical column, as well as approximate cardinality measurements for all columns. These statistics can then be used by models to speed up their training phase, or at the end of the statistical analysis to produce correlation hints.
 
-Possible inter-column correlations can be detected in a number of ways; we focused with two strategies: 
+Possible inter-column correlations can be detected in a number of ways; we focused on two strategies:
 
 \begin{itemize}
-\item For mostly-numeric datasets, we used Pearson's product-moment
-  correlation. This simple statistical test is commonly used to find correlation
-  between multiple values. It relies on the Pearson correlation coefficient,
-  which measures linear correlation between two vectors.
+\item For mostly-numeric datasets, we use Pearson's product-moment
+  correlation. It relies on the Pearson correlation coefficient,
+  which measures linear dependencies between two vectors.
 
   Given two column vectors $X$ and $Y$, Pearson's coefficient $R$ is given by the following formula:
-  \begin{align} 
+  \begin{align}
     \label{eqn:pearson}
     R = \frac{\Covar(X,Y)}{\sqrt{\Var(X)\Var(Y)}}
   \end{align}
-  
-  $R$'s value always lies between -1 and 1. An $R$ value close to 0 indicates little or no correlation, while values close to 1 or 1 indicate strong positive or negative correlations. Pairs of columns with a value of \(R\) above a user-specified threshold were added to a list of correlation hints, for use by models. 
-\item For mostly non-numeric datasets, we used a cardinality-based measure, flagging groups of columns as correlated when the cardinality of their product was below a user-specified threshold. 
+
+  $R$'s value always lies between $-1$ and $1$. An $R$ value close to 0 indicates little or no correlation, while values close to $+1$ or $-1$ indicate strong positive or negative correlations. Pairs of columns with a value of \(R\) above a user-specified threshold are added to a list of correlation hints, for use by models.
+\item For mostly non-numeric datasets, we use a cardinality-based measure, flagging groups of expanded columns as correlated when the cardinality of their Cartesian product is below a user-specified threshold.
 \end{itemize}
 
 \fxnote{It would be really easy to support correlations inside of fields. Do we add it and remove this paragraph?}
-Currently, we only detect correlations between expanded fields of different columns, as they are more likely to be meaningful. However, although some correlations in expanded fields of the same column are redundant (\texttt{isUppercase} and \texttt{isLowercase} for a string), some might be relevant (for example, a correlation between \texttt{weekday} and \texttt{month} for a date). We leave this exploration to future work.
+It is debatable whether correlations should be looked for in expanded tuple fields that come from the same original value. On the one hand such dependencies may provide valuable insight about the data (think for example of a date whose ``day of week'' value would correlate with the month, for example for an event happening all Mondays of May and all Thursdays of June). On the other hand, taking these subtuple correlations into account vastly increases the size of the search space, and may add spurious hits to the results. Experimentally, we found that discarding intra-field correlations made the entire process more robust, and did not hurt accuracy on our test sets.
 
-In our implementation, all statistics and correlations are computed in memory using a single pass over the data; the expanded tuples are analyzed one row at a time, and the final statistics and correlation coefficients are computed after the last tuple has been processed. 
+All aforementioned statistics and correlation hints can be computed using a single pass over the data: the expanded tuples are analyzed one row at a time, and the final statistics and correlations are computed after the last tuple has been processed. Our implementation conforms to this description.
 
-The analyzer's results are accessible by any models used at later stages in the tool.
+The results of this analysis pass are available to models used at later stages in the tool.
