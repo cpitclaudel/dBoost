@@ -33,7 +33,7 @@
 - [ ] ? Change title?
 - [-] Add missing stuff
   - [X] Z Outlier detection description for mixture models
-  - [ ] R Update Intel graphs
+  - [X] R Update Intel graphs
   - [X] C Peaky histograms
   - [X] C Partitioning functor
   - [X] C Discrete analyzer
@@ -41,7 +41,7 @@
   - [X] C Review the history to find new stuff
     - [X] New rules: id for ints, email validation
   - [X] C Partitioned histograms results on logins dataset
-  - [ ] R Add the section on LLF
+  - [X] R Add the section on LOF
   - [X] C Add the plots explaining the models
   - [X] C Add plots showing peakiness measures
 - [-] Proof-reading
