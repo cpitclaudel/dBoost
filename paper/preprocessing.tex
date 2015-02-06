@@ -28,6 +28,7 @@ To reconstruct potentially lost information we expand tuples, breaking down each
 
 \newenvironment{stackedlines}{\renewcommand{\arraystretch}{1.2}\begin{array}[b]{@{}l@{\quad}l@{}}}{\end{array}}
 
+% todo: Merge figures?
 \begin{figure}[H]
   $\begin{stackedlines}
     \texttt{string:}\\
@@ -44,7 +45,6 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \text{\parbox{\widthof{base-10 residue:}}{title case:} } & \texttt{True (1)}
   \end{cases}$
 \end{figure}
-
 \begin{figure}[H]
   $\begin{stackedlines}
     \texttt{int:}\\
@@ -61,7 +61,6 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \text{mod-10 residue: } & \texttt{4}
   \end{cases}$
 \end{figure}
-
 \begin{figure}[H]
    $\begin{stackedlines}
     \texttt{float:}\\
@@ -75,6 +74,6 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \text{\parbox{\widthof{base-10 residue:}}{date, \ldots:} } & \texttt{\ldots}
   \end{cases}$
 
-  \caption{Some tuple expansion.}
+  \caption{Selected tuple expansion rules.}
   \label{fig:tuple-expansion}
 \end{figure}
