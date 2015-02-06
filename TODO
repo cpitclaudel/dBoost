@@ -32,11 +32,12 @@
 
 - [ ] ? Change title?
 - [ ] Use autoref
-- [ ] Check source of definition of outliers in abstract (ref needed?)
+- [X] Check source of definition of outliers in abstract (ref needed?)
 - [ ] Should we add more discussion of the rules?
 - [X] Rephrase the outline so that it is more compact  [DISCUSS]
 - [X] Mention soft functional dependencies in the intro
 - [ ] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
+- [ ] Find more convincing examples for the CSAIL dataset
 - [-] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [ ] R Update Intel graphs
@@ -54,6 +55,7 @@
   - [ ] C Mixture models
     - [ ] Z Fix undefined $j$ in formula
     - [ ] C Finish proofreading
+  - [ ] Proofread future work
   - [X] R Proofread C's newly written sections
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
 - [X] R Change the names in CSAIL

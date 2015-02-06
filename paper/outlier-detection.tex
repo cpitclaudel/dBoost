@@ -32,6 +32,7 @@ The histogram-based modeling strategy proceeds in two phases to detect outliers.
 
 First, after running through the learning phase, it decides for each histogram whether that histogram is ``peaked'' (i.e. showing or a few strong modes) enough to be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar number of values, and are thus not useful for outlier detection. In practice, we use a simple statistical test to determine whether a histogram is sufficiently modal: we count the number of elements that fall into the most populated (``top'') bins, and discard the histogram if this count totals less than a user-specified proportion of values. Finding how many bins to include in the set of top bins is the most challenging part, and for this paper we explored two thresholding strategies (Figure~\ref{fig:peakiness}):
 
+\fxnote{Should we move this figure?}
 \begin{figure*}
   \centering
   \paddedgraphics[width=\linewidth]{../graphics/peakiness.pdf}
@@ -54,3 +55,6 @@ h_a(x_a) \le \epsilon \sum_k h_a(k)
 where $h_a(x)$ designates the number of tuples with value $x$ for field $a$, and $\epsilon$ is a user-chosen sensitivity parameter.
 
 In this model, identifying and reporting the outlying attributes is simply a matter of remembering which values $x_a$ failed test \eqref{eqn:hist-outlier}.
+
+\subsubsection{Partition-based modeling}
+In the partition-based case, outlier are detected by the underlying models. To classify a given expanded tuple, each group of correlated attributes is divided between a one-attribute key and a group sub-population attributes. This group of attributes is then passed to the underlying model corresponding to the given value of the key, and the whole original tuple is reported as an outlier if any of its groups of sub-population attributes is marked as such by the underlying models.
