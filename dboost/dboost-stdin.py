@@ -11,7 +11,7 @@ from dboost import cli
 from dboost.utils.read import stream_tuples
 from dboost.utils.printing import print_rows, debug
 
-parser = cli.get_sdtin_parser()
+parser = cli.get_stdin_parser()
 args, models, analyzers, rules = cli.parsewith(parser)
 
 testset_generator = stream_tuples(args.input, args.fs, args.floats_only, args.inmemory, args.maxrecords)
