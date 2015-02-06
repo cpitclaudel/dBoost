@@ -1,6 +1,6 @@
 FIGDIR = ../graphics/plots
 TEXFILES=$(wildcard *.tex)
-PLOTS = sensors_gm sensors_mm
+#PLOTS = sensors_gm sensors_mm
 PDFFIGS := $(PLOTS:%=$(FIGDIR)/%.pdf)
 
 PYPLOTS=$(wildcard ../graphics/*.py)
