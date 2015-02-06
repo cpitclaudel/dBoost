@@ -34,8 +34,8 @@
 - [ ] Use autoref
 - [ ] Check source of definition of outliers in abstract (ref needed?)
 - [ ] Should we add more discussion of the rules?
-- [ ] Rephrase the outline so that it is more compact
 - [ ] Mention soft functional dependencies in the intro
+- [X] Rephrase the outline so that it is more compact  [DISCUSS]
 - [ ] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
 - [-] Add missing stuff
   - [X] Z Outlier detection description for mixture models
