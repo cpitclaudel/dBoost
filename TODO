@@ -38,6 +38,7 @@
 - [X] Mention soft functional dependencies in the intro
 - [X] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
 - [ ] Find more convincing examples for the CSAIL dataset
+- [ ] 
 - [-] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [ ] R Update Intel graphs
@@ -77,8 +78,8 @@
 - [ ] ? Combine outlier reports from multiple models
 - [X] C Adjust Gaussian model to use data from statistical analysis
 - [ ] Z Add unit tests
-- [ ] ? Look at correlations inside the expansion of a given field
-- [ ] ? Ensure that there is only one type per column
+- [X] C Look at correlations inside the expansion of a given field (trivial: change combination to product in tupleops)
+- [ ] ? Ensure that there is only one type per column (should be done by extracting a tuple of types. Could speed everything up, too)
 - [ ] ? Change the outlier reporting strategy to make it easier to report
   outliers
   - [ ] C Use =namedtuple=s
