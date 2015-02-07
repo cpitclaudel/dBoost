@@ -1,7 +1,7 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-We implemented dBoost in \texttt{python}. Our code is publicly available on GitHub under version 3 of the GNU Public License~\footnote{\url{https://github.com/cpitclaudel/6.830}}. The program is made of two parts: a library, and a number of data acquisition front-ends (CSV and SQL are currently supported). The library provides functions for each of the phases previously described.
+We implemented dBoost in version 3 of the Python programming language. Our code is publicly available on GitHub under version 3 of the GNU Public License\footnote{\url{https://github.com/cpitclaudel/6.830}}. The program is made of two parts: a library, and a number of data acquisition front-ends (CSV and SQL are currently supported). The library provides functions for each of the phases previously described.
 
 %Table~\ref{table:flags} shows the usage options to run the models supported by dBoost. \fxnote{Should we keep this table? ** Add an appendix if we have room}
 
@@ -27,14 +27,13 @@ We implemented dBoost in \texttt{python}. Our code is publicly available on GitH
 %  \end{tabular}
 %\end{table*}
 
-This sections presents the results of running our tool on real and synthetic datasets.
+This sections presents the results of running our tool on the following real and synthetic datasets.
 
 \begin{itemize}
 \item \emph{Synthetic datasets}
   \begin{description}
-  \item[Fizz-Buzz] A mixed textual-numerical dataset in which each record contains two entries: a number, and either ``Fizz'' if the number is divisible by 3, ``Buzz'' if the number is divisible by 5, ``FizzBuzz'' if it is divisible by both, and the number itself (as a string) otherwise. Outliers appear when the second column does not respect these rules; this can be a misplaced ``Fizz'', a missing ``Buzz'', or even a totally different string (e.g. ``Woof'').
+  \item[Fizz-Buzz] A mixed textual-numerical dataset in which each record contains two entries: a number, and either ``Fizz'' if the number is divisible by 3, ``Buzz'' if the number is divisible by 5, ``FizzBuzz'' if it is divisible by both, and the number itself (as a string) otherwise. Outliers appear when the second column does not respect these rules; this can be a misplaced ``Fizz'', a missing ``Buzz'', or even a totally different string (e.g. ``Woof!'').
   \item[Web logins] A series of three non-numeric datasets in which entries contain the login time and connection location for different users. Each user has different connection habits, leading to different types of outliers.
-  \item[TODO] Continuous dataset (is this still a TODO item?)
   \end{description}
 \item \emph{Real-world datasets}
   \begin{description}

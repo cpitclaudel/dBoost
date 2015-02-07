@@ -24,9 +24,12 @@
   basicstyle=\ttfamily\small,  %
   breaklines=true, %
   keywordstyle=\textbf, %
-  literate={█}{{$\blacksquare$}}1{•}{{$\bullet$}}1,
-  moredelim=[is][\color{red}]{\$}{\$}, %
-  upquote=true %
+  literate={█}{{$\blacksquare$}}1
+           {•}{{$\bullet$}}1,
+  moredelim=[is][\color{red}\underbar]{\$}{\$}, %
+  upquote=true, %
+  keepspaces=true, %
+  basewidth=0.5em %
 }
 
 \lstnewenvironment{lstnobreak}[1][]
@@ -49,3 +52,7 @@
 \newlength{\figurepadding}
 \setlength{\figurepadding}{0.5em}
 \newcommand{\paddedgraphics}[2][]{\includegraphics[#1]{#2}\vspace{\figurepadding}}
+
+% Local Variables:
+% mode: latex
+% End:

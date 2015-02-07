@@ -1,7 +1,7 @@
 \subsection{Preprocessing}
 \label{sec:preprocessing}
 
-Before being used to generate a model of the data, the tuples are cleaned up and expanded in order to extract relevant information.
+Before being used to generate a model of the data, the tuples are expanded in order to reveal and extract potentially relevant information.
 
 \subsubsection{Tuple Expansion}
 
@@ -24,17 +24,18 @@ Data stored in databases often has rich semantics, encompassing dates and times,
 
 Unfortunately, information on the structure of this data is also what an outlier detection engine would most benefit from. For example, the day of the week in a date may be relevant information in a banking application in which transactions are only completed on weekdays, but unless the programmer explicitly duplicates this information in a separate column, it remains inaccessible to an automated outlier detector.
 
-To reconstruct potentially lost information we expand tuples, breaking down each field into a sub-tuple of extracted type-depent features. Figure~\ref{fig:tuple-expansion} lists the rules that we apply to values of these three data types. These rules serve as a starting point for tuple expansion, but we expect users of our toolbox to expand this set of rules to add insight specific to their application domain. Expressing rules as simple functions mapping a value of a given type to a tuple of features makes it possible to express soft constraints about the data easily: instead of specifying hard constraints, users ensure that a certain way of looking at the data is consistent across the rows of the table.
+To reconstruct potentially lost information we expand tuples, breaking down each field into a sub-tuple of extracted type-depent features. Figure~\ref{fig:tuple-expansion} lists the rules that we apply to values of these three data types. These rules serve as a starting point for tuple expansion, but we expect users of our toolbox to expand this set of rules to add insight specific to their application domain. Expressing rules as simple functions mapping a value of a given type to a tuple of features makes it possible to express soft constraints about the data easily: instead of specifying hard constraints, users state that a certain way of looking at the data should consistent across the rows of the table.
 
 \newenvironment{stackedlines}{\renewcommand{\arraystretch}{1.2}\begin{array}[b]{@{}l@{\quad}l@{}}}{\end{array}}
 
+% todo: Merge figures?
 \begin{figure}[H]
   $\begin{stackedlines}
     \texttt{string:}\\
     \texttt{\parbox{\widthof{1418222134.325}}{"32-G414"}}
   \end{stackedlines} \longrightarrow
   \begin{cases}
-    \text{id: } & \texttt{32-G414}\\
+    % \text{id: } & \texttt{32-G414}\\
     \text{length: } & \texttt{7}\\
     \text{signature: } & \texttt{NNPLNNN}\\
     \text{uppercase: } & \texttt{True (1)}\\
@@ -43,15 +44,14 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \text{erase numbers: } & \texttt{<num>-G<num>}\\
     \text{\parbox{\widthof{base-10 residue:}}{title case:} } & \texttt{True (1)}
   \end{cases}$
-\end{figure}
-
-\begin{figure}[H]
+% \end{figure}
+% \begin{figure}[H]
   $\begin{stackedlines}
     \texttt{int:}\\
     \texttt{\parbox{\widthof{1418222134.325}}{1418222134}}
   \end{stackedlines} \longrightarrow
   \begin{cases}
-    \text{id: } & \texttt{1418222134}\\
+    % \text{id: } & \texttt{1418222134}\\
     \text{date: } & \texttt{(2014,12,10)}\\
     \text{time: } & \texttt{(14,35)}\\
     \text{weekday: } & \texttt{Wed (2)}\\
@@ -60,21 +60,20 @@ To reconstruct potentially lost information we expand tuples, breaking down each
     \text{binary: } & \texttt{0b10101\ldots010}\\
     \text{mod-10 residue: } & \texttt{4}
   \end{cases}$
-\end{figure}
-
-\begin{figure}[H]
+% \end{figure}
+% \begin{figure}[H]
    $\begin{stackedlines}
     \texttt{float:}\\
     \texttt{1418222134.325}
   \end{stackedlines} \longrightarrow
   \begin{cases}
-    \text{id: } & \texttt{1418222134.325}\\
+    % \text{id: } & \texttt{1418222134.325}\\
     \text{intpart: } & \texttt{1418222134}\\
     \text{fracpart: } & \texttt{0.325}\\
     \text{millis: } & \texttt{325}\\
     \text{\parbox{\widthof{base-10 residue:}}{date, \ldots:} } & \texttt{\ldots}
   \end{cases}$
 
-  \caption{Examples of tuple expansion rules currently implemented.}
+  \caption{Selected tuple expansion rules.}
   \label{fig:tuple-expansion}
 \end{figure}

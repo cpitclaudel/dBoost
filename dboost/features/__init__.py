@@ -55,7 +55,7 @@ NUMBERS = re.compile(r"(^s)?\d+")
 def strp(s: str) -> ("strp",):
     return (NUMBERS.sub("<num>", s),)
 
-HTML5_EMAIL_VALIDATOR = re.compile(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+HTML5_EMAIL_VALIDATOR = re.compile(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.(?P<ext>[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?))*$")
 
 @rule
 def email_checks(s: str) -> ("simple email check",): # "RFC822 email check"):
@@ -63,8 +63,17 @@ def email_checks(s: str) -> ("simple email check",): # "RFC822 email check"):
 #TODO: This should be asymmetric
 
 @rule
+def email_domain(s: str) -> ("email domain",):
+    match = HTML5_EMAIL_VALIDATOR.match(s)
+    return (match.group("ext").lower() if match else "NONE",)
+
+@rule
 def id(s: str) -> ("id",):
     return (s,)
+
+@rule
+def empty(s: str) -> ("empty",):
+    return (s == "" or s.isspace(),)
 
 @rule
 def int_id(x: int) -> ("id",):
