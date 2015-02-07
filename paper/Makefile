@@ -17,6 +17,7 @@ $(PYPLOTS_PDFS_RENDERED): %.pdf: %.pdf.py
 
 $(PYPLOTS_PNGS_RENDERED): %.png: %.png.py
 	python3 $< $@
+	convert $@ -trim "$@"
 
 paper.pdf: $(TEXFILES) $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
 	pdflatex -draftmode -shell-escape paper.tex
