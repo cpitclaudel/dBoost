@@ -42,7 +42,7 @@ def get_base_parser():
 
     return base_parser
 
-def get_sdtin_parser():
+def get_stdin_parser():
     parser = argparse.ArgumentParser(parents = [get_base_parser()],
                                      description="Loads a database from a text file, and reports outliers")
     parser.add_argument("input", nargs='?', default = "-", type = argparse.FileType('r'),

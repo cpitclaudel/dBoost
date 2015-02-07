@@ -31,6 +31,14 @@
 ** Paper
 
 - [ ] ? Change title?
+- [ ] Use autoref
+- [X] Check source of definition of outliers in abstract (ref needed?)
+- [ ] Should we add more discussion of the rules?
+- [X] Rephrase the outline so that it is more compact  [DISCUSS]
+- [X] Mention soft functional dependencies in the intro
+- [X] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
+- [ ] Find more convincing examples for the CSAIL dataset
+- [ ] 
 - [-] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [X] R Update Intel graphs
@@ -48,6 +56,7 @@
   - [ ] C Mixture models
     - [ ] Z Fix undefined $j$ in formula
     - [ ] C Finish proofreading
+  - [ ] Proofread future work
   - [X] R Proofread C's newly written sections
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
 - [X] R Change the names in CSAIL
@@ -69,8 +78,8 @@
 - [ ] ? Combine outlier reports from multiple models
 - [X] C Adjust Gaussian model to use data from statistical analysis
 - [ ] Z Add unit tests
-- [ ] ? Look at correlations inside the expansion of a given field
-- [ ] ? Ensure that there is only one type per column
+- [X] C Look at correlations inside the expansion of a given field (trivial: change combination to product in tupleops)
+- [X] C Ensure that there is only one type per column
 - [ ] ? Change the outlier reporting strategy to make it easier to report
   outliers
   - [ ] C Use =namedtuple=s

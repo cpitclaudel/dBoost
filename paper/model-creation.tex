@@ -1,8 +1,7 @@
 \subsection{Data modeling}
 \label{sec:model-creation}
 
-The current distribution of dBoost comprises three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well; the last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions that arise from collections of human-input data. The following three subsections discuss the particulars of these three models.
-
+The current distribution of dBoost comprises three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well; the last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions that arise from collections of human-input data. The following three subsections discuss the particulars of these three models; section~\ref{sec:partitioning} presents a way of extending model to deal with data that lend itself well to partitioning over a particular attribute.
 
 \begin{figure}%
   \centering
@@ -23,45 +22,47 @@ The model's parameters (a pair $(\mu, \sigma)$ for each numerical column) are co
 Despite its simplicity, this model presents the attractive property of requiring extremely little memory -- on the order of the size of one expanded tuple.
 
 \subsubsection{Mixture Modeling}
-The multivariate Gaussian Mixture model (Figure~\ref{fig:mixture}) takes advantage of the correlation hints supplied by the statistical analysis part to model sub-tuples of the expanded tuples as samples from multivariate Gaussian mixtures (GMMs), creating one model per set or correlated columns.
+The multivariate Gaussian Mixture model (Figure~\ref{fig:mixture}) takes advantage of the correlation hints supplied by the statistical analysis pass to model sub-tuples of the expanded tuples as samples from multivariate Gaussian mixtures (GMMs), creating one model per group of correlated columns.
 
 For example, if the statistical analysis phase outlines a pair of fields $(f_1, f_2)$ as good candidate for joint modeling, then the Mixture modeling strategy will learn a particular GMM to model this correlation. Pairs of values $(X_1, X_2)$ are here assumed to have been produced by random sampling off a distribution of the form
 \begin{align*}
 \sum_{j=1}^{N} \pi_j \mathcal N(\mu_j, \Sigma_j)
 \end{align*}
 
-where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined implementation value, but abundant literature exists on the subject of choosing $N$~\cite{Schwartz1978}~\cite{Akaike1974}), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learned as part of the modeling pass. This was implemented using the community-developed package \texttt{scikit-learn}. 
+where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined value in our implementation, but abundant literature exists on the subject of choosing $N$~\cite{Schwartz1978}~\cite{Akaike1974}), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learned as part of the modeling pass.
 
-Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Most of the expanded tuples, however, are discarded after the relevant fields are extracted for learning purposes; in most cases we expect that the set of values retained will be much smaller than the set of all rows itself, thus limiting the memory usage.
+Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Still, most of the fields obtained after expanding each tuple are discarded after the relevant ones are extracted for learning purposes; in most cases we expect the set of values retained to be much smaller than the set of all attributes, thus limiting the memory usage.
 
 \subsubsection{Histogram-based Modeling}
-Simple Gaussian modeling and Gaussian Mixture modeling both offer good results for continuous numerical data such as those produced by sensor networks, but suffer from two limitations:
+Simple Gaussian modeling and Gaussian Mixture modeling both offer good results for continuous numerical data such as the ones produced by sensors, but suffer from two limitations:
 
 \begin{itemize}
 \item They make strong hypotheses about the distribution of the data under study
 \item They fail to capture patterns in discrete numerical data, non-numerical data, or heterogeneous data
 \end{itemize}
 
-Our last model (Figure~\ref{fig:histogram}) does not make any assumption about the data under study. Instead, it counts the occurrences of each unique value in each column of the expanded tuple and for each set of potentially correlated sub-tuples (as suggested by the analysis module). These counts, accumulated over the entire dataset, provide a \emph{de facto} distribution of the data in each field and set of correlated fields. 
+Our last model (Figure~\ref{fig:histogram}) does not make any assumption about the data under study. Instead, it counts the occurrences of each unique value in each column of the expanded tuple and for each set of potentially correlated sub-tuples (as suggested by the analysis module). These counts, accumulated over the entire dataset, provide a \emph{de facto} distribution of the data in each field and set of correlated fields.
 
-As described above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. To limit memory usage, and to speed up the modeling phase, we chose to discard histograms as soon as they reached a certain size -- say, 16 different bins. A number of heuristics could be implemented here, but the idea is generally that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned. With this modification, histograms are quick to generate and extremely memory efficient. 
+Described as above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. To limit memory usage, and to speed up the modeling phase, we instead discard histograms as soon as they reach a certain size -- say, 16 different bins. A number of heuristics could be implemented here, but the idea is generally that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned. With this modification, histograms are quick to generate and extremely memory efficient.
 
-Histograms also have the valuable property of treating sets of fields (obtained via correlation analysis) and single fields in the exact same way, thus requiring no adjustment to changes in the type of correlations detected by the statistical analyzer. Finally, because they make no assumption about the data they manipulate (aside from the requirement that it be of small cardinality), histograms are able to accurately describe a broad class of discrete distributions.
+Histograms also have the valuable property of treating sets of fields (obtained via correlation analysis) and single fields in the exact same way, thus permitting to model single columns or groups of attributes indifferently. Finally, because they make no assumption about the data they manipulate (aside from the requirement that it be of small cardinality), histograms are able to accurately describe a broad class of discrete distributions.
 
 \subsubsection{Meta-modeling through attribute-based partitioning}
+\label{sec:partitioning}
+
 The models presented above treat attributes and sets of correlated attributes as a whole. In some cases, however, it is possible to identify sub-populations by scrutinizing certain expanded attributes of the data; these sub-populations can then be studied separately, yielding more insight and better outlier classification performance.
 
-The general approach, given a dataset and a pre-existing model, consists in extracting sets of attributes based on correlation hints provided by earlier stages of the pipeline, and splitting these set of attributes between a single key, and one or more sub-population attributes. One instance of the selected model is then built for each value of the key. 
+The general approach, given a dataset and a pre-existing model, consists in extracting sets of attributes based on correlation hints provided by earlier stages of the pipeline, and dividing each group of attributes between a single key, and one or more sub-population attributes. One instance of the selected model is then built for each value of the key.
 
 This type of approach is useful when the distribution for an attribute or set of attributes is multi-modal. A high-level non-partitioned analysis will reveal values that fall in none of the classes; a partitioned approach, on the other hand, may more easily reveal discrepancies by suppressing interference between each class.
 
 As an example, consider the case of an airline adjusting status levels for its frequent fliers, using the number of flights for each passenger as well as their status level. A non-partitioned analysis may not return any interesting information, but a partitioned analysis could single out passengers in lower status levels traveling significantly more than average, or instead passengers with higher status traveling rarely. This would work even if statuses are stored as textual data, with no indication of their relative rankings.
 
-In addition to better classification performance, partitioning may lead to better runtime performance by diminishing the size of the dataset that each model covers. These benefits are most important when model construction performance does not scale linearly, and when data volumes are too large to be analyzed on a single machine. 
+In addition to better classification accuracy, partitioning may lead to better runtime performance by diminishing the size of the dataset that each model covers. These benefits are most important when model construction performance does not scale linearly, and when data volumes are too large to be analyzed on a single machine.
 
-Finally attribute-based partitioning enabled analysis that was previously impossible. Assuming for example that a dataset with two columns has 4 classes identified by the value in the first column, each with 10 distinct expected values in the second column, a generic histogram-based analysis would discard the histogram for the pair of values as having too many-buckets (40). A partitioned analysis, on the other hand, would allow the construction of four histograms, each with 10 normal bins, and potentially a few outliers.
+Finally, attribute-based partitioning enables analysis that was previously impossible. Assuming for example that a dataset with two columns has 4 classes identified by the value in the first column, each with 10 distinct expected values in the second column, a generic histogram-based analysis would discard the histogram for the pair of values as having too many buckets (40). A partitioned analysis, on the other hand, would allow the construction of four histograms, each with 10 regular bins and potentially a few outliers.
 
 In our prototype implementation, we focused on partitioning applied to the discrete histogram case; the technique, however, generalizes to all the models presented above.
 
-% As an example, consider a store that accepts multiple forms of payment. Instead of considering the data as a whole, one may segment it by payment medium, and model transactions that fall in each model separately. This may yield insight into the spending behaviours 
-% A class instructor, for example, might provide students with two grades: one mid-term, letter-based grade, and one end-of-term numerical score. Modeling the data as a whole would 
+% As an example, consider a store that accepts multiple forms of payment. Instead of considering the data as a whole, one may segment it by payment medium, and model transactions that fall in each model separately. This may yield insight into the spending behaviours
+% A class instructor, for example, might provide students with two grades: one mid-term, letter-based grade, and one end-of-term numerical score. Modeling the data as a whole would
