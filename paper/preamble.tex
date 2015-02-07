@@ -24,9 +24,12 @@
   basicstyle=\ttfamily\small,  %
   breaklines=true, %
   keywordstyle=\textbf, %
-  literate={█}{{$\blacksquare$}}1{•}{{$\bullet$}}1,
-  moredelim=[is][\color{red}]{\$}{\$}, %
-  upquote=true %
+  literate={█}{{$\blacksquare$}}1
+           {•}{{$\bullet$}}1,
+  moredelim=[is][\color{red}\underbar]{\$}{\$}, %
+  upquote=true, %
+  keepspaces=true, %
+  basewidth=0.5em %
 }
 
 \lstnewenvironment{lstnobreak}[1][]
