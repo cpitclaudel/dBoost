@@ -25,23 +25,23 @@
 - [X] C Check PyPy compatibility
 - [ ] R Prepare Intel dataset
 - [X] Z Adjust mixture models to include all fields
-- [ ] ? Test using Coords instead of Pearson
 - [X] Z Fill in =more_info= in mixture.py
 
 ** Paper
 
-- [ ] ? Change title?
+- [X] C Fix title
 - [ ] Use autoref
 - [X] Check source of definition of outliers in abstract (ref needed?)
-- [ ] Should we add more discussion of the rules?
-- [X] Rephrase the outline so that it is more compact  [DISCUSS]
+- [X] Should we add more discussion of the rules? NO
+- [X] Rephrase the outline so that it is more compact
 - [X] Mention soft functional dependencies in the intro
 - [X] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
 - [X] Find more convincing examples for the CSAIL dataset
-- [ ] Plots
+- [-] Plots
   - [ ] Fix fonts, 1 Gaussians, and colors
   - [ ] Get plots with the simple Gaussian model
   - [ ] Say "mixture model" instead of "Gaussian"
+  - [X] Rasterize the mixture models plot
 - [X] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [X] R Update Intel graphs
@@ -56,9 +56,9 @@
   - [X] C Add the plots explaining the models
   - [X] C Add plots showing peakiness measures
 - [-] Proof-reading
-  - [-] C Mixture models
+  - [X] C Mixture models
     - [X] Z Fix undefined $j$ in formula
-    - [ ] C Finish proofreading
+    - [X] C Finish proofreading
   - [ ] Proofread future work
   - [X] R Proofread C's newly written sections
 - [X] C At the beginning of evaluation, add a high-level overview of all the datasets
@@ -87,6 +87,10 @@
   outliers
   - [ ] C Use =namedtuple=s
 
+** Paper
+
+- [ ] ? Test using Coords instead of Pearson
+- [ ] 3D plots
 
 * DONE
 
