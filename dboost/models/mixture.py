@@ -54,7 +54,7 @@ class Mixture:
         _, resp = gmm.score_samples([xi])
         component = argmax(resp)
         distance = Mixture.mahalanobis(xi, gmm, component)
-        return component, gmm.weights_[component] *  erf(distance / sqrt(2))
+        return component, gmm.weights_[component] * (1-erf(distance / sqrt(2)))
 
     def find_discrepancies(self, X, index):
         correlations = X[0]
