@@ -9,6 +9,7 @@ TANGO = {"yellow": ("#fce94f", "#edd400", "#c4a000"),
          "black": ("#888a85", "#555753", "#2e3436")}
 
 import sys
+from matplotlib import pyplot
 from os.path import dirname, join
 
 def filename(default):
