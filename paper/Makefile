@@ -1,24 +1,24 @@
 FIGDIR = ../graphics
 TEXFILES=$(wildcard *.tex)
-#PDFFIGS := $(PLOTS:%=$(FIGDIR)/%.pdf)
 
-PYPLOTS=$(wildcard $(FIGDIR)/*.py)
-PYPLOTS_PDFS=$(PYPLOTS:.py=.pdf)
+PYPLOTS_PDFS=$(wildcard $(FIGDIR)/*.pdf.py)
+PYPLOTS_PNGS=$(wildcard $(FIGDIR)/*.png.py)
+PYPLOTS_PDFS_RENDERED=$(PYPLOTS_PDFS:.pdf.py=.pdf)
+PYPLOTS_PNGS_RENDERED=$(PYPLOTS_PNGS:.png.py=.png)
 
 print-%:
 	@echo $* = $($*)
 
 all: paper.pdf
 
-#$(FIGDIR)/%.pdf:
-#	cd $(FIGDIR) && python3 plots.py
-#	pdfcrop $@ $@
-
-$(PYPLOTS_PDFS): %.pdf: %.py
+$(PYPLOTS_PDFS_RENDERED): %.pdf: %.pdf.py
 	python3 $< $@
 	pdfcrop $@ $@
 
-paper.pdf: $(TEXFILES) $(PYPLOTS_PDFS)
+$(PYPLOTS_PNGS_RENDERED): %.png: %.png.py
+	python3 $< $@
+
+paper.pdf: $(TEXFILES) $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
 	pdflatex -draftmode -shell-escape paper.tex
 	bibtex paper.aux
 	pdflatex -draftmode -shell-escape paper.tex
@@ -28,4 +28,4 @@ view: paper.pdf
 	open paper.pdf
 
 clean:
-	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out $(PYPLOTS_PDFS)
+	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
