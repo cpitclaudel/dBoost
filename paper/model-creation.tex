@@ -5,10 +5,10 @@ The current distribution of dBoost comprises three data modeling strategies. Two
 
 \begin{figure}%
   \centering
-  \newcommand{\cramped}[4]{\subfloat[#3]{\includegraphics[width=.3\linewidth,page=#1]{#2}\label{fig:#4}}}
-  \cramped{1}{../graphics/models-plots.pdf}{Gaussian}{gaussian}\hspace*{.01\linewidth}
-  \cramped{2}{../graphics/models-plots.pdf}{Mixture}{mixture}\hspace*{.01\linewidth}
-  \cramped{3}{../graphics/models-plots.pdf}{Histogram}{histogram}
+  \newcommand{\cramped}[3]{\subfloat[#2]{\includegraphics[width=.3\linewidth]{#1}\label{fig:#3}}}
+  \cramped{../graphics/gaussians-preview.pdf}{Gaussian}{gaussian}\hspace*{.01\linewidth}
+  \cramped{../graphics/mixtures-preview.png}{Mixture}{mixture}\hspace*{.01\linewidth}
+  \cramped{../graphics/histograms-preview.pdf}{Histogram}{histogram}
   \caption{Simple visualization of the outlier detection strategy employed by each model}
   \label{fig:models}
 \end{figure}
