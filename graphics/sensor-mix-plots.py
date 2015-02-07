@@ -9,8 +9,8 @@ dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
 
 # e, p, t, y, x
 args = [
-    (0.7,2,0.25,0,1),
-    (0.7,2,0.25,0,3)]
+    (0.7,2,0.05,0,1),
+    (0.7,2,0.05,0,3)]
 
 pdf = PdfPages(fname)
 for (e,p,t,y,x) in args:
