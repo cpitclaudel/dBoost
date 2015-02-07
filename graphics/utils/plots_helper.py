@@ -3,7 +3,7 @@ import matplotlib as mpl
 from matplotlib import pyplot, mlab
 from mpl_toolkits.mplot3d import Axes3D
 
-sensors_schema = ["Temperature (C)","Humidity (%)","Light","Voltage (V)"]
+sensors_schema = ["Temperature (C)","Humidity ($\%$)","Light","Voltage (V)"]
 
 def get_sensor_data(fname):
     d = [[],[],[],[]]
@@ -34,8 +34,8 @@ def sensors(title,x,y,dfile,ofile):
         if l in outliers:
             o[y].append(d[y][l])
             o[x].append(d[x][l])
-    ax.scatter(d[x],d[y],color='yellow',marker="x",alpha = 1)
-    ax.scatter(o[x],o[y],color='red',marker="o")
+    ax.scatter(d[x],d[y],color='yellow',marker="o",alpha = 1)
+    ax.scatter(o[x],o[y],color='blue',marker="o")
 
 def lof(title,dfile,ofile):
     d = get_sensor_data(dfile)
@@ -43,11 +43,11 @@ def lof(title,dfile,ofile):
     ax.set_title(title)
     ax.set_xlabel(sensors_schema[1])
     ax.set_ylabel(sensors_schema[0])
-    ax.scatter(d[1],d[0],marker='x',color='yellow',alpha = 1)
+    ax.scatter(d[1],d[0],marker='o',color='yellow',alpha = 1)
     with open(ofile,'r') as f:
         rdr = csv.reader(f,delimiter=' ')
         for l in rdr:
             l = [float(x) for x in l]
             if l[0] < 1.5: continue
-            ax.scatter(l[2],l[1],marker='o',color='red',s=(l[0]*10))
+            ax.scatter(l[2],l[1],marker='o',color='blue',s=(l[0]*10))
 

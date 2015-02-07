@@ -4,14 +4,13 @@ import matplotlib
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 
-make,fname = filename("sensor-plots.pdf")
+make,fname = filename("sensor-mix-plots.pdf")
 dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
 
 # e, p, t, y, x
 args = [
-    (0.7,1,0.05,0,1),
-    (0.7,1,0.05,0,3),
-    (0,1,0.005,0,1)]
+    (0.7,2,0.25,0,1),
+    (0.7,2,0.25,0,3)]
 
 pdf = PdfPages(fname)
 for (e,p,t,y,x) in args:
