@@ -13,3 +13,6 @@ all: master.pdf
 
 master.pdf: $(TEXFILES) ../graphics/models-plots-crop.pdf
 	pdflatex master.tex
+
+clean:
+	rm -fv *.pdf *.aux *.log *.out *.nav *.snm *.toc *.vrb
