@@ -11,7 +11,30 @@ Due to the numerical nature of this data, the Simple Gaussian and Mixture models
 We also compare the results of our models to Local Outlier Factors, a common outlier detection methodology, in this section.
  
 \subsubsection{Simple Gaussian Model}
-% Random Sample 1000 data points
+
+The results from running the sensor data set through the Simple Gaussian model are shown in Figure~\ref{fig:sensors_gaus_1-5}.
+In this experiment we flag the entries with column values that fall outside $1.5$ standard deviations of the mean of that particular column as outliers.
+Correlation hints cannot be consumed by this model, so we turn off correlations.
+As we observe in Figure~\ref{fig:sensors_gaus_1-5}, this leads to the extreme values on the temperature spectrum as well as the humidity spectrum to be identified as outliers.
+However, many points in the normal range of operation are flagged as outliers.
+The cause of the noise can be seen in Figure~\ref{fig:sensors_gaus_1-5b}.
+In this plot we see that the values of both voltage and light are relatively evenly distributed within their respective ranges.
+Therefore many values lie outside $1.5$ standard deviations from the mean, despite having reasonable values in other dimensions such as temperature.
+Using information from correlations is one way in which we improve on this, which we describe in the next section.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth,page=1]{../graphics/sensor-gaus-plots.pdf}
+\caption{Outliers from sensor data detected by a Gaussian model.}
+\label{fig:sensors_gaus_1-5}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth,page=2]{../graphics/sensor-gaus-plots.pdf}
+\caption{Outliers from sensor data detected by a Gaussian model.}
+\label{fig:sensors_gaus_1-5b}
+\end{figure}
+
 \subsubsection{Mixture Model}
 We set the statistical threshold to $0.7$, which produces two correlations between temperature and humidity and between temperature and voltage.
 Figures~\ref{fig:sensors_1} and~\ref{fig:sensors_2} shows the results from a single Gaussian model, with the data plotted in grey and the outliers in black.
@@ -32,31 +55,31 @@ However, this highlights the points within normal sensor operation that have out
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.45\textwidth,page=1]{../graphics/sensor-plots.pdf}
-\caption{Outliers from sensor data detected by a Gaussian model.}
+\caption{Outliers from sensor data detected by a Mixture model with 1 Gaussian.}
 \label{fig:sensors_1}
 \end{figure}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.45\textwidth,page=2]{../graphics/sensor-plots.pdf}
-\caption{Outliers from sensor data detected by a Mixture model.}
+\caption{Outliers from sensor data detected by a Mixture model with 1 Gaussian.}
 \label{fig:sensors_2}
 \end{figure}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.45\textwidth,page=3]{../graphics/sensor-plots.pdf}
-\caption{Outliers from sensor data detected by a Gaussian model with no correlations.}
+\caption{Outliers from sensor data detected by a Mixture model with no correlations.}
 \label{fig:sensors_nocorr}
 \end{figure}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.45\textwidth,page=1]{../graphics/sensor-mix-plots.pdf}
-\caption{Outliers from sensor data detected by a Mixture model.}
+\caption{Outliers from sensor data detected by a Mixture model with 2 Gaussians.}
 \label{fig:sensors_3}
 \end{figure}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.45\textwidth,page=2]{../graphics/sensor-mix-plots.pdf}
-\caption{Outliers from sensor data detected by a Mixture model.}
+\caption{Outliers from sensor data detected by a Mixture model with 2 Gaussians.}
 \label{fig:sensors_4}
 \end{figure}
 
