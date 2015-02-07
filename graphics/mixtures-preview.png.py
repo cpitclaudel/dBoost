@@ -43,9 +43,10 @@ def mixture_plt():
     cmap_rgb = colors.ListedColormap(colors.hsv_to_rgb(np.array([cmap_hsv]))[0])
 
     WHITE = (1, 1, 1, 0.05)
-    ax.plot_surface(x, y, z, rstride = 5, cstride = 5, edgecolor = WHITE,
+    STRIDE = 1
+    ax.plot_surface(x, y, z, rstride = STRIDE, cstride = STRIDE, edgecolor = WHITE,
                     cmap = cmap_rgb, linewidth = 1, shade = True)
-    ax.plot_wireframe(x, y, z, rstride = 5, cstride = 5, edgecolor = WHITE,
+    ax.plot_wireframe(x, y, z, rstride = STRIDE, cstride = STRIDE, edgecolor = WHITE,
                       linewidth = 1)
 
     ax.dist = 7.5
