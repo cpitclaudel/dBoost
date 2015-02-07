@@ -39,7 +39,7 @@
 - [X] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
 - [ ] Find more convincing examples for the CSAIL dataset
 - [ ] 
-- [-] Add missing stuff
+- [X] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [X] R Update Intel graphs
   - [X] C Peaky histograms
@@ -53,8 +53,8 @@
   - [X] C Add the plots explaining the models
   - [X] C Add plots showing peakiness measures
 - [-] Proof-reading
-  - [ ] C Mixture models
-    - [ ] Z Fix undefined $j$ in formula
+  - [-] C Mixture models
+    - [X] Z Fix undefined $j$ in formula
     - [ ] C Finish proofreading
   - [ ] Proofread future work
   - [X] R Proofread C's newly written sections
