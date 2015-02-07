@@ -30,7 +30,10 @@ HIST_LENGTH = max(len(hist) for hist in HISTOGRAMS)
 
 def is_peaked(hist, model):
     hist = dict(enumerate(hist))
-    return model.IsPeaked(hist, 0.8)
+    if model is Histogram:
+        return model.IsPeaked(hist, 0.8)
+    else:
+        return model.IsPeaked(hist, 5, 0.8)
 
 BAR_WIDTH = 0.8
 PLOTS_PER_LINE = 4
