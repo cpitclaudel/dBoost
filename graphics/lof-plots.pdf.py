@@ -1,4 +1,4 @@
-from utils import filename
+from utils import filename, save2pdf, setup
 from utils.plots_helper import lof
 import matplotlib
 from matplotlib import pyplot
@@ -9,9 +9,9 @@ dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
 
 pdf = PdfPages(fname)
 for k in [2,10]:
-    title = "Local Outlier Factor\nk=" + str(k)
+    title = "Local Outlier Factor\n$k=" + str(k) + "$"
     ofile = "../results/k" + str(k) + "data01.out"
+    setup()
     lof(title,dfile,ofile)
-    pyplot.savefig(pdf, format = 'pdf', transparent = True)
-    pyplot.clf()
+    save2pdf(pdf)
 pdf.close()

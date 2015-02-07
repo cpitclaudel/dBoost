@@ -9,9 +9,22 @@ TANGO = {"yellow": ("#fce94f", "#edd400", "#c4a000"),
          "black": ("#888a85", "#555753", "#2e3436")}
 
 import sys
+import matplotlib as mpl
 from matplotlib import pyplot
 from os.path import dirname, join
 
 def filename(default):
     has_name = len(sys.argv) > 1
     return (has_name, sys.argv[1] if has_name else join(dirname(__file__), default))
+
+def save2pdf(pdf):
+    pyplot.tight_layout()
+    pyplot.savefig(pdf, format = 'pdf', bbox_inches = "tight", transparent = True)
+    pyplot.clf()
+
+def setup():
+    FS = 9.5
+    mpl.rcParams['font.size'] = FS
+    mpl.rcParams['legend.fontsize'] = FS
+    mpl.rcParams['axes.titlesize'] = FS
+    pyplot.gcf().set_size_inches(4, 4)

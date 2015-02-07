@@ -1,4 +1,4 @@
-from utils import filename
+from utils import filename, save2pdf, setup
 from utils.plots_helper import sensors 
 import matplotlib
 from matplotlib import pyplot
@@ -16,7 +16,7 @@ pdf = PdfPages(fname)
 for (e,p,t,y,x) in args:
     title = "Outliers in Sensor Data\n"+str(p)+" Gaussians,$\\theta$=" + str(t)
     ofile = "../results/sensors_dirty_stat" + str(e) + "_mix" + str(p) + "_" + str(t) + ".out"
+    setup()
     sensors(title,x,y,dfile,ofile)
-    pyplot.savefig(pdf, format = 'pdf', transparent = True)
-    pyplot.clf()
+    save2pdf(pdf)
 pdf.close()

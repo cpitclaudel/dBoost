@@ -89,6 +89,7 @@
 
 ** Paper
 
+- [X] Plots: specify size in inches
 - [ ] ? Test using Coords instead of Pearson
 - [ ] 3D plots
 
