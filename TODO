@@ -37,8 +37,11 @@
 - [X] Rephrase the outline so that it is more compact  [DISCUSS]
 - [X] Mention soft functional dependencies in the intro
 - [X] Add discussion of more advanced correlation detection strategies (CORDS) before data modeling section
-- [ ] Find more convincing examples for the CSAIL dataset
-- [ ] 
+- [X] Find more convincing examples for the CSAIL dataset
+- [ ] Plots
+  - [ ] Fix fonts, 1 Gaussians, and colors
+  - [ ] Get plots with the simple Gaussian model
+  - [ ] Say "mixture model" instead of "Gaussian"
 - [X] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [X] R Update Intel graphs

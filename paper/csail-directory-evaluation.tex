@@ -20,8 +20,8 @@ This invocation produces a long list of outliers; a small subset of these is pre
   $Lu-ater$, Eva, 32-G972,
     eva@csail.mit.edu, Research Scientist
 
-  Doe, $ $, 32-G699,
-    doejh@mit.edu, Administrative Assistant
+  Tweakit, $ $, 32-G699,
+    twktem@mit.edu, Administrative Assistant
 \end{lstlisting}
 
 In total, 451 entries contain outliers, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. By changing the input parameters to $\theta = 0.8, \epsilon = 0.05$, most of the outliers due to office numbers disappear due to the lower sensitivity. \lstinline{Hacker, Alyssa} disappears from the list, since e-mails with inconsistent capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$. In total there are $68$ outliers.
@@ -37,8 +37,8 @@ In total, 451 entries contain outliers, out of a total of 1000. Office numbers a
   > Value '$Lu-ater$' (1) doesn't match
     feature '$title case$'
 
-  Doe, $ $, 32-G699,
-    doejh@mit.edu, Administrative Assistant ...
+  Tweakit, $ $, 32-G699,
+    twktem@mit.edu, Administrative Assistant ...
   > Value '$ $' (1) doesn't match
     feature '$empty$'
 \end{lstlisting}
@@ -70,12 +70,12 @@ In addition to identifying outliers, dBoost is equipped with tools that provide 
     [ 15] $False$
     [986] ████████████████████ True
 
-  Doe, $ $, 32-G699,
-    doejh@mit.edu, Administrative Assistant ...
+  Tweakit, $ $, 32-G699,
+    twktem@mit.edu, Administrative Assistant ...
   > Value '$ $' (1) doesn't match
   • histogram for ('empty',):
     [1000] ████████████████████ False
-    [   1] True
+    [   1] $True$
 \end{lstlisting}
 
 Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case is particularly interesting: to extract the signature of a string, our tool replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{NE47-989} is converted to \lstinline{Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd}, which does not fall in any of the dominant bins (the most frequent case, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center).
