@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import matplotlib
 from utils import TANGO, filename
 from matplotlib import pyplot

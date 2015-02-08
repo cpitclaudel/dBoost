@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 from math import exp
 from matplotlib import pyplot

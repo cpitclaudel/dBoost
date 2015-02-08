@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 from utils import filename, save2pdf, setup
 from utils.plots_helper import sensors 
 import matplotlib

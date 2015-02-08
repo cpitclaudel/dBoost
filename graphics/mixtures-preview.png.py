@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from bisect import bisect_left
 import matplotlib
 from utils import TANGO
