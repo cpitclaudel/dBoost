@@ -3,7 +3,7 @@ from utils import filename, save2pdf, setup
 from utils.plots_helper import sensors 
 from matplotlib.backends.backend_pdf import PdfPages
 
-make,fname = filename("sensor-mix-plots.pdf")
+make, fname = filename("sensor-mix-plots.pdf")
 dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
 
 # e, p, t, y, x
