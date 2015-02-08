@@ -2,11 +2,12 @@
 \newcommand{\plot}[4]{
   \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\columnwidth,page=#1]{../graphics/#2}
+    \includegraphics[page=#1]{../graphics/#2}
     \caption{#3}
     \label{fig:#4}
   \end{figure}
 }
+
 \plot{1}{sensor-gaus-plots.pdf}{Simple Gaussian model}{sensors_gaus_1-5}
 \plot{2}{sensor-gaus-plots.pdf}{Simple Gaussian model}{sensors_gaus_1-5b}
 \plot{1}{sensor-plots.pdf}{Mixture model with 1 Gaussian}{sensors_1}

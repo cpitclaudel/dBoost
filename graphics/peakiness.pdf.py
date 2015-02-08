@@ -1,7 +1,7 @@
 import sys
 from math import exp
 from matplotlib import pyplot
-from utils import TANGO, filename
+from utils import TANGO, filename, to_inches, rcparams
 
 from os.path import join, dirname
 sys.path.append(join(dirname(__file__), '../'))
@@ -10,8 +10,7 @@ from dboost.models.discrete import Histogram
 from dboost.models.discretepart import PartitionedHistogram
 
 import matplotlib
-matplotlib.rc('text', usetex=True)
-matplotlib.rcParams['font.family'] = 'serif'
+rcparams()
 matplotlib.rcParams['text.latex.preamble']=[r"\usepackage{amsmath,amssymb,calc}\usepackage{pifont}\newcommand{\cmark}{\ding{51}}\newcommand{\xmark}{\ding{55}}"]
 
 HISTOGRAMS = [
@@ -38,7 +37,7 @@ def is_peaked(hist, model):
 BAR_WIDTH = 0.8
 PLOTS_PER_LINE = 4
 DISABLED_AXES = ("left", "right", "top")
-fig, axes = pyplot.subplots(len(HISTOGRAMS) // PLOTS_PER_LINE, PLOTS_PER_LINE, sharex = True, sharey = True, squeeze = False, frameon = False, figsize = (9, 2))
+fig, axes = pyplot.subplots(len(HISTOGRAMS) // PLOTS_PER_LINE, PLOTS_PER_LINE, sharex = True, sharey = True, squeeze = False, frameon = False, figsize = (to_inches(504), 1.75))
 
 ORANGE, GREEN = (TANGO[color][2] for color in ("orange", "green"))
 DASHES = [[], (2, 1)]
@@ -84,7 +83,9 @@ def makehatches(axis, bar, in_di_peak, in_dd_peak):
 
 def arrow(axis, x1, y1, x2, y2, arrow_style, color="black", line_style='solid'):
     transform = axis.get_xaxis_transform()
-    # Using data coordinates doesn't allow drawing outside of the axes. annotation_clip=False would work too
+    # transform is needed because Using data coordinates without an explicit
+    # tranform doesn't allow drawing outside of the axes. annotation_clip=False
+    # would work too
 
     axis.annotate('', xy=(x1, y1), xycoords=transform,
                   xytext=(x2, y2), textcoords=transform,
@@ -99,7 +100,6 @@ def markers(axis, x1, x2, y, color, dashes, msize = 0.02):
     for line in lines:
         axis.add_line(line)
 
-# top_style = '|-|,widthA=0.2,widthB=0.2'
 PEAKINESS = [r'\xmark~no peak', r'\cmark~peak']
 ALGOS = ["$D$-independent:", "$D$-dependent:", "Distribution-independent:", "Distribution-dependent:"]
 FLABEL = r'\renewcommand{{\tabcolsep}}{{1pt}}\begin{{tabular}}{{ll}}{} & {}\\{} & {}\end{{tabular}}'
@@ -145,27 +145,24 @@ for hid, hist in enumerate(HISTOGRAMS):
     header = lambda dist_dep: ALGOS[dist_dep]
     label = FLABEL.format(header(False), peaked(Histogram),
                           header(True), peaked(PartitionedHistogram))
-    axis.set_xlabel(label, fontsize=11)
+    axis.set_xlabel(label)
 
     di_x_start, dd_x_start = bars[di_first_hi].get_x(), bars[dd_first_hi].get_x()
     x_end = bars[-1].get_x() + BAR_WIDTH
     y_di, y_dd = 1.1, 1.2
     markers(axis, di_x_start, x_end, y_di, GREEN, True)
-    # axis.text(m_end, y_di + 0.05, "top bins (DI)", verticalalignment='center', color=annot_color, fontsize=10)
-    # if not models_agree:
     markers(axis, dd_x_start, x_end, y_dd, ORANGE, False)
-    # axis.text(m_end, y_dd + 0.05, "top bins (DD)", verticalalignment='center', color=annot_color, fontsize=10)
 
+legend = fig.legend(handles = [Line2D((0, 50), (0, 0), dashes=DASHES[True], color=GREEN),
+                               Line2D((0, 50), (0, 0), dashes=DASHES[False], color=ORANGE)],
+                    labels = ["top bins ($D$-independent model)",
+                              "top bins ($D$-dependent model)"],
+                    loc = 8, ncol = 2, bbox_to_anchor = (0.5,-0.15), bbox_transform = fig.transFigure)
 
-fig.legend(handles = [Line2D((0, 50), (0, 0), dashes=DASHES[True], color=GREEN),
-                      Line2D((0, 50), (0, 0), dashes=DASHES[False], color=ORANGE)],
-           labels = ["top bins ($D$-independent model)",
-                     "top bins ($D$-dependent model)"],
-           loc = 8, ncol = 2, fontsize=11)
 fig.tight_layout()
 batch_mode, fname = filename("peakiness.pdf")
 
 if batch_mode:
-    fig.savefig(fname, pad_inches = 0.5, bbox_inches = "tight")
+    fig.savefig(fname, transparent=True)
 else:
     pyplot.show()

@@ -15,16 +15,29 @@ from os.path import dirname, join
 
 def filename(default):
     has_name = len(sys.argv) > 1
-    return (has_name, sys.argv[1] if has_name else join(dirname(__file__), default))
+    return (has_name, sys.argv[1] if has_name else default)
 
 def save2pdf(pdf):
     pyplot.tight_layout()
-    pyplot.savefig(pdf, format = 'pdf', bbox_inches = "tight", transparent = True)
+    pyplot.savefig(pdf, format = 'pdf')
     pyplot.clf()
 
+def rcparams():
+    mpl.rcParams.update({
+        "font.size": 9,
+        "font.family": "serif",
+        "font.serif": "computer modern roman",
+        "legend.fontsize": "medium",
+        "axes.titlesize": "medium",
+        "text.usetex": True,
+        "text.latex.unicode": True,
+        "savefig.bbox": "tight",
+        "savefig.pad_inches": 0.05
+    })
+
 def setup():
-    FS = 9.5
-    mpl.rcParams['font.size'] = FS
-    mpl.rcParams['legend.fontsize'] = FS
-    mpl.rcParams['axes.titlesize'] = FS
-    pyplot.gcf().set_size_inches(4, 4)
+    rcparams()
+    pyplot.gcf().set_size_inches(to_inches(200), to_inches(200)) # full column size is 240pt
+
+def to_inches(points):
+    return points / 72.26999

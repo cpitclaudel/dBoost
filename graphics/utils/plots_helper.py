@@ -4,11 +4,7 @@ from matplotlib import pyplot, mlab
 from mpl_toolkits.mplot3d import Axes3D
 from utils import TANGO
 
-mpl.rc('text', usetex=True)
-mpl.rcParams['font.family'] = 'serif'
-mpl.rcParams['text.latex.preamble']=[r"\usepackage{amsmath,amssymb,calc}\usepackage{pifont}\newcommand{\cmark}{\ding{51}}\newcommand{\xmark}{\ding{55}}"]
-
-sensors_schema = ["Temperature (C)","Humidity ($\%$)","Light","Voltage (V)"]
+sensors_schema = ["Temperature (C)",r"Humidity ($\%$)","Light","Voltage (V)"]
 
 def get_sensor_data(fname):
     d = [[],[],[],[]]

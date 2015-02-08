@@ -1,7 +1,5 @@
 from utils import filename, save2pdf, setup
 from utils.plots_helper import lof
-import matplotlib
-from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 
 make,fname = filename("lof-plots.pdf")
