@@ -27,10 +27,11 @@ __pycache__/
 
 # Samples
 /samples/
+/results/
 
 # Compiled graphics
 /graphics/*.pdf
-/graphics/plots/*.pdf
+/graphics/*.png
 
 # Project files
 /.ropeproject/
