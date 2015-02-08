@@ -17,3 +17,12 @@
 \plot{2}{sensor-mix-plots.pdf}{Mixture model with 2 Gaussians}{sensors_4}
 \plot{1}{lof-plots.pdf}{Local Outlier Factor for the $k=2$ nearest neighbors}{lof_2}
 \plot{2}{lof-plots.pdf}{Local Outlier Factor for the $k=10$ nearest neighbors}{lof_10}
+
+\begin{figure*}
+  \centering
+  \newcommand{\cramped}[3]{\subfloat[#2]{\includegraphics[page=#1]{../graphics/3d-plots.pdf}\label{fig:#3}}}\hspace{\fill}
+  \cramped{1}{GMM, $n = 1$, $\theta=0.005$, no correlations}{gmm1t005nc}\hspace{\fill}
+  \cramped{2}{GMM, $n = 1$, $\theta=0.1$}{gmm1t10}\hspace{\fill}
+  \cramped{3}{GMM, $n = 2$, $\theta=0.05$}{gmm2t05}\hspace{\fill}
+  \caption{Temperature Humidity}
+\end{figure*}
