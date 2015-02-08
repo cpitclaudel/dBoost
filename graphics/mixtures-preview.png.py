@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-from bisect import bisect_left
 import matplotlib
-from utils import TANGO
 from matplotlib import pyplot
-from matplotlib.backends.backend_pdf import PdfPages
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 matplotlib.rcParams['lines.linewidth'] = 2
@@ -11,8 +9,6 @@ matplotlib.rcParams['savefig.dpi'] = 300
 
 def mixture_plt():
     from utils._multivariate import multivariate_normal
-    from mpl_toolkits.mplot3d import Axes3D
-    from matplotlib import cm
 
     centers = ([0.5, 1.5], [-1, -2], [2, -1])
     covs = ([[1.2, 2],[0.7, 1]], [[0.75, 0.6],[0.6, 0.75]], [[2, 0],[0, 2]])
@@ -27,7 +23,8 @@ def mixture_plt():
 
     x, y = np.meshgrid(x, y)
     pos = np.empty(x.shape + (2,))
-    pos[:, :, 0] = x; pos[:, :, 1] = y
+    pos[:, :, 0] = x
+    pos[:, :, 1] = y
 
     gaussians = (multivariate_normal(*param) for param in zip(centers, covs))
     z = sum(c * P for c, P in zip(coeffs, (g.pdf(pos) for g in gaussians)))
