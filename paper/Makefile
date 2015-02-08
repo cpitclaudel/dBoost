@@ -12,11 +12,11 @@ print-%:
 all: paper.pdf
 
 $(PYPLOTS_PDFS_RENDERED): %.pdf: %.pdf.py
-	python3 $< $@
+	$< $@
 	pdfcrop $@ $@
 
 $(PYPLOTS_PNGS_RENDERED): %.png: %.png.py
-	python3 $< $@
+	$< $@
 	convert $@ -trim "$@"
 
 paper.pdf: $(TEXFILES) $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
@@ -24,6 +24,13 @@ paper.pdf: $(TEXFILES) $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
 	bibtex paper.aux
 	pdflatex -draftmode -shell-escape paper.tex
 	pdflatex -shell-escape paper.tex
+
+paper-grayscale.pdf: paper.pdf
+	gs -sDEVICE=pdfwrite -sProcessColorModel=DeviceGray \
+	   -sColorConversionStrategy=Gray -dOverrideICC \
+	   -o "paper-grayscale.pdf" -f "paper.pdf"
+
+grayscale: paper-grayscale.pdf
 
 view: paper.pdf
 	open paper.pdf
