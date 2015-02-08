@@ -36,4 +36,7 @@ view: paper.pdf
 	open paper.pdf
 
 clean:
-	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
+	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out $(PYPLOTS_PDFS_RENDERED)
+
+clean-all: clean
+	rm -fv $(PYPLOTS_PNGS_RENDERED)
