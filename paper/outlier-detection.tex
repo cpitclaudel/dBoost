@@ -13,7 +13,7 @@ The simple Gaussian model measures how much each value differs from the mean com
 \end{align}
 where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
 
-In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus simply report single-attribute outliers.
+In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus simply reports single-attribute outliers.
 
 \subsubsection{Mixture Modeling}
 The Gaussian Mixture model uses the correlation hints provided by the statistical analysis phase to break down each row into small set of tuples of presumably correlated values.
