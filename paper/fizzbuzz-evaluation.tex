@@ -15,14 +15,14 @@ Running the discrete statistical analyzer on the synthetic datasets suggests tha
    $30$ $Buzz$
    > Values ($30$, '$Buzz$') (0, 1) do not match
      features ('$div 3$', '$erase numbers$')
-     • histogram for ('div 3', 'erase numbers'):
-       ██████████████████ (False, '<num>')
-       █████ (False, 'Buzz')
-       (False, 'Fizz')
-       (False, 'Woof!')
-       $(True, 'Buzz')$
-       ██████████ (True, 'Fizz')
-       ██ (True, 'FizzBuzz')
+     • histogram for ('div 3', 'strp'):
+       [532] ████████████████████ (False, '<num>')
+       [133] █████ (False, 'Buzz')
+       [  1] ▌ (False, 'Fizz')
+       [  1] ▌ (False, 'Woof!')
+       [  1] /▌/ $(True, 'Buzz')$
+       [267] ██████████ (True, 'Fizz')
+       [ 66] ██ (True, 'FizzBuzz')
 \end{lstnobreak}
 
 Using the partitioned histogram model produces similar output:
@@ -32,12 +32,12 @@ Using the partitioned histogram model produces similar output:
    > Values ($30$, '$Buzz$') (0, 1) do not match
      features ('$div 3$', '$strp$')
      • histogram for ('strp',) if 'div 3' = True:
-       $('Buzz',)$
-       ████████████████████ ('Fizz',)
-       ████ ('FizzBuzz',)
+       [  1] /▌/ $('Buzz',)$
+       [267] ████████████████████ ('Fizz',)
+       [ 66] ████ ('FizzBuzz',)
      ... if 'div 3' = False:
-       ████████████████████ ('<num>',)
-       █████ ('Buzz',)
-       ('Fizz',)
-       ('Woof!',)
+       [532] ████████████████████ ('<num>',)
+       [133] █████ ('Buzz',)
+       [  1] ▌ ('Fizz',)
+       [  1] ▌ ('Woof!',)
 \end{lstnobreak}

@@ -51,23 +51,23 @@ In addition to identifying outliers, dBoost is equipped with tools that provide 
    > Value '$NE47-223$' (3) doesn't match
      feature 'signature'
    • histogram for ('signature',):
-     [266] ██████████
-     [  1] $Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd$
-     [  1] Lu,Nd,Nd,Pd,Nd,Nd,Nd
-     [  2] Nd,Nd,Lu,Pd,Nd,Nd,Nd
+     [266] ██████████ <empty>
+     [  1] /▌/ $Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd$
+     [  1] ▌ Lu,Nd,Nd,Pd,Nd,Nd,Nd
+     [  2] ▌ Nd,Nd,Lu,Pd,Nd,Nd,Nd
      [485] ████████████████████ Nd,Nd,Pd,Lu,Nd,Nd,Nd
      [ 51] ██ Nd,Nd,Pd,Lu,Nd,Nd,Nd,Lu
      [155] ██████ Nd,Nd,Pd,Nd,Nd,Nd
      [ 36] █ Nd,Nd,Pd,Nd,Nd,Nd,Lu
-     [  3] Nd,Nd,Pd,Nd,Nd,Nd,Nd
-     [  1] Nd,Pd,Nd,Nd,Nd
+     [  3] ▌ Nd,Nd,Pd,Nd,Nd,Nd,Nd
+     [  1] ▌ Nd,Pd,Nd,Nd,Nd
 
   $Lu-ater$, Eva, 32-G972,
     eva@csail.mit.edu, Research Scientist
   > Value '$Lu-ater$' (1) doesn't match
     feature '$title case$'
   • histogram for ('$title case$',):
-    [ 15] $False$
+    [ 15] /▌/ $False$
     [986] ████████████████████ True
 
   Tweakit, $ $, 32-G699,
@@ -75,7 +75,7 @@ In addition to identifying outliers, dBoost is equipped with tools that provide 
   > Value '$ $' (1) doesn't match
   • histogram for ('empty',):
     [1000] ████████████████████ False
-    [   1] $True$
+    [   1] /▌/ $True$
 \end{lstlisting}
 
 Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case is particularly interesting: to extract the signature of a string, our tool replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{NE47-989} is converted to \lstinline{Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd}, which does not fall in any of the dominant bins (the most frequent case, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center).
@@ -88,8 +88,8 @@ Manual inspection of the results reveal that most of the outliers reported are a
   > Value '$DeFect$' (1) doesn't match
     feature '$title case$'
   • histogram for ('$title case$',):
-    $False$
-    ████████████████████ True
+    [ 15] /▌/ $False$
+    [986] ████████████████████ True
 \end{lstlisting}
 
 The case of \lstinline{DeFect} is correct, but our tool notes that it does not adhere to the casing standard derived from other tuples, and thus reports it.
