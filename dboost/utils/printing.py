@@ -85,6 +85,8 @@ def colorize(row, indices):
 
 def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
     BLOCK = "█"
+    LEFT_HALF_BLOCK = "▌"
+
     try:
         W, H = os.get_terminal_size()
     except (OSError, AttributeError):
@@ -103,7 +105,7 @@ def hhistplot(counter, highlighted, indent = "", pipe = sys.stdout, w = 20):
         label = str(key)
         bar_size = int(value * scale)
         header = indent + "[" + str(value).rjust(header_width) + "] "
-        bar = BLOCK * bar_size + " " if bar_size > 0 else ""
+        bar = (BLOCK * bar_size if bar_size > 0 else LEFT_HALF_BLOCK) + " "
 
         label_avail_space = W - 2 - len(bar) - len(header)
         if len(label) > label_avail_space:
