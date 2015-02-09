@@ -1,7 +1,7 @@
 \subsection{Outlier Detection}
 \label{sec:outlier-detection}
 
-Models, once properly trained, are used for classification and detection of outliers -- either on incoming INSERT operations on a running system, or on existing rows (typically, the ones used during the model training phase). % LATER: Citation about databases sizes?
+Models, once properly trained, are used for classification and detection of outliers -- either in incoming \texttt{INSERT} operations on a running system, or in existing rows (typically, the ones used during the model training phase). % LATER: Citation about databases sizes?
 
 Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, the tool automatically indicates which values in the row caused it to be flagged as an outlier.
 
