@@ -29,18 +29,15 @@ In total, 451 entries contain outliers, out of a total of 1000. Office numbers a
 \begin{lstlisting}[gobble=2]
   Bitdiddle, Ben, $NE47-989$,
     bbitdid@csail.mit.edu, Graduate Student
-  > Value '$NE47-989$' (3) doesn't match
-    feature '$signature$'
+  > Value '$NE47-989$' doesn't match feature '$signature$'
 
   $Lu-ater$, Eva, 32-G972,
     eva@csail.mit.edu, Research Scientist
-  > Value '$Lu-ater$' (1) doesn't match
-    feature '$title case$'
+  > Value '$Lu-ater$' doesn't match feature '$title case$'
 
   Tweakit, $ $, 32-G699,
     twktem@mit.edu, Administrative Assistant ...
-  > Value '$ $' (1) doesn't match
-    feature '$empty$'
+  > Value '$ $' doesn't match feature '$empty$'
 \end{lstlisting}
 
 In addition to identifying outliers, dBoost is equipped with tools that provide the user with additional feedback on why features were identified as outliers.
@@ -48,8 +45,7 @@ In addition to identifying outliers, dBoost is equipped with tools that provide 
 \begin{lstlisting}[gobble=2]
   Bitdiddle, Ben, $NE47-989$,
     bbitdid@csail.mit.edu, Graduate Student
-   > Value '$NE47-223$' (3) doesn't match
-     feature 'signature'
+   > Value '$NE47-223$' doesn't match feature '$signature$'
    • histogram for ('signature',):
      [266] ██████████ <empty>
      [  1] /▌/ $Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd$
@@ -64,15 +60,14 @@ In addition to identifying outliers, dBoost is equipped with tools that provide 
 
   $Lu-ater$, Eva, 32-G972,
     eva@csail.mit.edu, Research Scientist
-  > Value '$Lu-ater$' (1) doesn't match
-    feature '$title case$'
+  > Value '$Lu-ater$' doesn't match feature '$title case$'
   • histogram for ('$title case$',):
     [ 15] /▌/ $False$
     [986] ████████████████████ True
 
   Tweakit, $ $, 32-G699,
     twktem@mit.edu, Administrative Assistant ...
-  > Value '$ $' (1) doesn't match
+  > Value '$ $' doesn't match feature '$empty$'
   • histogram for ('empty',):
     [1000] ████████████████████ False
     [   1] /▌/ $True$
@@ -85,8 +80,7 @@ Manual inspection of the results reveal that most of the outliers reported are a
 \begin{lstlisting}[gobble=2]
   $DeFect$, Cy, 32-D597,
     cydf@csail.mit.edu, Graduate Student
-  > Value '$DeFect$' (1) doesn't match
-    feature '$title case$'
+  > Value '$DeFect$' doesn't match feature '$title case$'
   • histogram for ('$title case$',):
     [ 15] /▌/ $False$
     [986] ████████████████████ True

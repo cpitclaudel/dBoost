@@ -13,31 +13,31 @@ Running the discrete statistical analyzer on the synthetic datasets suggests tha
 
 \begin{lstnobreak}[gobble=2]
    $30$ $Buzz$
-   > Values ($30$, '$Buzz$') (0, 1) do not match
-     features ('$div 3$', '$erase numbers$')
-     • histogram for ('div 3', 'strp'):
-       [532] ████████████████████ (False, '<num>')
-       [133] █████ (False, 'Buzz')
-       [  1] ▌ (False, 'Fizz')
-       [  1] ▌ (False, 'Woof!')
-       [  1] /▌/ $(True, 'Buzz')$
-       [267] ██████████ (True, 'Fizz')
-       [ 66] ██ (True, 'FizzBuzz')
+   > Values ($30$, '$Buzz$') do not
+     match features ('$div 3$', '$erase numbers$')
+   • histogram for ('div 3', 'strp'):
+     [532] ████████████████████ (False, '<num>')
+     [133] █████ (False, 'Buzz')
+     [  1] ▌ (False, 'Fizz')
+     [  1] ▌ (False, 'Woof!')
+     [  1] /▌/ $(True, 'Buzz')$
+     [267] ██████████ (True, 'Fizz')
+     [ 66] ██ (True, 'FizzBuzz')
 \end{lstnobreak}
 
 Using the partitioned histogram model produces similar output:
 
 \begin{lstnobreak}[gobble=2]
    $30$ $Buzz$
-   > Values ($30$, '$Buzz$') (0, 1) do not match
-     features ('$div 3$', '$strp$')
-     • histogram for ('strp',) if 'div 3' = True:
-       [  1] /▌/ $('Buzz',)$
-       [267] ████████████████████ ('Fizz',)
-       [ 66] ████ ('FizzBuzz',)
-     ... if 'div 3' = False:
-       [532] ████████████████████ ('<num>',)
-       [133] █████ ('Buzz',)
-       [  1] ▌ ('Fizz',)
-       [  1] ▌ ('Woof!',)
+   > Values ($30$, '$Buzz$') do not
+     match features ('$div 3$', '$strp$')
+   • histogram for ('strp',) if 'div 3' = True:
+     [  1] /▌/ $('Buzz',)$
+     [267] ████████████████████ ('Fizz',)
+     [ 66] ████ ('FizzBuzz',)
+   ... if 'div 3' = False:
+     [532] ████████████████████ ('<num>',)
+     [133] █████ ('Buzz',)
+     [  1] ▌ ('Fizz',)
+     [  1] ▌ ('Woof!',)
 \end{lstnobreak}
