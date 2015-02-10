@@ -9,18 +9,18 @@ Little work, however, has focused on developing generic methods for user-guided 
 
 This paper presents an innovative approach to reporting and flagging outliers in highly heterogeneous datasets: our tools optimistically expand semantically poor SQL types to derive richer information, and use this derived information to detect outliers and provide detailed reports to the user. Expansion proceeds by applying a set of type-dependent rules, such that, for example, dates are reconstructed from integers by considering them as Unix timestamps. Rules function by mapping values of one type to a set of expanded attributes; they are user-configurable and, when many rows in a database agree on a particular expanded value, can be used to express soft constraints on the data. For example, if most of the values in a string column have the same casing, then a soft constraint can be learned about the proper casing of values of that column. Expanded data can furthermore be analyzed to detect soft functional dependencies between derived attributes, enabling the detection of a broad class of data inconsistencies.
 
-We designed the framework to be both fast and memory efficient; it proceeds in three online passes over the data, keeping no more information than strictly necessary (in general, no more than a few dozens of values per field in the database schema). The architecture is parallelizable, the analysis can be distributed over multiple computation nodes, and information can be kept from one run to the next so as to eliminate the first and possibly the second pass.
+We designed the system to be both fast and memory efficient; it proceeds in three online passes over the data, keeping no more information than strictly necessary (in general, no more than a few dozens of values per field in the database schema). The architecture is parallelizable, the analysis can be distributed over multiple computation nodes, and information can be kept from one run to the next so as to eliminate the first and possibly the second pass.
 
 Our contributions are as follows:
 \begin{enumerate}
 \item We discuss the idea of tuple expansion, and a set of rules that proved useful in flagging outliers in heterogeneous datasets.
 \item We describe a histogram-based approach in the context of detecting outliers in non-numerical, heterogeneous datasets.
-\item We evaluate the performance of our framework on several real-world datasets.
+\item We evaluate the performance of our system on several real-world datasets.
 \end{enumerate}
 
 The rest of this paper is structured as follows:
 \begin{itemize}
-\item We give an overview of our framework in Section~\ref{sec:overview}.
+\item We give an overview of our system in Section~\ref{sec:overview}.
 \item We discuss technical aspects in Section~\ref{sec:implementation}.
 \item We evaluate our tool on synthetic and real-world datasets in Section~\ref{sec:evaluation}.
 \item We describe related work in Section~\ref{sec:related-work}.
