@@ -73,7 +73,7 @@ In addition to identifying outliers, dBoost is equipped with tools that provide 
     [   1] /▌/ $True$
 \end{lstlisting}
 
-Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \lstinline{signature} case is particularly interesting: to extract the signature of a string, our tools replace each character by the name of its Unicode class: uppercase Latin letters are \lstinline{Lu}, numbers are \lstinline{Nd}, and punctuation signs are \lstinline{Pd}; hence the string \lstinline{NE47-989} is converted to \lstinline{Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd}, which does not fall in any of the dominant bins (the most frequent case, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers of like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center).
+Our tool highlights the incorrect field, and prints the corresponding histogram. The bin in which the suspicious value falls is also highlighted. The \texttt{signature} case is particularly interesting: recall that to extract the signature of a string, our tools replace each character by the name of its Unicode class; hence the string \texttt{NE47-989} is converted to \lstinline{Lu,Lu,Nd,Nd,Pd,Nd,Nd,Nd} (two letters, two numbers, one dash, three numbers), which does not fall in any of the dominant bins (the most frequent case, \lstinline{Nd,Nd,Pd,Lu,Nd,Nd,Nd}, describes office numbers like \lstinline{32-G804}, the predominant form of office numbering in the Stata Center).
 
 Manual inspection of the results reveal that most of the outliers reported are actually bad inputs. There are, however, a number of false positives, such as:
 

@@ -34,6 +34,7 @@ where $N$ is the number of individual components that the GMM comprises ($N$ is 
 Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Still, most of the fields obtained after expanding each tuple are discarded after the relevant ones are extracted for learning purposes; in most cases we expect the set of values retained to be much smaller than the set of all attributes, thus limiting the memory usage.
 
 \subsubsection{Histogram-based Modeling}
+\label{sec:histograms}
 Simple Gaussian modeling and Gaussian Mixture modeling both offer good results for continuous numerical data such as the ones produced by sensors, but suffer from two limitations:
 
 \begin{itemize}
