@@ -1,6 +1,6 @@
 \subsection{Logins: a more realistic partitioned dataset}
 
-Our web activity synthetic datasets are comprised of two columns: a Unix timestamp stored as an \texttt{INT}, and a country. Each dataset is supposed to track the connections of a registered user on a website; such a dataset could be obtained by selecting the relevant rows out of a large table listing all connections of all users. Each user in the datasets exhibits a different pattern:
+Our web activity synthetic datasets are comprised of two columns: a Unix timestamp stored as an \texttt{INT}, and a country. Each dataset is supposed to track the connections of a registered user on a website; such a dataset could be obtained by selecting the relevant rows out of a large table listing all connections of all users. Each user exhibits a different connection pattern:
 
 \begin{itemize}
 \item One user always connects from the same country; values that do not match this country are outliers.
@@ -8,7 +8,7 @@ Our web activity synthetic datasets are comprised of two columns: a Unix timesta
 \item The third user connects from a set of three countries, with no discernible pattern. This should not return any outliers.
 \end{itemize}
 
-The datasets are randomly generated sets of the 2000 most recent connections, listed in no particular order. The target outlier rate is \SI{5}{\percent} in each generated dataset.
+The datasets are randomly generated sets of 2000 connections, listed in no particular order. The target outlier rate is \SI{5}{\percent} in each generated dataset.
 
 \newcommand{\prop}[2]{#1\,\#\,#2}
 
