@@ -3,7 +3,9 @@
 
 Models, once properly trained, are used for classification and detection of outliers -- either in incoming \texttt{INSERT} operations on a running system, or in existing rows (typically, the ones used during the model training phase). % LATER: Citation about databases sizes?
 
-Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, the tool automatically indicates which values in the row caused it to be flagged as an outlier.
+Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, dBoost automatically indicates which values in the row caused it to be flagged as an outlier.
+
+In order to take advantage of the correlations detected by the statistical analysis phase, dBoost adds to each expanded tuple an additional field for each set of correlated columns. This additional field contain the corresponding correlated values, and can be evaluated by all models capable of analyzing with multidimensional data.
 
 \subsubsection{Simple Gaussian Modeling}
 The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
@@ -16,13 +18,10 @@ where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as descr
 In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus simply reports single-attribute outliers.
 
 \subsubsection{Mixture Modeling}
-The Gaussian Mixture model uses the correlation hints provided by the statistical analysis phase to break down each row into small set of tuples of presumably correlated values.
+In the Mixture model, the likelihood of each (possibly multi-dimensional) field is evaluated using the corresponding GMM. This model operates under the assumption that the data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM. 
 
-The likelihood of each resulting tuple is then evaluated using the corresponding GMM (Gaussian mixture model). The model operates under the assumption that the data is accurately modeled by the chosen number of components for the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM. 
+This makes it possible to assign a Gaussian component to each tuple, and then flag as outliers the tuples that are not sufficiently well explained by their corresponding Gaussian (see~\cite{Roberts1999}). Given a tuple $t$ and its corresponding Gaussian $c$, this means rejecting $t$ if
 
-This makes it possible to assign a Gaussian component $c$ to each tuple $t$, and then flag as outliers the tuples that are not sufficiently well explained by their corresponding Gaussian (see~\cite{Roberts1999}). Given a tuple $t$ and a Gaussian $c$, this means rejecting $t$ if 
-
-That is, if 
 \begin{align}
   \pi_c \cdot \Pr(\textbf{dist}(t, \mu_c) > d_0)  \leq \theta
   \label{eqn:mixture-outlier}
@@ -34,7 +33,7 @@ As in the Gaussian Model, providing the user with a list of attributes that caus
 \subsubsection{Histogram Modeling}
 The histogram-based modeling strategy proceeds in two phases to detect outliers.
 
-First, after running through the learning phase, it decides for each histogram whether that histogram is ``peaked'' (i.e. showing or a few strong modes) enough to be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar number of values, and are thus not useful for outlier detection. In practice, we use a simple statistical test to determine whether a histogram is sufficiently modal: we count the number of elements that fall into the most populated (``top'') bins, and discard the histogram if this count totals less than a user-specified proportion of values. Finding how many bins to include in the set of top bins is the most challenging part, and for this paper we explored two thresholding strategies (Figure~\ref{fig:peakiness}):
+First, after running through the learning phase, it decides for each histogram whether that histogram is ``peaked'' (i.e. showing a few strong modes) enough to be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar number of values, and are thus not useful for outlier detection. In practice, we use a simple statistical test to determine whether a histogram is sufficiently modal: we count the number of elements that fall into the most populated (``top'') bins, and discard the histogram if this count totals less than a user-specified proportion of values. Finding how many bins to include in the set of top bins is the most challenging part, and for this paper we explored two thresholding strategies (Figure~\ref{fig:peakiness}):
 
 \fxnote{Should we move this figure?}
 \begin{figure*}
