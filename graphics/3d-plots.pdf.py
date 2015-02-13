@@ -7,8 +7,8 @@ from matplotlib import pyplot
 batch, fname = filename("3d-plots.pdf")
 dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
 
-MIX_OUTFILE = "../results/sensors_dirty_stat{}_mix{}_{}.out"
-GAUSS_OUTFILE = "../results/sensors_dirty_stat{}_gaus{}.out"
+MIX_OUTFILE = "../results/sensors_dirty_stat{}_mixture{}_{}.out"
+GAUSS_OUTFILE = "../results/sensors_dirty_stat{}_gaussian{}.out"
 
 
 sources = [(GAUSS_OUTFILE, 1, 1.5),     # from gauss-plots

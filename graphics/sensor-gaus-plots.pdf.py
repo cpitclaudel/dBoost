@@ -16,7 +16,7 @@ args = [
 pdf = PdfPages(fname)
 for (e,s,y,x) in args:
     title = "Outliers in Sensor Data\nGaussian, stddev=" + str(s)
-    ofile = "../results/sensors_dirty_stat" + str(e) + "_gaus" + str(s) + ".out"
+    ofile = "../results/sensors_dirty_stat" + str(e) + "_gaussian" + str(s) + ".out"
     setup()
     sensors(title,x,y,dfile,ofile)
     save2pdf(pdf)
