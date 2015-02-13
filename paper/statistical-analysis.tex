@@ -1,7 +1,7 @@
 \subsection{Statistical Analysis}
 \label{sec:statistical-analysis}
 
-Following the tuple expansion, the expanded tuples go through the statistical analysis phase. This phase collects simple statistics on each column of the table, and estimates which sets of columns are correlated.
+Following the tuple expansion phase, the expanded tuples go through the statistical analysis phase. This phase collects simple statistics on each column of the table, and estimates which sets of columns are correlated.
 
 The statistical information includes the average, variance, standard deviation and extremes of each numerical column, as well as approximate cardinality measurements for all columns. These statistics can then be used by models to speed up their training phase or  produce correlation hints at the end of the statistical analysis phase.
 
