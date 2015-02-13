@@ -47,7 +47,9 @@
   - [ ] R Scaling plots
   - [ ] R Find a good theta value
 - [ ] Z/C Numerical benchmarks in the evaluation section
-- [ ] Z Major editing
+- [ ] Z/C Editing
+  - [ ] Z Mixture stuff
+  - [ ] C Add example to meta-modeling section
 - [X] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [X] R Update Intel graphs
