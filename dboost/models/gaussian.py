@@ -1,5 +1,4 @@
-import numbers
-from ..utils.printing import report_progress
+import sys
 from ..utils.tupleops import *
 from ..utils.autoconv import autoconv
 
@@ -8,9 +7,6 @@ class Simple:
 
     def __init__(self, tolerance):
         self.tolerance = tolerance
-        self.reset()
-
-    def reset(self):
         self.model = None
 
     @staticmethod
@@ -26,7 +22,7 @@ class Simple:
     def fit(self, Xs, analyzer):
         if analyzer.stats == None:
             print("Gaussian modelling requires a statistical preprocessing phase", file=sys.stderr)
-            import sys; sys.exit(1)
+            sys.exit(1)
         self.model = analyzer.stats
 
     def test_one(self, xi, stats):

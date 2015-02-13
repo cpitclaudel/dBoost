@@ -1,6 +1,6 @@
-from ..utils.tupleops import sys
-from ..utils.autoconv import autoconv
+import sys
 from math import erf,sqrt
+from ..utils.autoconv import autoconv
 
 class Mixture:
     ID = "mixture"

@@ -1,4 +1,3 @@
-import sys
 from math import sqrt
 from itertools import chain, combinations, product
 
