@@ -1,12 +1,7 @@
 #! /usr/bin/env python3
-import sys
-from . import utils
-from . import features
 from .utils import tupleops
 from .utils.printing import debug
 from itertools import chain
-from .analyzers import statistical
-from pprint import pprint
 
 def expand_field(f, rules):
     rls = rules[type(f)]
@@ -20,11 +15,11 @@ def expand_hints(X, hints):
     return (expanded_hints,) + X
 
 def expand_stream(generator, rules, keep_x, hints, maxrecords = float("+inf")):
-    for id, x in enumerate(generator()):
-        if id >= maxrecords:
+    for idx, x in enumerate(generator()):
+        if idx >= maxrecords:
             break
         X = expand(x, rules)
-        if hints != None:
+        if hints is not None:
             X = expand_hints(X, hints)
         yield (x, X) if keep_x else X
 
