@@ -1,5 +1,4 @@
-import numbers
-from ..utils.printing import report_progress
+import sys
 from ..utils.tupleops import *
 from ..utils.autoconv import autoconv
 
