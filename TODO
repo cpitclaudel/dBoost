@@ -42,14 +42,14 @@
   - [X] Get plots with the simple Gaussian model
   - [X] Say "mixture model" instead of "Gaussian"
   - [X] Rasterize the mixture models plot
-  - [ ] C Reorganize plots
+  - [X] C Reorganize plots
   - [ ] R 3D Plots
   - [ ] R Scaling plots
   - [ ] R Find a good theta value
 - [ ] Z/C Numerical benchmarks in the evaluation section
-- [ ] Z/C Editing
+- [-] Z/C Editing
   - [ ] Z Mixture stuff
-  - [ ] C Add example to meta-modeling section
+  - [X] C Add example to meta-modeling section
 - [X] Add missing stuff
   - [X] Z Outlier detection description for mixture models
   - [X] R Update Intel graphs
