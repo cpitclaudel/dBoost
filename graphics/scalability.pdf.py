@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from utils import filename, save2pdf, setup
+from utils import filename, save2pdf, setup, rcparams, to_inches 
 from utils.plots_helper import sensors 
 import matplotlib
 from matplotlib import pyplot
@@ -16,6 +16,8 @@ make,fname = filename("scalability.pdf")
 
 trs = [1000,10000,100000]#,2313153]
 tes = [100,1000,10000,100000,1000000,2313153]
+_trs = ["1K","10K","100K"]#,2313153]
+_tes = [0.100,1.000,10.000,100.000,1000.000,2313.153]
 #es = ["1_gaussian1.5","0.7_mixture1_0.075","0.7_mixture2_0.075"]
 es = [
     [1,"gaussian",1.5],
@@ -44,19 +46,21 @@ for (tr,te,e) in itertools.product(trs,tes,es):
                 continue
 dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
 pdf = PdfPages(fname)
-#setup()
+setup()
+rcparams()
+pyplot.gcf().set_size_inches(to_inches(240), to_inches(240)) # full column size is 240pt
 
 ax = pyplot.gca()
 ax.set_title("Scalability")
-ax.set_xlabel("Test Set Size")
+ax.set_xlabel("Test Set Size (Thousands)")
 ax.set_ylabel("Runtime (s)")
 lines = ["-","--","-."]
 linecycler = itertools.cycle(lines)
 ax.set_color_cycle(['g','g','g','r','r','r','b','b','b'])
 #ax.set_xscale('log')
-for (e,tr) in itertools.product(es,trs):
-    ax.plot(tes,results[(e[1],tr)],next(linecycler),label = "{}, {}".format(e[1].capitalize(),tr))
+for (e,(tr,_tr)) in itertools.product(es,zip(trs,_trs)):
+    ax.plot(_tes,results[(e[1],tr)],next(linecycler),label = "{}, {}".format(e[1].capitalize(),_tr))
 
-ax.legend(loc=2)
+ax.legend(loc=2,handlelength=3,prop={'size':6})
 save2pdf(pdf)
 pdf.close()
