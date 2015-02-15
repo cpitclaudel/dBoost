@@ -9,12 +9,15 @@ dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
 
 MIX_OUTFILE = "../results/sensors_dirty_stat{}_mixture{}_{}.out"
 GAUSS_OUTFILE = "../results/sensors_dirty_stat{}_gaussian{}.out"
+LOF_OUTFILE = "../results/sensors_dirty_lof{}.out"
 
 
 sources = [(GAUSS_OUTFILE, 1, 1.5),     # from gauss-plots
            (MIX_OUTFILE, 0, 1, 0.005),  # from sensor-plots (p3)
            (MIX_OUTFILE, 0.7, 1, 0.1),  # from sensor-plots (p1 and p2)
-           (MIX_OUTFILE, 0.7, 2, 0.05)] # from sensor-mix-plots (p1 and p2)
+           (MIX_OUTFILE, 0.7, 2, 0.05), # from sensor-mix-plots (p1 and p2)
+           (LOF_OUTFILE, 2), # from lof-plots 
+           (LOF_OUTFILE, 10)] # from lof-plots 
 
 if batch:
     pdf = PdfPages(fname)
