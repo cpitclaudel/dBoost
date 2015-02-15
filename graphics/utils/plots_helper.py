@@ -18,7 +18,7 @@ OUTLIER3D = dict(linewidth=EDGE_WIDTH, s = BASE_SIZE / 2.0, **get_marker_params(
 INLIER2D = dict(linewidth=EDGE_WIDTH, alpha=MARKER_ALPHA, s=BASE_SIZE, **get_marker_params('green'))
 OUTLIER2D = dict(linewidth=EDGE_WIDTH, alpha=MARKER_ALPHA, **get_marker_params('red'))
 
-sensors_schema = [r"Temperature (\si{\degreeCelsius})",r"Humidity (\si{\percent})",r"Light (??)",r"Voltage (\si{\volt})"]
+sensors_schema = [r"Temperature (\si{\degreeCelsius})",r"Humidity (\si{\percent})",r"Light (\si{\lux})",r"Voltage (\si{\volt})"]
 sensors_labels_padding= [2.5, 2.5, 3.25, 2.75]
 
 def get_sensor_data(fname):
@@ -69,7 +69,7 @@ def sensors3D_one(fig, subplot_id, inliers, outliers, x, y, z):
     ax.set_zlabel(zlabel)
     # ax.elev = 15
 
-    for axid, (axis, align, colid) in enumerate(zip(axes, align, (x, y, z))):
+    for (axis, align, colid) in zip(axes, align, (x, y, z)):
         # http://stackoverflow.com/questions/5525782/adjust-label-positioning-in-axes3d-of-matplotlib
         axis._axinfo['label']['space_factor'] = sensors_labels_padding[colid]
         axis._axinfo['ticklabel']['space_factor'] = 0.3
@@ -100,11 +100,12 @@ def sensors3D(dfile, ofile):
     # mpl.rcParams["font.size"] = 9
     pyplot.close()
 
-    columnsets = list(combinations(range(len(data)), 3))
+    NB_ROWS = 2
+    columnsets = list(combinations(range(len(data)), 3))[:2]
     nb_plots = len(columnsets)
 
     COLUMNS = 1
-    fig = pyplot.figure(figsize = (to_inches(504/3.0), to_inches(580))) #504|240, 666
+    fig = pyplot.figure(figsize = (to_inches(504/3.0), to_inches(580 * NB_ROWS / 4.0))) #504|240, 666
 
     for subplot_id, columns in enumerate(sorted(columnsets)):
         sensors3D_one(fig, (nb_plots // COLUMNS, COLUMNS, 1 + subplot_id), inliers, outliers, *columns)
