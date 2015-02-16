@@ -5,7 +5,7 @@ Models, once properly trained, are used for classification and detection of outl
 
 Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, dBoost automatically indicates which values in the row caused it to be flagged as an outlier.
 
-In order to take advantage of the correlations detected by the statistical analysis phase, dBoost adds to each expanded tuple an additional field for each set of correlated columns. This additional field contain the corresponding correlated values, and can be evaluated by all models capable of analyzing with multidimensional data.
+The inter-column correlations are also taken into account during modeling: if the statistical analysis phase detected a correlation between two columns $a$ and $b$, each tuple $t$ will be augmented by an additional field that contains the corresponding pair $(t_a, t_b)$. This field is treated as a single, multidimensional value, and is analyzed similarly to the other values by the models capable of modeling multi-dimensional data.
 
 \subsubsection{Simple Gaussian Modeling}
 The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
