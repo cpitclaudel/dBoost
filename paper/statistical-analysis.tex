@@ -3,7 +3,7 @@
 
 Following the tuple expansion phase, the expanded tuples go through the statistical analysis phase. This phase collects simple statistics on each column of the table, and estimates which sets of columns are correlated.
 
-The statistical information includes the average, variance, standard deviation and extremes of each numerical column, as well as approximate cardinality measurements for all columns. These statistics can then be used by models to speed up their training phase or  produce correlation hints at the end of the statistical analysis phase.
+The statistical information includes the average, variance, standard deviation and extremes of each numerical column, as well as approximate cardinality measurements for all columns. These statistics have two purposes: they are used during the statistical analysis phase to determine which columns in the table are correlated, and reused during data modeling to speed up the training phase of certain models.
 
 We focus on two inter-column correlation detection strategies:
 
