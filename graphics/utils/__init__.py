@@ -30,6 +30,7 @@ def rcparams():
         "axes.titlesize": "medium",
         "xtick.labelsize": "small",
         "ytick.labelsize": "small",
+        "legend.fontsize": "medium",
         "text.usetex": True,
         "text.latex.unicode": True,
         "savefig.bbox": "tight",
