@@ -64,11 +64,11 @@ for (train,test) in itertools.product(train_sizes,test_sizes):
         if e[1] == "gaussian":
             f = "../results/sensors_{}_{}_stat{}_{}{}.out".format(*([train]+[test]+e))
             if os.path.isfile(f): continue
-            cmd = "python dboost-stdin.py --minimal -F ' ' --train-with {} {} --statistical {} --{} {} -d fracpart -d unix2date_float > /tmp/tmp.out 2>{}".format(*([train_file]+[test_file]+e+[f]))
+            cmd = "dboost-stdin.py --minimal -F ' ' --train-with {} {} --statistical {} --{} {} -d fracpart -d unix2date_float > /tmp/tmp.out 2>{}".format(*([train_file]+[test_file]+e+[f]))
         elif e[1] == "mixture":
             f = "../results/sensors_{}_{}_stat{}_{}{}_{}.out".format(*([train]+[test]+e))
             if os.path.isfile(f): continue
-            cmd = "python dboost-stdin.py --minimal -F ' ' --train-with {} {} --statistical {} --{} {} {} -d fracpart -d unix2date_float > /tmp/tmp.out 2>{}".format(*([train_file]+[test_file]+e+[f]))
+            cmd = "dboost-stdin.py --minimal -F ' ' --train-with {} {} --statistical {} --{} {} {} -d fracpart -d unix2date_float > /tmp/tmp.out 2>{}".format(*([train_file]+[test_file]+e+[f]))
         else: assert(False)
         if cmd != None:
             print(cmd)
