@@ -81,7 +81,7 @@ for i, d in enumerate(data):
 for tic in ax.yaxis.get_major_ticks():
     tic.tick1On = tic.tick2On = False
 
-ax.legend(['Outlier', 'Dubious', 'False positives', 'False negatives'], ncol = 2)
+ax.legend(['Outliers', 'Dubious', 'False positives', 'False negatives'], ncol = 2)
 ax.set_yticks(y_pos)
 ax.set_yticklabels(y_labels)
 
