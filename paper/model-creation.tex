@@ -34,7 +34,7 @@ where $N$ is the number of individual components that the GMM comprises ($N$ is 
 
 Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Still, most of the fields obtained after expanding each tuple are discarded after the relevant ones are extracted for learning purposes; in most cases we expect the set of values retained to be much smaller than the set of all attributes, thus limiting the memory usage. 
 
-In addition, when dealing with large amounts of data, it is possible -- and indeed, preferable -- to train the model on a random subset of the dataset before running the full analysis. This approach is particularly relevant when using the Mixture model, but the memory and time savings that it brings can of course be extended to all modeling methods.
+In addition, when dealing with large amounts of data, it is possible -- and indeed, preferable -- to train the model on a random subset of the dataset before running the full analysis. This approach is particularly relevant when using the Mixture model, but can be applied to all of them.
 
 \subsubsection{Histogram-based Modeling}
 \label{sec:histograms}
@@ -60,9 +60,9 @@ The general approach, given a dataset and a pre-existing model, consists in extr
 
 This type of approach is useful when the distribution for an attribute or set of attributes is multi-modal. A high-level non-partitioned analysis will reveal values that fall in none of the classes; a partitioned approach, on the other hand, may more easily reveal discrepancies by suppressing interference between each class.
 
-As an example, consider the case of an airline adjusting status levels for its frequent fliers, using the number of flights for each passenger as well as their status level. A non-partitioned analysis may not return any interesting information, but a partitioned analysis could single out passengers in lower status levels traveling significantly more than average, or instead passengers with higher status traveling rarely. This would work even if statuses are stored as textual data, with no indication of their relative rankings.
+As an example, consider the case of an airline adjusting status levels for its frequent fliers, using the number of flights for each passenger as well as their status level. A non-partitioned analysis may not return any interesting information, but a partitioned analysis could single out passengers in lower status levels traveling significantly more than average, or passengers with higher status traveling rarely. This would work even if statuses were stored as textual data, with no indication of their relative rankings.
 
-In addition to better classification accuracy, partitioning may lead to better runtime performance by diminishing the size of the dataset that each model covers. These benefits are most important when model construction performance does not scale linearly, and when data volumes are too large to be analyzed on a single machine.
+In addition to providing better classification accuracy, partitioning may lead to better runtime performance by diminishing the size of the dataset covered by each model. These benefits are especially important when model construction performance does not scale linearly, and when data volumes are too large to be analyzed on a single machine.
 
 Finally, attribute-based partitioning enables analysis that was previously impossible. Assuming for example that a dataset with two columns has 4 classes identified by the value in the first column, each with 10 distinct expected values in the second column, a generic histogram-based analysis would discard the histogram for the pair of values as having too many buckets (40). A partitioned analysis, on the other hand, would allow the construction of four histograms, each with 10 regular bins and potentially a few outliers.
 
