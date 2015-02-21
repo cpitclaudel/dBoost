@@ -64,6 +64,7 @@ We find that LOF is not as useful at pointing out the tagged outliers in the sen
 
 %We show in Figure~\ref{fig:scaling} how dBoost scales as the amount of data used to build the models and to test on the models increases.
 We measured the total runtime of our system, including the data modeling and outlier detection phases for the Simple Gaussian and Mixture models with 1 and 2 Gaussians.
+Our experiments were run on an Intel i7 processor running at 2.8 GHz.
 In these experiments, we used random sampling to provide different-sized training sets to build the data model and test sets from which the system detects outliers.
 In Figure~\ref{fig:scaling}, we show the runtime of the various models for varying training set sizes, with the test set sizes increasing along the x-axis.
 As we can see in the figure, runtime scales linearly as the test set size increases.
