@@ -2,6 +2,7 @@
 from .utils import tupleops
 from .utils.printing import debug
 from itertools import chain
+import timeit,sys
 
 def expand_field(f, rules):
     rls = rules[type(f)]
@@ -23,7 +24,8 @@ def expand_stream(generator, rules, keep_x, hints, maxrecords = float("+inf")):
             X = expand_hints(X, hints)
         yield (x, X) if keep_x else X
 
-def outliers(trainset_generator, testset_generator, analyzer, model, rules, maxrecords = float("+inf")):
+def outliers(trainset_generator, testset_generator, analyzer, model, rules,runtime_progress, maxrecords = float("+inf")):
+    start = timeit.default_timer()
     debug(">> Finding correlations")
 
     analyzer.fit(expand_stream(trainset_generator, rules, False, None, maxrecords))
@@ -39,3 +41,7 @@ def outliers(trainset_generator, testset_generator, analyzer, model, rules, maxr
         discrepancies = model.find_discrepancies(X, index)
         if len(discrepancies) > 0:
             yield index, (x, X, discrepancies)
+        if index % runtime_progress == 0:
+            debug("Time {} {}".format(index,timeit.default_timer()-start))
+    stop = timeit.default_timer()
+    debug("Runtime ",stop-start)

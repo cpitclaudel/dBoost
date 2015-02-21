@@ -10,14 +10,15 @@ matplotlib.rcParams['text.latex.preamble'] = [r"\usepackage{siunitx}"]
 
 make,fname = filename("scalability.pdf")
 
+INTEL_TOTAL = 2313153
 # labels: vary train size + algo type
 # x: vary test size
 # y: runtime in s
 
 trs = [1000,10000,100000]#,2313153]
-tes = [100,1000,10000,100000,1000000,2313153]
+tes = [INTEL_TOTAL]
 _trs = ["1K","10K","100K"]#,2313153]
-_tes = [0.100,1.000,10.000,100.000,1000.000,2313.153]
+#_tes = [0.100,1.000,10.000,100.000,1000.000,2313.153]
 #es = ["1_gaussian1.5","0.7_mixture1_0.075","0.7_mixture2_0.075"]
 es = [
     [1,"gaussian",1.5],
@@ -26,24 +27,27 @@ es = [
 ]
 # build data
 results = {} 
-results2 = {} 
+vals = {} 
 
 for (tr,te,e) in itertools.product(trs,tes,es):
+    if (e[1],tr) not in results:
+        results[(e[1],tr)] = []
+        vals[(e[1],tr)] = []
     if e[1] == "gaussian":
-        ofile = "../results/sensors_{}_{}_stat{}_{}{}.out".format(tr,te,*e)
+        ofile = "../results/sensors_{}_stat{}_{}{}.out".format(tr,*e)
     else:
-        ofile = "../results/sensors_{}_{}_stat{}_{}_{}.out".format(tr,te,*e)
+        ofile = "../results/sensors_{}_stat{}_{}_{}.out".format(tr,*e)
     with open(ofile,'r') as f:
         for line in f:
             line = line.strip().split()
-            if line[0] == "Runtime:":
+            if line[0] == "Time":
+                print("{} {} {}: {}".format(tr,e[1],float(line[1]),float(line[2])))
+                vals[(e[1],tr)].append(float(line[1]))
+                results[(e[1],tr)].append(float(line[2]))
+            if line[0] == "Runtime":
                 print("{} {} {}: {}".format(tr,te,e[1],float(line[1])))
-                if (e[1],te) not in results2:
-                    results2[(e[1],te)] = []
-                if (e[1],tr) not in results:
-                    results[(e[1],tr)] = []
+                vals[(e[1],tr)].append(te)
                 results[(e[1],tr)].append(float(line[1]))
-                results2[(e[1],te)].append(float(line[1]))
                 continue
 print(results)
 pdf = PdfPages(fname)
@@ -60,7 +64,8 @@ linecycler = itertools.cycle(lines)
 ax.set_color_cycle(['g','g','g','r','r','r','b','b','b'])
 #ax.set_xscale('log')
 for (e,(tr,_tr)) in itertools.product(es,zip(trs,_trs)):
-    ax.plot(_tes,results[(e[1],tr)],next(linecycler),label = "{}, {}".format(e[1].capitalize(),_tr))
+    vals[(e[1],tr)] = [val/1000 for val in vals[(e[1],tr)]]
+    ax.plot(vals[(e[1],tr)],results[(e[1],tr)],next(linecycler),label = "{}, {}".format(e[1].capitalize(),_tr))
 
 ax.legend(loc=2,handlelength=3,prop={'size':6})
 save2pdf(pdf)

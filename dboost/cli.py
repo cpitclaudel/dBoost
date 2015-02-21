@@ -35,6 +35,9 @@ def get_base_parser():
                              action = "store_const", const = -1,
                              help = "Trim output down to the bare minimum, reporting only the indices of outliers on stdout.")
 
+    base_parser.add_argument("--pr", dest = "runtime_progress", metavar = "N",
+                             action = "store", default = float("+inf"), type = int,
+                             help = "Print runtime progress for every provided number of test set entries")
     base_parser.set_defaults(disabled_rules = [])
 
     register_modules(base_parser, REGISTERED_MODELS)

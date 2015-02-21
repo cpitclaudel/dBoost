@@ -10,7 +10,6 @@ from dboost import features
 from dboost import cli
 from dboost.utils.read import stream_tuples
 from dboost.utils.printing import print_rows, debug
-import timeit
 
 parser = cli.get_stdin_parser()
 args, models, analyzers, rules = cli.parsewith(parser)
@@ -29,10 +28,8 @@ if not args.inmemory and not args.trainwith.seekable():
 # TODO: Input should be fed to all models in one pass.
 for model in models:
     for analyzer in analyzers:
-        start = timeit.default_timer()
         outliers = list(dboost.outliers(trainset_generator, testset_generator,
-                                        analyzer, model, rules, args.maxrecords))
-        stop = timeit.default_timer()
+                                        analyzer, model, rules,args.runtime_progress, args.maxrecords))
 
         if len(outliers) == 0:
             debug("   All clean!")
@@ -40,4 +37,3 @@ for model in models:
             print_rows(outliers, model, analyzer.hints,
                        features.descriptions(rules), args.verbosity)
             debug("   {} outliers found".format(len(outliers)))
-        debug("Runtime:",stop-start,"sec")
