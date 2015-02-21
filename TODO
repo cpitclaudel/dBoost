@@ -32,6 +32,8 @@
 
 - [X] C Fix title
 - [ ] Use autoref
+- [ ] C Balance columns on last page
+- [X] Z Fix undefined references
 - [X] Check source of definition of outliers in abstract (ref needed?)
 - [X] Should we add more discussion of the rules? NO
 - [X] Rephrase the outline so that it is more compact
