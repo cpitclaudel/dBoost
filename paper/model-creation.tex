@@ -64,7 +64,7 @@ As an example, consider the case of an airline adjusting status levels for its f
 
 In addition to providing better classification accuracy, partitioning may lead to better runtime performance by diminishing the size of the dataset covered by each model. These benefits are especially important when model construction performance does not scale linearly, and when data volumes are too large to be analyzed on a single machine.
 
-Finally, attribute-based partitioning enables analysis that was previously impossible. Assuming for example that a dataset with two columns has 4 classes identified by the value in the first column, each with 10 distinct expected values in the second column, a generic histogram-based analysis would discard the histogram for the pair of values as having too many buckets (40). A partitioned analysis, on the other hand, would allow the construction of four histograms, each with 10 regular bins and potentially a few outliers.
+Finally, attribute-based partitioning allows for previously impossible analysis. Assuming for example that a dataset with two columns has 4 classes identified by the value in the first column, each with 10 distinct expected values in the second column, a generic histogram-based analysis would discard the histogram for the pair of values as having too many buckets (40). A partitioned analysis, on the other hand, would allow the construction of four histograms, each with 10 regular bins and potentially a few outliers.
 
 In our prototype implementation, we focused on partitioning applied to the discrete histogram case; the technique, however, generalizes to all the models presented above.
 

@@ -12,7 +12,7 @@ The datasets are randomly generated sets of 2000 connections, listed in no parti
 
 \newcommand{\prop}[2]{#1\,\#\,#2}
 
-Just like in the \emph{Fizz-Buzz} example, numerical models are useless here, and histogram-based models fare well. In the first case, a histogram-based model with no correlation analysis is sufficient to flag the outliers. In the second case, the discrete statistical analysis phase singles out interesting pairs of correlated columns, including \texttt{(\prop{date}{day of week}, country)} and \texttt{(\prop{date}{is weekend}, country)}. A histogram-based model is sufficient to successfully flag outliers, without resorting to partitioning.
+As in the \emph{Fizz-Buzz} example, numerical models are useless here, whereas histogram-based models produce good results. In the first case, a histogram-based model with no correlation analysis is sufficient to flag the outliers. In the second case, the discrete statistical analysis phase singles out interesting pairs of correlated columns, including \texttt{(\prop{date}{day of week}, country)} and \texttt{(\prop{date}{is weekend}, country)}. A histogram-based model is sufficient to successfully flag outliers, without resorting to partitioning.
 
 \fxnote{Exclude self-correlations from the discrete analyzer to speed it up and get better results}
 
