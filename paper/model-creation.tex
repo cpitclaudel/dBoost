@@ -34,7 +34,7 @@ where $N$ is the number of individual components that the GMM comprises ($N$ is 
 
 Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Still, most of the fields obtained after expanding each tuple are discarded after the relevant ones are extracted for learning purposes; in most cases we expect the set of values retained to be much smaller than the set of all attributes, thus limiting the memory usage. 
 
-In addition, when dealing with large amounts of data, it is possible -- and indeed, preferable -- to train the model on a random subset of the dataset before running the full analysis. This approach is particularly relevant when using the Mixture model, but can be applied to all of them.
+In addition, when dealing with large amounts of data, it is possible -- and indeed, preferable -- to train the Mixture model on a randomly sampled subset of the data before running the full analysis. This approach is particularly relevant when using the Mixture model, but can be applied to all models to shorten the learning phase when dealing with very large datasets.
 
 \subsubsection{Histogram-based Modeling}
 \label{sec:histograms}
