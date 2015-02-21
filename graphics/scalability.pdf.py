@@ -37,6 +37,7 @@ for (tr,te,e) in itertools.product(trs,tes,es):
         for line in f:
             line = line.strip().split()
             if line[0] == "Runtime:":
+                print("{} {} {}: {}".format(tr,te,e[1],float(line[1])))
                 if (e[1],te) not in results2:
                     results2[(e[1],te)] = []
                 if (e[1],tr) not in results:
@@ -44,7 +45,7 @@ for (tr,te,e) in itertools.product(trs,tes,es):
                 results[(e[1],tr)].append(float(line[1]))
                 results2[(e[1],te)].append(float(line[1]))
                 continue
-dfile = "../datasets/real/intel/sensors-1000-dirty.txt"
+print(results)
 pdf = PdfPages(fname)
 setup()
 rcparams()

@@ -9,7 +9,7 @@ INTEL_TOTAL = 2313153
 # r) Gather results and put in a meaningful format
 
 train_sizes = [10,100,1000,10000,100000]
-test_sizes = [10,100,1000,10000,100000,1000000]#,INTEL_TOTAL]
+test_sizes = [10,100,1000,10000,100000,1000000,INTEL_TOTAL]
 
 def get_rand_sample(k,ofile):
     l = random.sample(range(0,INTEL_TOTAL),k)
