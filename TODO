@@ -5,7 +5,7 @@
 
 ** Research
 
-- [ ] R PAPER Closer look at references
+- [X] R PAPER Closer look at references
 - [X] Z Add stuff to related work section
 - [X] Z Find a good continuous multi-dimensional dataset
 - [X] Z Comparison to other datasets from the COORDS paper (Census DB, TPCH)
@@ -16,21 +16,24 @@
 - [X] C Add csail examples to invocation.md
 - [X] R Make the plots more reproducible (integrate in the Makefile)
 - [X] R Add a clean target to the Makefile
-- [-] Optimize the statistical analyzer
+- [X] Optimize the statistical analyzer
   - [X] C Look at performance
   - [X] C Fix TPCH
-  - [ ] Z Test TPCH
+  - [X] Z Test TPCH
 - [X] C Pass the output of the analyzer to models
 - [X] R Make CORDS a model
 - [X] C Check PyPy compatibility
-- [ ] R Prepare Intel dataset
+- [X] R Prepare Intel dataset
 - [X] Z Adjust mixture models to include all fields
 - [X] Z Fill in =more_info= in mixture.py
+- [ ] R Timing implementation
 
 ** Paper
 
 - [X] C Fix title
 - [ ] Use autoref
+- [ ] C Balance columns on last page
+- [X] Z Fix undefined references
 - [X] Check source of definition of outliers in abstract (ref needed?)
 - [X] Should we add more discussion of the rules? NO
 - [X] Rephrase the outline so that it is more compact
@@ -43,12 +46,12 @@
   - [X] Say "mixture model" instead of "Gaussian"
   - [X] Rasterize the mixture models plot
   - [X] C Reorganize plots
-  - [ ] R 3D Plots
+  - [X] R 3D Plots
   - [ ] R Scaling plots
-  - [ ] R Find a good theta value
-- [ ] Z/C Numerical benchmarks in the evaluation section
-- [-] Z/C Editing
-  - [ ] Z Mixture stuff
+  - [X] R Find a good theta value
+- [X] Z/C Numerical benchmarks in the evaluation section
+- [X] Z/C Editing
+  - [X] Z Mixture stuff
   - [X] C Add example to meta-modeling section
 - [X] Add missing stuff
   - [X] Z Outlier detection description for mixture models
