@@ -22,8 +22,8 @@ _trs = ["1K","10K","100K"]#,2313153]
 #es = ["1_gaussian1.5","0.7_mixture1_0.075","0.7_mixture2_0.075"]
 es = [
     [1,"gaussian",1.5],
-    [0.7,"mixture1",0.075],
-    [0.7,"mixture2",0.075]
+    [0.7,"mixture1",0.1],
+    [0.7,"mixture2",0.05]
 ]
 # build data
 results = {} 
