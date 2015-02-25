@@ -57,11 +57,12 @@ pyplot.gcf().set_size_inches(to_inches(240), to_inches(240)) # full column size 
 
 ax = pyplot.gca()
 ax.set_title("Scalability")
-ax.set_xlabel("Test Set Size (Thousands)")
+ax.set_xlabel("Test set size (Thousands)")
 ax.set_ylabel("Runtime (s)")
-lines = ["-","--","-."]
+lines = ["-","--",":"]
 linecycler = itertools.cycle(lines)
 ax.set_color_cycle(['g','g','g','r','r','r','b','b','b'])
+ax.set_xlim([0,2000])
 #ax.set_xscale('log')
 for (e,(tr,_tr)) in itertools.product(es,zip(trs,_trs)):
     vals[(e[1],tr)] = [val/1000 for val in vals[(e[1],tr)]]
