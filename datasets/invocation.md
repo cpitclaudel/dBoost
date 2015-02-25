@@ -22,13 +22,13 @@ This example shows how adding a few extraction rules manages to capture relative
 
 An example of suspect behavior detection. User 0 always logs in from the same country; user 1 logs in from different countries on week-days and week-ends. User 2 doesn't follow any particular pattern.
 
-    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins0
-    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins1
-    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins2
+    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins0 -d unix2date -d bits
+    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins1 -d unix2date -d bits
+    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 datasets/synthetic/logins2 -d unix2date -d bits
 
 The three invocations test for proper detection of outliers on the three users, individually
 
-    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1}) -d div -d mod --in-memory
+    time ./dboost/dboost-stdin.py --histogram 0.6 0.05 --discretestats 8 2 <(cat datasets/synthetic/logins{0,1}) -d div -d mod --in-memory -d unix2date -d bits
     time ./dboost/dboost-stdin.py --partitionedhistogram 2 0.9 0.03 --discretestats 16 3 <(cat datasets/synthetic/logins{0,1,2}) -d div -d mod -d bits --in-memory -d unix2date
 
 These ones merge multiple datasets
@@ -42,3 +42,6 @@ These ones merge multiple datasets
 ## Intel
 
     time ./dboost/dboost-stdin.py -F ' ' --statistical .7 --mixture 2 .1 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float
+    time ./dboost/dboost-stdin.py -F ' ' --statistical .7 --mixture 2 .075 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float
+    time ./dboost/dboost-stdin.py -F ' ' --statistical .7 --mixture 1 .075 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float
+    time ./dboost/dboost-stdin.py -F ' ' --statistical .7 --gaussian 1.5 datasets/real/intel/sensors-1000_dataonly.txt -d unix2date_float
