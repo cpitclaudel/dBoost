@@ -1,4 +1,4 @@
-\section{\dBoost/ overview}
+\section{dBoost overview}
 \label{sec:overview}
 
 We designed a framework that analyzes, models, and detects outliers in data.
@@ -20,3 +20,34 @@ The different components of our system are summarized as follows and described i
 \item Data modeling -- We apply various machine-learning algorithms to build models of the data (Section~\ref{sec:model-creation}).
 \item Outlier detection -- Using the models built in the previous stage and user-provided sensitivity thresholds, we report outliers identified by the models trained during the previous stage (Section~\ref{sec:outlier-detection}).
 \end{enumerate}
+
+In Table~\ref{tab:example} we show an example of our tool applied to a small dataset that includes a transaction ID and a column of integers.
+Our tool reads the data row-by-row and expands the integer field into four additional columns (Date, Time, Weekday, and Mod-10) based on the field type.
+These tuple expansions are not materialized in the database, but rather fed. 
+
+\begin{table*}[t]
+\centering
+\begin{tabular}{|c|c|c||c|c|c|c|c|c|}
+\multicolumn{3}{c}{Original Data} & \multicolumn{3}{c}{Tuple Expansions of Int (not materialized)} & \multicolumn{3}{c}{Tuple Expansions of SSN (not materialized)} \\
+\hline
+XID & Reg. Date & SSN & Year & Weekday & ... & Length & Signature & ... \\ \hline
+1 & 1416497422 & 783-345-2351 & 2014 & Thursday && 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  \\ \hline 
+\rowcolor{red} 
+2 & 1418201134 & 773-746- & 2014  & Wednesday && 12 & $<$num$>$-$<$num$>$- &  \\ \hline 
+3 & 1420359855 & 773-289-5552 & 2015  & Sunday && 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  \\ \hline 
+4 & 1421575392 & 849-843-2729 & 2015 & Sunday && 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  \\ \hline 
+\rowcolor{red} 
+5 & 01302015 & 773-387-9201 & 1970 & Friday && 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  \\ \hline 
+6 & 1424866716 & 821-322-1857 & 2015 & Wednesday && 8 & $<$num$>$-$<$num$>$-$<$num$>$ &  \\ \hline 
+7 & 1425059692 & 822-971-1892 & 2015 & Friday && 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  \\ \hline 
+%1 & 1416497422 & 11/20/2014 & 15:30:32 & Thursday & 2 \\ \hline 
+%2 & 1418201134 & 12/10/2014 & 8:45:34 & Wednesday & 4 \\ \hline 
+%3 & 1420359855 & 1/4/2015 & 8:24:15 & Sunday & 5 \\ \hline 
+%4 & 1421575392 & 1/18/2015 & 10:03:12 & Sunday & 2 \\ \hline 
+%\rowcolor{red} 5 & 01302015 & 1/16/1970 & 1:40:15 & Friday & 5 \\ \hline 
+%6 & 1424866716 & 2/25/2015 & 12:18:36 & Wednesday & 6 \\ \hline 
+%7 & 1425059692 & 2/27/2015 & 17:54:52 & Friday & 2 \\ \hline 
+\end{tabular}
+\caption{An example dataset showing an outlier detected by a histogram model}
+\label{tab:example}
+\end{table*}
