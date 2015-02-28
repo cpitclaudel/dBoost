@@ -3,7 +3,7 @@
 
 Models, once properly trained, are used for classification and detection of outliers -- either in incoming \texttt{INSERT} operations on a running system, or in existing rows (possibly but not necessarily the ones used during the model training phase). % LATER: Citation about databases sizes?
 
-Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, \dBoost automatically indicates which values in the row caused it to be flagged as an outlier.
+Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, \dBoost/ automatically indicates which values in the row caused it to be flagged as an outlier.
 
 The inter-column correlations are also taken into account during modeling: if the statistical analysis phase detected a correlation between two columns $a$ and $b$, each tuple $t$ will be augmented by an additional field that contains the corresponding pair $(t_a, t_b)$. This field is treated as a single, multidimensional value, and is analyzed similarly to the other values by the models capable of modeling multi-dimensional data.
 
