@@ -41,7 +41,7 @@ if batch:
 
 YS = [[1,3,3],[2,1.01,2,2],[1,6],[1,6]]
 
-LABELS = [["1970","2014","2015"], ["Wed.","Thu.","Fri.","Sun."], ["8", "12"], [r"nnn ", r"nn"]]
+LABELS = [["1970","2014","2015"], ["Wed.","Thu.","Fri.","Sun."], ["8", "12"], [r"nnn", r"nn"]]
 
 for ys, labels in zip(YS, LABELS):
     make_hist(ys, labels)
