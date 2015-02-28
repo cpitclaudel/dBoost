@@ -13,7 +13,7 @@ This invocation runs in 0.604 seconds\footnote{All runtime results were obtained
 \begin{figure*}
 \centering
   \paddedgraphics{../graphics/csail-stats}
-  \caption{Accuracy of dBoost on the CSAIL dataset. Outliers were detected using $\theta = 0.8$ and $\epsilon = 0.025$; the tuples are sorted according to why they are -- or are flagged as -- outliers. The false positives in the last category are due to names whose proper capitalization is not title case.}
+  \caption{Accuracy of dBoost on the CSAIL dataset, evaluated by comparison to manual annotation of outliers in the directory. Outliers were detected using $\theta = 0.8$ and $\epsilon = 0.025$; the tuples are sorted according to why they are -- or are flagged as -- outliers. The false positives in the last category are due to names whose proper capitalization is not title case. Green represents region of agreement between the output of dBoost and manual annotation, red shows outliers in the manual annotation that dBoost did not find, orange shows records that dBoost flagged as outliers that the manual annotation did not, and grey indicates values that could not manually be categorized with complete certainty as either outlying or non-outlying value.}
   \label{fig:csail-evaluation}
 \end{figure*}
 
@@ -31,7 +31,7 @@ This invocation runs in 0.604 seconds\footnote{All runtime results were obtained
     twktem@mit.edu, Administrative Assistant
 \end{lstlisting}
 
-In total, 451 entries contain outliers, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. By changing the input parameters to $\theta = 0.8, \epsilon = 0.05$, most of the outliers due to office numbers disappear due to the lower sensitivity. \lstinline{Hacker, Alyssa} disappears from the list, since e-mails with inconsistent capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$. In total there are $68$ outliers.
+In total, 451 entries contain outliers, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. By changing the input parameters to $\theta = 0.8, \epsilon = 0.05$, most of the outliers due to office numbers disappear due to the lower sensitivity. \lstinline{Hacker, Alyssa} disappears from the list, since e-mails with inconsistent capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$. After tuning these parameters, we are left with 68 outliers.
 
 \begin{lstlisting}[gobble=2]
   Bitdiddle, Ben, $NE47-989$,
