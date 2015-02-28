@@ -1,9 +1,9 @@
 \subsection{Data modeling}
 \label{sec:model-creation}
 
-The current implementation of dBoost contains three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well; the last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. The following three subsections discuss the particulars of these three models; section~\ref{sec:partitioning} presents a way of extending models to deal with data that lend itself well to partitioning over a particular attribute.
+The current distribution of \dBoost contains three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well; the last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. The following three subsections discuss the particulars of these three models; section~\ref{sec:partitioning} presents a way of extending models to deal with data that lends itself well to partitioning over a particular attribute.
 
-\begin{figure}%
+\begin{figure}
   \centering
   \newcommand{\cramped}[3]{\subfloat[#2]{\includegraphics[width=.3\linewidth]{#1}\label{fig:#3}}}
   \cramped{../graphics/gaussians-preview.pdf}{Gaussian}{gaussian}\hspace*{.01\linewidth}

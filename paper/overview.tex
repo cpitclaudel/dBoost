@@ -6,7 +6,7 @@ The whole system can be seen in Figure~\ref{fig:pipeline}.
 
 As a first step, tuples are read from the database and expanded: a set of type-dependent features is extracted for each field. These features express simple properties of the data, such as the length of a string, or the parity of an integer.
 
-These expanded tuples are then analyzed in order to obtain simple statistical information, and to detect soft functional dependencies between different fields. The expanded tuples are then used to train one of three data models (Gaussian, Mixtures, and Histograms), with the help of the statistics and correlation hints gathered at the previous stage.
+These expanded tuples are then analyzed in order to obtain simple statistical information, and to detect soft functional dependencies between different fields. The expanded tuples are then used to train one of three data models (Gaussian, Mixtures, or Histograms), with the help of the statistics and correlation hints gathered at the previous stage.
 
 Finally, the trained model is used to classify tuples into regular records and outliers; these tuples can be the ones the model was trained with, or future inputs to the database system.
 
