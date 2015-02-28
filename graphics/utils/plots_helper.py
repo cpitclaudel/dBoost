@@ -104,7 +104,7 @@ def sensors3D(dfile, ofile):
     nb_plots = len(columnsets)
 
     COLUMNS = 1
-    fig = pyplot.figure(figsize = (to_inches(200), to_inches(650 / 2.0))) #504|240, 666
+    fig = pyplot.figure(figsize = (to_inches(200), to_inches(630 / 2.0))) #504|240, 666
 
     for subplot_id, columns in enumerate(sorted(columnsets)):
         sensors3D_one(fig, (nb_plots // COLUMNS, COLUMNS, 1 + subplot_id), inliers, outliers, *columns)
