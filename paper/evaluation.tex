@@ -42,7 +42,7 @@ This sections presents the results of running our tool on the following real and
   \end{description}
 \end{itemize}
 
-These datasets showcase the power of our methods, both in terms of classification power, and in terms of expressiveness and succinctness when adding new rules to the system\footnote{Indeed, the set of rules used for tuple expansion is user-configurable, and new rules can be easily added; thus, specific knowledge about the data can be taught to the system by users, expressing some soft form of data integrity constraints.}. Where relevant we included performance measurements: these numbers intend to demonstrate that our approach is computationally reasonable, and that our models scale linearly given a fixed training size. Our prototype requires in the order of a few minutes to process a million elements using a high-level single-threaded scripting language; a production-ready implementation would run one or two orders of magnitude faster by taking advantage of the inherent parallelizability of the models, using an efficient on-disk representation of the data, and relying on a lower-level language with an efficient optimizing compiler.
+These datasets showcase the power of our methods, both in terms of classification power and expressiveness and succinctness when adding new rules to the system\footnote{Indeed, the set of rules used for tuple expansion is user-configurable, and new rules can be easily added; thus, specific knowledge about the data can be taught to the system by users, expressing some soft form of data integrity constraints.}. Where relevant we include performance measurements. These numbers intend to demonstrate that our approach is computationally reasonable and that our models scale linearly given a fixed training size. We show in Section~\ref{sec:performance-evaluation} how our prototype requires on the order of a few minutes to process a million elements using a high-level single-threaded scripting language. A production-ready implementation would run one or two orders of magnitude faster by taking advantage of the inherent parallelizability of the models, using an efficient on-disk representation of the data, and relying on a lower-level language with an efficient optimizing compiler.
 
 The following subsections describe each of the test sets and associated results in greater detail.
 
@@ -50,5 +50,6 @@ The following subsections describe each of the test sets and associated results 
 \input{logins-evaluation}
 \input{csail-directory-evaluation}
 \input{intel-lab-data-evaluation}
+\input{performance-evaluation}
 %\input{presidential-campaign-evaluation}
 %\input{mimic2-evaluation}

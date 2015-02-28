@@ -55,16 +55,4 @@ This is because points that are within the normal range of the data will be sele
 %When the number of nearest neighbors evaluated is increased to $10$ in Figure~\ref{fig:lof_10}, the outliers detected are further outside the main cluster of points.
 We find that LOF is not as useful at pointing out the tagged outliers in the sensor data set.
 
-\subsubsection{Scalability}
 
-%We show in Figure~\ref{fig:scaling} how \dBoost/ scales as the amount of data used to build the models and to test on the models increases.
-We measured the total runtime of our system, including the data modeling and outlier detection phases for the Simple Gaussian and Mixture models with 1 and 2 Gaussians. In these experiments, we used random sampling to provide different-sized training sets to build the data model and test sets from which the system detects outliers.
-
-In Figure~\ref{fig:scaling}, we show the runtime of our prototype. Each line shows a model trained with a different training set size. As shown in the figure, runtime scales linearly as the test set size increases.
-
-\begin{figure}
-\centering
-\paddedgraphics{../graphics/scalability.pdf}
-\caption{The scalability of the Gaussian and Mixture Models produced with different training sample sizes (listed next to the model in the legend) as the test set size increases.}
-\label{fig:scaling}
-\end{figure}
