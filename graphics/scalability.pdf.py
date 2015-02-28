@@ -39,7 +39,7 @@ for (tr,te,e) in itertools.product(trs,tes,es):
     if e[1] == "gaussian":
         ofile = "../results/sensors_{}_stat{}_{}{}.out".format(tr,*e)
     elif e[1] == "histogram":
-        ofile = "../results/csail-timings-{}-{}.txt".format(tr,tes_h)
+        ofile = "../results/csail/csail-timings-{}-{}.txt".format(tr,tes_h)
     else:
         ofile = "../results/sensors_{}_stat{}_{}_{}.out".format(tr,*e)
     with open(ofile,'r') as f:

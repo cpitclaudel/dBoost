@@ -37,7 +37,7 @@ def make_trainset(training_size):
     return make_scaled_dataset(inpath, outpath, training_size)
 
 def get_args(training_path, dataset_path, printout_delay):
-    cmd = "../dboost/dboost-stdin.py --statistical 1 --histogram 0.8 0.2 --in-memory --pr {} --train-with".format(printout_delay)
+    cmd = "/build/pypy3-2.4.0-linux64/bin/pypy3 ../dboost/dboost-stdin.py --statistical 1 --histogram 0.8 0.2 --in-memory --pr {} --train-with".format(printout_delay)
     args = shlex.split(cmd)
     args.append(training_path)
     args.append(dataset_path)
