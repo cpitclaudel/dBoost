@@ -22,9 +22,9 @@ def save2pdf(pdf):
     pyplot.savefig(pdf, format = 'pdf')
     pyplot.clf()
 
-def rcparams():
+def rcparams(fontsize = 9):
     mpl.rcParams.update({
-        "font.size": 9,
+        "font.size": fontsize,
         "font.family": "serif",
         "font.serif": "computer modern roman",
         "axes.titlesize": "medium",
