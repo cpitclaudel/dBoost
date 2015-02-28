@@ -1,9 +1,9 @@
 \subsection{Outlier Detection}
 \label{sec:outlier-detection}
 
-Models, once properly trained, are used for classification and detection of outliers -- either in incoming \texttt{INSERT} operations on a running system, or in existing rows (typically, the ones used during the model training phase). % LATER: Citation about databases sizes?
+Models, once properly trained, are used for classification and detection of outliers -- either in incoming \texttt{INSERT} operations on a running system, or in existing rows (possibly but not necessarily the ones used during the model training phase). % LATER: Citation about databases sizes?
 
-Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, dBoost automatically indicates which values in the row caused it to be flagged as an outlier.
+Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, \dBoost automatically indicates which values in the row caused it to be flagged as an outlier.
 
 The inter-column correlations are also taken into account during modeling: if the statistical analysis phase detected a correlation between two columns $a$ and $b$, each tuple $t$ will be augmented by an additional field that contains the corresponding pair $(t_a, t_b)$. This field is treated as a single, multidimensional value, and is analyzed similarly to the other values by the models capable of modeling multi-dimensional data.
 
@@ -15,7 +15,7 @@ The simple Gaussian model measures how much each value differs from the mean com
 \end{align}
 where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
 
-In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfied Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus simply reports single-attribute outliers.
+In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfy Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus reports only single-attribute outliers.
 
 \subsubsection{Mixture Modeling}
 In the Mixture model, the likelihood of each (possibly multi-dimensional) field is evaluated using the corresponding GMM. This model operates under the assumption that the data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM. 
@@ -60,4 +60,4 @@ where $h_a(x)$ designates the number of tuples with value $x$ for field $a$, and
 In this model, identifying and reporting the outlying attributes is simply a matter of remembering which values $x_a$ failed test \eqref{eqn:hist-outlier}.
 
 \subsubsection{Partition-based modeling}
-In the partition-based case, outlier are detected by the underlying models. To classify a given expanded tuple, each group of correlated attributes is divided between a one-attribute key and a group sub-population attributes. This group of attributes is then passed to the underlying model corresponding to the given value of the key, and the whole original tuple is reported as an outlier if any of its groups of sub-population attributes is marked as such by the underlying models.
+In the partition-based case, outliers are detected by the underlying models. To classify a given expanded tuple, each group of correlated attributes is divided between a one-attribute key and a group sub-population attributes. This group of attributes is then passed to the underlying model corresponding to the given value of the key, and the whole original tuple is reported as an outlier if any of its groups of sub-population attributes is marked as such by the underlying models.
