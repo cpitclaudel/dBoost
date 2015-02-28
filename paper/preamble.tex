@@ -95,6 +95,7 @@
 \newlength{\figurepadding}
 \setlength{\figurepadding}{0.5em}
 \newcommand{\paddedgraphics}[2][]{\includegraphics[#1]{#2}\vspace{\figurepadding}}
+\newcommand{\timing}[4][\second]{analysis time: \SI{#2}{#1}, training time: \SI{#3}{\second}, total runtime: \SI{#4}{#1}}
 
 \def\dBoost/{\emph{dBoost}}
 
