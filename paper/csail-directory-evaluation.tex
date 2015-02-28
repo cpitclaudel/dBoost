@@ -6,9 +6,9 @@ The CSAIL directory is an online directory of about 1000 faculty, staff and stud
 Some entries, such as a phone number, may be missing from the directory. Nonetheless, we expect our framework to be useful in flagging discrepancies between different records. Since the notion of what constitutes an outlier here is imprecise at best, we also expect the tool to allow the user to explore different sets of parameters. To illustrate the process, we present the results returned by two iterations of the tool in the next subsection, each with increasingly strict limits on the number of outliers returned. Because the CSAIL test set is exclusively textual, we use the histogram model for evaluation; continuous models would not fare as well, since only part of the expanded tuples are numeric.
 
 \subsubsection{Initial run: low specificity filtering}
-The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0.2$. Correlation detection is disabled for these experiments.
+The search for outliers is initiated with parameters $\theta = 0.8, \epsilon = 0.2$ (\timing {0.36}{.11}{0.60}). Correlation detection is disabled for these experiments.
 
-This invocation runs in \SI{0.60}{\second}, and produces a long list of outliers; a small subset of these is presented below. For privacy reasons, names,  phone numbers, office numbers, and emails have been omitted or anonymized in the following listings.
+This invocation produces a long list of outliers; a small subset of these is presented below. For privacy reasons, names,  phone numbers, office numbers, and emails have been omitted or anonymized in the following listings.
 
 \begin{figure*}
 \centering
