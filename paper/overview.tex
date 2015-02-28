@@ -23,14 +23,14 @@ The different components of our system are summarized as follows and described i
 
 In Table~\ref{tab:example} we show an example of our tool applied to a small dataset that includes a transaction ID, a registration date (Reg. Date), and a social security number (SSN).
 Our tool reads the data row-by-row and expands the registration date based on the integer field type into additional columns, of which two, year and weekday, are shown.
-Similarly, SSN is also expanded based on its string field type to the string length and a copy of the string with numbers stripped out and replaced by $<$num$>$.
+Similarly, SSN is also expanded based on its string field type to the string length and a copy of the string with numbers stripped out and replaced by \texttt{num}.
 These tuple expansions are not materialized in the database, but rather fed into the model one-by-one, after which the expansions for each row are discarded.
 The rows detected as outliers by the Histogram model are highlighted in red in the table. 
 
 The Histogam model detects the row with \texttt{XID=2} as an outlier due to the Length and Strip Number expansions.
-As seen in the corresponding histograms, the values 8 and \texttt{<num>-<num>-} are seen few enough times in the data that they are flagged as suspicious.
+As seen in the corresponding histograms, the values \texttt{8} and \texttt{<num>-<num>} are seen few enough times in the data that they are flagged as suspicious.
 The row with \texttt{XID=5} is also flagged as an outlier due to the incorrect registration date.
-The histogram analyzing the years shows that 1970 does not occur in the database frequently, so it is reported as an outlier. 
+The histogram analyzing the years shows that 1970 does not occur in the database frequently. 
 
 \begin{table*}[t]
 \begin{center}

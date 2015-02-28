@@ -5,7 +5,7 @@ Following the tuple expansion phase, the expanded tuples go through the statisti
 
 The statistical information includes the average, variance, standard deviation and extremes of each numerical column, as well as approximate cardinality measurements for all columns. These statistics have two purposes. First, they are used at the end of the statistical analysis phase to determine which columns in the table are correlated. Second, the statistics can be used during data modeling to speed up the training phase of certain models by precompiling parameters needed by the models (e.g., mean and standard deviation for the Gaussian model).
 
-We focus on two inter-column correlation detection strategies:
+We focus on two inter-column correlation strategies:
 
 \begin{itemize}
 \item For mostly-numerical datasets, we use Pearson's product-moment
