@@ -7,16 +7,16 @@ from utils import TANGO
 mpl.rcParams['text.latex.preamble'] = [r"\usepackage{siunitx}"]
 
 LOF_SCALE, BASE_SIZE = 5, 10
-MARKER_ALPHA, EDGE_WIDTH = 1, 0.1
+MARKER_ALPHA, EDGE_WIDTH = 0.9, 0.1
 
 def get_marker_params(color, **kwargs):
-    return dict(facecolor=TANGO[color][0], edgecolor=TANGO[color][2], **kwargs)
+    return dict(facecolor="none", edgecolor=TANGO[color][2], alpha = MARKER_ALPHA, **kwargs)
     # must use facecolor: see https://github.com/matplotlib/matplotlib/issues/4083
 
-INLIER3D = dict(linewidth=EDGE_WIDTH, s = BASE_SIZE / 2.0, **get_marker_params('green'))
-OUTLIER3D = dict(linewidth=EDGE_WIDTH, s = BASE_SIZE / 2.0, **get_marker_params('red'))
-INLIER2D = dict(linewidth=EDGE_WIDTH, alpha=MARKER_ALPHA, s=BASE_SIZE, **get_marker_params('green'))
-OUTLIER2D = dict(linewidth=EDGE_WIDTH, alpha=MARKER_ALPHA, **get_marker_params('red'))
+INLIER3D = dict(linewidth=EDGE_WIDTH, s = BASE_SIZE, marker='o', **get_marker_params('green'))
+OUTLIER3D = dict(linewidth=EDGE_WIDTH, s = BASE_SIZE * 2, marker='x', **get_marker_params('red'))
+INLIER2D = dict(linewidth=EDGE_WIDTH, s = BASE_SIZE, **get_marker_params('green'))
+OUTLIER2D = dict(linewidth=EDGE_WIDTH, **get_marker_params('red'))
 
 sensors_schema = [r"Temperature (\si{\degreeCelsius})",r"Humidity (\si{\percent})",r"Light (\si{\lux})",r"Voltage (\si{\volt})"]
 sensors_labels_padding= [2.5, 2.5, 3.25, 2.75]
@@ -81,7 +81,7 @@ def sensors3D_one(fig, subplot_id, inliers, outliers, x, y, z):
         pane.set_pane_color(NO_COLOR)
 
     scatter3D(ax, inliers, x, y, z, INLIER3D, s=BASE_SIZE / 2.0)
-    scatter3D(ax, outliers, x, y, z, OUTLIER3D, s=BASE_SIZE / 2.0, marker='x')
+    scatter3D(ax, outliers, x, y, z, OUTLIER3D, s=BASE_SIZE / 2.0)
 
     NBINS = 7
     for ax_id in ('x', 'y'):
@@ -100,12 +100,11 @@ def sensors3D(dfile, ofile):
     # mpl.rcParams["font.size"] = 9
     pyplot.close()
 
-    NB_ROWS = 2
     columnsets = list(combinations(range(len(data)), 3))[:2]
     nb_plots = len(columnsets)
 
     COLUMNS = 1
-    fig = pyplot.figure(figsize = (to_inches(200), to_inches(650 / 2.0))) #504|240, 666
+    fig = pyplot.figure(figsize = (to_inches(200), to_inches(630 / 2.0))) #504|240, 666
 
     for subplot_id, columns in enumerate(sorted(columnsets)):
         sensors3D_one(fig, (nb_plots // COLUMNS, COLUMNS, 1 + subplot_id), inliers, outliers, *columns)
