@@ -5,10 +5,10 @@ Models, once properly trained, are used for classification and detection of outl
 
 Given that databases can contain tables with tens or hundreds of columns, simply flagging a row as an outlier is insufficient: users cannot be expected to painstakingly analyze each outlying row. Instead, \dBoost/ automatically indicates which values in the row caused it to be flagged as an outlier.
 
-The inter-column correlations are also taken into account during modeling: if the statistical analysis phase detected a correlation between two columns $a$ and $b$, each tuple $t$ will be augmented by an additional field that contains the corresponding pair $(t_a, t_b)$. This field is treated as a single, multidimensional value, and is analyzed similarly to the other values by the models capable of modeling multi-dimensional data.
+The inter-column correlations are also taken into account during modeling: if the statistical analysis phase detected a correlation between two columns $a$ and $b$, each tuple $t$ will be augmented by an additional field that contains the corresponding pair $(t_a, t_b)$. This field is treated as a single, multidimensional value, and is analyzed similarly to the other values by the models.
 
 \subsubsection{Simple Gaussian Modeling}
-The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass to flag outliers. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
+The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
 \begin{align}
   |v_a - \mu_a| \ge \theta \cdot \sigma_a
   \label{eqn:gaussian-outlier}
@@ -18,7 +18,7 @@ where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as descr
 In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfy Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus reports only single-attribute outliers.
 
 \subsubsection{Mixture Modeling}
-In the Mixture model, the likelihood of each (possibly multi-dimensional) field is evaluated using the corresponding GMM. This model operates under the assumption that the data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM. 
+In the Mixture model, the likelihood of each (possibly multidimensional) field is evaluated using the corresponding GMM. This model operates under the assumption that data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM. 
 
 This makes it possible to assign a Gaussian component to each tuple, and then flag as outliers the tuples that are not sufficiently well explained by their corresponding Gaussian (see~\cite{Roberts1999}). Given a tuple $t$ and its corresponding Gaussian $c$, this means rejecting $t$ if
 
