@@ -72,7 +72,7 @@ for (e,(tr,_tr)) in itertools.product(es,zip(trs,_trs)):
     #vals[(e[1],tr)] = [val/1000 for val in vals[(e[1],tr)]]
     ax.plot(vals[(e[1],tr)],results[(e[1],tr)],next(linecycler),label = "{}, {}".format(e[1].capitalize(),_tr))#,marker='x',markersize=2.0)
 
-ax.set_xticklabels(['0','5M','10M','15M','20M'])
+ax.set_xticklabels(['0','0.5M','1M','1.5M','2.0M'])
 ax.legend(loc=2,handlelength=3,prop={'size':6})
 save2pdf(pdf)
 pdf.close()
