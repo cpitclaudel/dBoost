@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from utils import filename, save2pdf
+from utils import filename
 from utils.plots_helper import sensors3D
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import pyplot
