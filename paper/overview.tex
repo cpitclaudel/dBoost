@@ -25,7 +25,7 @@ In Table~\ref{tab:example} we show an example of our tool applied to a small dat
 Our tool reads the data row-by-row and expands the registration date based on the integer field type into additional columns, of which two, year and weekday, are shown.
 Similarly, SSN is also expanded based on its string field type to the string length and a copy of the string with numbers stripped out and replaced by $<$num$>$.
 These tuple expansions are not materialized in the database, but rather fed into the model one-by-one, after which the expansions for each row are discarded.
-The outliers detected by the Histogram model are highlighted in red in the table. 
+The rows detected as outliers by the Histogram model are highlighted in red in the table. 
 
 \begin{table*}[t]
 \begin{center}
@@ -35,12 +35,12 @@ The outliers detected by the Histogram model are highlighted in red in the table
 \hline
 XID & Reg. Date & SSN & Year & Weekday & ... & Length & Strip Numbers & ... \\ \hline
 1 & 1416497422 & 783-345-2351 & 2014 & Thursday && 12 & $<$num$>$-$<$num$>$-$<$num$>$ &...  \\ \hline 
-\rowcolor{red} 
-2 & 1418201134 & 773-746- & 2014  & Wednesday &...& 8 & $<$num$>$-$<$num$>$- &...  \\ \hline 
+%\rowcolor{red} 
+\textcolor{red}{2} &\textcolor{red}{ 1418201134 }&\textcolor{red}{ 773-746- }&\textcolor{red}{ 2014  }&\textcolor{red}{ Wednesday }&\textcolor{red}{...}&\textcolor{red}{ 8 }&\textcolor{red}{ $<$num$>$-$<$num$>$- }&\textcolor{red}{...}  \\ \hline 
 3 & 1420359855 & 773-289-5552 & 2015  & Sunday &...& 12 & $<$num$>$-$<$num$>$-$<$num$>$ &...  \\ \hline 
 4 & 1421575392 & 849-843-2729 & 2015 & Sunday &...& 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  ...\\ \hline 
-\rowcolor{red} 
-5 & 01302015 & 773-387-9201 & 1970 & Friday &...& 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  ...\\ \hline 
+%\rowcolor{red} 
+\textcolor{red}{5 }&\textcolor{red}{ 01302015 }&\textcolor{red}{ 773-387-9201 }&\textcolor{red}{ 1970 }&\textcolor{red}{ Friday }&\textcolor{red}{...}&\textcolor{red}{ 12 }&\textcolor{red}{ $<$num$>$-$<$num$>$-$<$num$>$ }&\textcolor{red}{  ...}\\ \hline 
 6 & 1424866716 & 821-322-1857 & 2015 & Wednesday &...& 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  ...\\ \hline 
 7 & 1425059692 & 822-971-1892 & 2015 & Friday &...& 12 & $<$num$>$-$<$num$>$-$<$num$>$ &  ...\\ \hline 
 %1 & 1416497422 & 11/20/2014 & 15:30:32 & Thursday & 2 \\ \hline 
