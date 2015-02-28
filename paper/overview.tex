@@ -28,7 +28,7 @@ These tuple expansions are not materialized in the database, but rather fed into
 The outliers detected by the Histogram model are highlighted in red in the table. 
 
 \begin{table*}[t]
-\centering
+\begin{center}
 \begin{tabular}{|c|c|c||c|c|c||c|c|c|}
 \multicolumn{3}{c}{Original Data} & \multicolumn{3}{c}{Tuple Expansions of Int} & \multicolumn{3}{c}{Tuple Expansions of SSN} \\
 \multicolumn{3}{c}{} & \multicolumn{3}{c}{(not materialized)} & \multicolumn{3}{c}{(not materialized)} \\
@@ -53,4 +53,12 @@ XID & Reg. Date & SSN & Year & Weekday & ... & Length & Strip Numbers & ... \\ \
 \end{tabular}
 \caption{An example dataset showing outliers detected by a histogram model.}
 \label{tab:example}
+\end{center}
+\hspace{6.5cm} 
+\includegraphics{../graphics/table-histograms-year}
+\hspace{2.8cm} 
+\includegraphics{../graphics/table-histograms-length}
+\hspace{1.5cm} 
+\includegraphics{../graphics/table-histograms-sig}
+
 \end{table*}
