@@ -21,23 +21,14 @@ The different components of our system are summarized as follows and described i
 \item Outlier detection -- Using the models built in the previous stage and user-provided sensitivity thresholds, we report outliers identified by the models trained during the previous stage (Section~\ref{sec:outlier-detection}).
 \end{enumerate}
 
-In Table~\ref{tab:example} we show an example of our tool applied to a small dataset that includes a transaction ID, a registration date (Reg. Date), and a social security number (SSN).
-Our tool reads the data row-by-row and expands the registration date based on the integer field type into additional columns, of which two, year and weekday, are shown.
-Similarly, SSN is also expanded based on its string field type to the string length and a copy of the string with numbers stripped out and replaced by \texttt{num}.
-These tuple expansions are not materialized in the database, but rather fed into the model one-by-one, after which the expansions for each row are discarded.
-The rows detected as outliers by the Histogram model are highlighted in red in the table. 
+Table~\ref{tab:example} illustrates these ideas on a very small dataset that includes a transaction ID, a registration date (Reg. date), and a social security number (SSN). We read the data row-by-row, and expand the registration date and SSN values into additional columns. The particular expansion rules are based on the type of each values: Reg. date is an \texttt{INT}, so it gets expanded, among others, into a year and a weekday. SSN is a \texttt{STRING}, and gets expanded into among others a length and a copy of the string with numbers stripped out and replaced by \texttt{<num>}. These tuple expansions are not materialized in the database, but rather fed into the model one-by-one, after which they are discarded.
 
 \newcommand*{\boldtt}[1]{\fontfamily{pcr}\selectfont #1}
-
-The histogram model detects the row with \texttt{XID=2} as an outlier due to the Length and Strip Number expansions.
-As seen in the corresponding histograms, the values \texttt{8} and \texttt{<num>-<num>} are seen few enough times in the data that they are flagged as suspicious.
-The row with \texttt{XID=5} is also flagged as an outlier due to the incorrect registration date.
-The histogram analyzing the years shows that 1970 does not occur in the database frequently. 
 
 \begin{table*}[t]
 \begin{center}
 \begin{tabular}{|c|c|c||c|c|c||c|c|c|}
-\multicolumn{3}{c}{Original Data} & \multicolumn{3}{c}{Tuple Expansions of Int} & \multicolumn{3}{c}{Tuple Expansions of SSN} \\
+\multicolumn{3}{c}{Original Data} & \multicolumn{3}{c}{Expansions of Reg. Date} & \multicolumn{3}{c}{Expansions of SSN} \\
 \multicolumn{3}{c}{} & \multicolumn{3}{c}{(not materialized)} & \multicolumn{3}{c}{(not materialized)} \\
 \hline
 XID & Reg. Date & SSN & Year & Weekday & \ldots & Length & Strip Numbers & \ldots \\ \hline
@@ -62,6 +53,6 @@ XID & Reg. Date & SSN & Year & Weekday & \ldots & Length & Strip Numbers & \ldot
 \end{tabular}
 \end{center}
 \vspace{1cm}
-\caption{An example dataset showing outliers detected by a histogram model.}
+\caption{An example dataset showing outliers based on a histogram model. The rows detected as outliers are highlighted in red. The row with \texttt{XID=2} is flagged due to its ``Length'' and ``Strip Numbers'' expansions: as seen in the corresponding histograms, the values \texttt{8} and \texttt{<num>-<num>} are seen few enough times in the data that they are flagged as suspicious. The row with \texttt{XID=5} is also flagged as an outlier due to its incorrect registration date: indeed, the histogram analyzing the years shows that 1970 does not occur in the database frequently.}
 \label{tab:example}
 \end{table*}
