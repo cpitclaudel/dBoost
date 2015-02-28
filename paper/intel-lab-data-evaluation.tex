@@ -44,7 +44,7 @@ In this section we compare the results of our Gaussian and Mixture models to Loc
 LOF measures the degree to which a data point is an outlier by comparing each data point's reachability to those of its $k$ nearest neighbors.
 The higher the LOF, the more isolated the data point relative to its local neighborhood and therefore the more likely the point is to be an outlier.
 
-One downside of LOF compared to \dBoost is that it can only evaluate two-dimensional data.
+One downside of LOF compared to \dBoost/ is that it can only evaluate two-dimensional data.
 The original algorithm also has significant computation complexity in order to calculate the distance to the nearest neighbors of each data point.
 One benefit of LOF, however, is that the algorithm returns a continuous value that indicates the degree to which a point is an outlier, as opposed to a binary value.
 
@@ -57,7 +57,7 @@ We find that LOF is not as useful at pointing out the tagged outliers in the sen
 
 \subsubsection{Scalability}
 
-%We show in Figure~\ref{fig:scaling} how \dBoost scales as the amount of data used to build the models and to test on the models increases.
+%We show in Figure~\ref{fig:scaling} how \dBoost/ scales as the amount of data used to build the models and to test on the models increases.
 We measured the total runtime of our system, including the data modeling and outlier detection phases for the Simple Gaussian and Mixture models with 1 and 2 Gaussians. In these experiments, we used random sampling to provide different-sized training sets to build the data model and test sets from which the system detects outliers.
 
 In Figure~\ref{fig:scaling}, we show the runtime of our prototype. Each line shows a model trained with a different training set size. As shown in the figure, runtime scales linearly as the test set size increases.

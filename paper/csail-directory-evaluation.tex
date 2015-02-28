@@ -13,7 +13,7 @@ This invocation runs in 0.604 seconds\footnote{All runtime results were obtained
 \begin{figure*}
 \centering
   \paddedgraphics{../graphics/csail-stats}
-  \caption{Accuracy of \dBoost on the CSAIL dataset, evaluated by comparison to manual annotation of outliers in the directory. Outliers were detected using $\theta = 0.8$ and $\epsilon = 0.025$; the tuples are sorted according to why they are -- or are flagged as -- outliers. The false positives in the last category are due to names whose proper capitalization is not title case. Green represents region of agreement between the output of dBoost and manual annotation, red shows outliers in the manual annotation that dBoost did not find, orange shows records that dBoost flagged as outliers that the manual annotation did not, and grey indicates values that could not manually be categorized with complete certainty as either outlying or non-outlying value.}
+  \caption{Accuracy of \dBoost/ on the CSAIL dataset, evaluated by comparison to manual annotation of outliers in the directory. Outliers were detected using $\theta = 0.8$ and $\epsilon = 0.025$; the tuples are sorted according to why they are -- or are flagged as -- outliers. The false positives in the last category are due to names whose proper capitalization is not title case. Green represents region of agreement between the output of dBoost and manual annotation, red shows outliers in the manual annotation that dBoost did not find, orange shows records that dBoost flagged as outliers that the manual annotation did not, and grey indicates values that could not manually be categorized with complete certainty as either outlying or non-outlying value.}
 
   \label{fig:csail-evaluation}
 \end{figure*}
@@ -48,7 +48,7 @@ In total, 451 entries contain outliers, out of a total of 1000. Office numbers a
   > Value '$ $' doesn't match feature '$empty$'
 \end{lstlisting}
 
-In addition to identifying outliers, \dBoost is equipped with tools that provide the user with additional feedback on why features were identified as outliers.
+In addition to identifying outliers, \dBoost/ is equipped with tools that provide the user with additional feedback on why features were identified as outliers.
 
 \begin{lstlisting}[gobble=2]
   Bitdiddle, Ben, $NE47-989$,
@@ -96,4 +96,4 @@ Manual inspection of the results reveal that most of the outliers reported are a
 
 The case of \lstinline{DeFect} is correct, but our tool notes that it does not adhere to the casing standard derived from other tuples, and thus reports it.
 
-We compared \dBoost's output to a manually annotated version of the CSAIL directory to analyze its accuracy; the results are shown in Figure~\ref{fig:csail-evaluation}.
+We compared \dBoost/'s output to a manually annotated version of the CSAIL directory to analyze its accuracy; the results are shown in Figure~\ref{fig:csail-evaluation}.
