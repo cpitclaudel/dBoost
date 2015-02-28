@@ -8,7 +8,7 @@ The statistical information includes the average, variance, standard deviation a
 We focus on two inter-column correlation detection strategies:
 
 \begin{itemize}
-\item For mostly-numeric datasets, we use Pearson's product-moment
+\item For mostly-numerical datasets, we use Pearson's product-moment
   correlation. It relies on the Pearson correlation coefficient,
   which measures linear dependencies between two vectors.
 
@@ -20,7 +20,7 @@ We focus on two inter-column correlation detection strategies:
 
   $R$'s value always lies between $-1$ and $1$. An $R$ value close to 0 indicates little or no correlation, while values close to $+1$ or $-1$ indicate strong positive or negative correlations, respectively. Pairs of columns with a value of \(R\) above a user-specified threshold are added to a list of correlation hints, for use by the models.
 
-\item For mostly non-numeric datasets, we use a cardinality-based measure, flagging groups of expanded columns as correlated when their joint cardinality is below a user-specified threshold. When two columns are correlated (e.g., when one is computed directly from the other), the number of distinct pairs in the columns is similar to the number of distinct items in either column. On the other hand, when two columns are independent, the number of distinct pairs is close to the product of the number of distinct values in each column.
+\item For mostly non-numerical datasets, we use a cardinality-based measure, flagging groups of expanded columns as correlated when their joint cardinality is below a user-specified threshold. When two columns are correlated (e.g., when one is computed directly from the other), the number of distinct pairs in the columns is similar to the number of distinct items in either column. On the other hand, when two columns are independent, the number of distinct pairs is close to the product of the number of distinct values in each column.
 \end{itemize}
 
 It is debatable whether correlations should be looked for in expanded tuple fields that come from the same original value. On the one hand such dependencies may provide valuable insight about the data (think for example of a date whose ``day of week'' value would correlate with the month, for example for an event happening all Mondays of May and all Thursdays of June). On the other hand, taking these subtuple correlations into account vastly increases the size of the search space, and may add spurious hits to the results. Experimentally, we found that discarding intra-field correlations made the entire process faster and more robust, and did not hurt accuracy on our test sets.
