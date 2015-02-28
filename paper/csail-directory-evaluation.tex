@@ -21,22 +21,10 @@ This invocation produces a long list of outliers; a small subset of these is pre
 \begin{lstlisting}[gobble=2]
   Hacker, Alyssa, 32-D968,
     $aph@CSAIL.MIT.EDU$, Postdoctoral Associate
+  > Value '$aph@CSAIL.MIT.EDU$' doesn't match feature '$lower case$'
 
   Bitdiddle, Ben, $NE47-989$,
     bbitdid@mit.edu, Graduate Student
-
-  $Lu-ater$, Eva, 32-G972,
-    eva@csail.mit.edu, Research Scientist
-
-  Tweakit, $ $, 32-G699,
-    twktem@mit.edu, Administrative Assistant
-\end{lstlisting}
-
-In total, 451 entries contain outliers, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. By changing the input parameters to $\theta = 0.8, \epsilon = 0.05$, most of the outliers due to office numbers disappear due to the lower sensitivity. \lstinline{Hacker, Alyssa} disappears from the list, since e-mails with inconsistent capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$. After tuning these parameters, we are left with 68 outliers.
-
-\begin{lstlisting}[gobble=2]
-  Bitdiddle, Ben, $NE47-989$,
-    bbitdid@csail.mit.edu, Graduate Student
   > Value '$NE47-989$' doesn't match feature '$signature$'
 
   $Lu-ater$, Eva, 32-G972,
@@ -44,9 +32,11 @@ In total, 451 entries contain outliers, out of a total of 1000. Office numbers a
   > Value '$Lu-ater$' doesn't match feature '$title case$'
 
   Tweakit, $ $, 32-G699,
-    twktem@mit.edu, Administrative Assistant ...
+    twktem@mit.edu, Administrative Assistant
   > Value '$ $' doesn't match feature '$empty$'
 \end{lstlisting}
+
+In total, 451 entries contain outliers, out of a total of 1000. Office numbers are often flagged, as well as names and email addresses. By changing the input parameters to $\theta = 0.8, \epsilon = 0.05$, most of the outliers due to office numbers disappear due to the lower sensitivity. \lstinline{Hacker, Alyssa} disappears from the list, since e-mails with inconsistent capitalization occur frequently enough in the database that they are not considered outliers at sensitivity level $\epsilon = 0.05$. After tuning these parameters, we are left with 68 outliers.
 
 In addition to identifying outliers, \dBoost/ is equipped with tools that provide the user with additional feedback on why features were identified as outliers.
 
