@@ -1,7 +1,9 @@
 \subsection{Data modeling}
 \label{sec:model-creation}
 
-The current implementation of \dBoost/ contains three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well; the last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. The following three subsections discuss the particulars of these three models; section~\ref{sec:partitioning} presents a way of extending models to deal with data that lends itself well to partitioning over a particular attribute.
+The current implementation of \dBoost/ contains three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well.
+They assume that data is distributed normally.
+The last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. The following three subsections discuss the particulars of these three models; section~\ref{sec:partitioning} presents a way of extending models to deal with data that lends itself well to partitioning over a particular attribute.
 
 \begin{figure}
   \centering
@@ -41,13 +43,14 @@ In addition, when dealing with large amounts of data, it is possible -- and inde
 Simple Gaussian modeling and Gaussian Mixture modeling both offer good results for continuous numerical data such as the ones produced by sensors, but suffer from two limitations:
 
 \begin{itemize}
-\item They make strong hypotheses about the distribution of the data under study
+\item They make strong assumptions about the distribution of the data under study
 \item They fail to capture patterns in discrete numerical data, non-numerical data, or heterogeneous data
 \end{itemize}
 
 Our last model (Figure~\ref{fig:histogram}) does not make any assumption about the data under study. Instead, it counts the occurrences of each unique value in each column of the expanded tuple and for each set of potentially correlated sub-tuples (as suggested by the analysis module). These counts, accumulated over the entire dataset, provide a \emph{de facto} distribution of the data in each field and set of correlated fields.
 
-Described as above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. To limit memory usage, and to speed up the modeling phase, we instead discard histograms as soon as they reach a certain size -- say, 16 bins. Discarding histograms when their number of bins reaches a fixed threshold is just one of a number of heuristics that could be implemented here; the idea is that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned (as an extreme example, the histogram of an attribute with no repeated values would only have one value per bin, and would not yield any insight about the data). With this discarding heuristic applied, histograms are quick to generate and extremely memory efficient.
+%Described as above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. 
+To limit memory usage, and to speed up the modeling phase, we discard histograms as soon as they reach a certain size -- say, 16 bins. Discarding histograms when their number of bins reaches a fixed threshold is just one of a number of heuristics that could be implemented here; the idea is that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned (as an extreme example, the histogram of an attribute with no repeated values would only have one value per bin, and would not yield any insight about the data). With this discarding heuristic applied, histograms are quick to generate and extremely memory efficient.
 
 Histograms also have the valuable property of treating sets of fields (obtained via correlation analysis) and single fields in the exact same way, thus permitting to model single columns or groups of attributes indifferently. Finally, because they make no assumption about the data they manipulate (aside from the requirement that it be of small cardinality), histograms are able to accurately describe a broad class of discrete distributions.
 

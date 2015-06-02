@@ -1,10 +1,20 @@
-\section{dBoost overview}
+\subsection{dBoost overview}
 \label{sec:overview}
 
-We designed a framework that analyzes, models, and detects outliers in data.
+\begin{figure*}
+  \centering %TODO: Should this be full width?
+  \paddedgraphics[width=.8\textwidth]{../graphics/pipeline.pdf}
+  \caption{The \dBoost/ pipeline}
+  \label{fig:pipeline}
+\end{figure*}
+
+
+We designed a framework built on the tuple expansion from Section~\ref{sec:expansion} that analyzes, models, and detects outliers.
 The whole system can be seen in Figure~\ref{fig:pipeline}.
 
-As a first step, tuples are read from the database and expanded: a set of type-dependent features is extracted for each field. These features express simple properties of the data, such as the length of a string, or the parity of an integer.
+As a first step, tuples are read from the database and expanded using the methodology described in Section~\ref{sec:expansion}.
+A set of type-dependent features is extracted for each field. 
+These features express simple properties of the data, such as the length of a string, or the parity of an integer.
 
 These expanded tuples are then analyzed in order to obtain simple statistical information, and to detect soft functional dependencies between different fields. The expanded tuples are then used to train one of three data models (Gaussian, Mixtures, or Histograms), with the help of the statistics and correlation hints gathered at the previous stage.
 
@@ -15,13 +25,18 @@ From a high level view, our pipeline is implemented as a three-pass streaming al
 The different components of our system are summarized as follows and described in detail in the following sections:
 
 \begin{enumerate}
-\item Preprocessing -- Tuples are expanded using knowledge about the database schema and field types (Section~\ref{sec:preprocessing}).
+\item Tuple expansion -- Tuples are expanded using knowledge about the database schema and field types.
 \item Statistical analysis -- The expanded data is analysed to gather basic statistics, along with correlation information. These statistics are used for modeling and outlier detection (Section~\ref{sec:statistical-analysis}).
 \item Data modeling -- We apply various machine-learning algorithms to build models of the data (Section~\ref{sec:model-creation}).
 \item Outlier detection -- Using the models built in the previous stage and user-provided sensitivity thresholds, we report outliers identified by the models trained during the previous stage (Section~\ref{sec:outlier-detection}).
 \end{enumerate}
 
-Table~\ref{tab:example} illustrates these ideas on a very small dataset that includes a transaction ID, a registration date (Reg. date), and a social security number (SSN). We read the data row-by-row, and expand the registration date and SSN values into additional columns. The particular expansion rules are based on the type of each values: Reg. date is an \texttt{INT}, so it gets expanded, among others, into a year and a weekday. SSN is a \texttt{STRING}, and gets expanded into among others a length and a copy of the string with numbers stripped out and replaced by \texttt{<num>}. These tuple expansions are not materialized in the database, but rather fed into the model one-by-one, after which they are discarded.
+Table~\ref{tab:example} illustrates these ideas on a very small dataset that includes a transaction ID, a registration date (Reg. date), and a social security number (SSN). We read the data row-by-row, and expand the registration date and SSN values into additional columns. The particular expansion rules are based on the type of each values: Reg. date is an \texttt{INT}, so it gets expanded, among others, into a year and a weekday. SSN is a \texttt{STRING}, and gets expanded into among others a length and a copy of the string with numbers stripped out and replaced by \texttt{<num>}.
+
+Tuple expansions are not materialized in the database, but rather fed into the model one-by-one as the engine processes each row.
+After being processed, the expanded tuples are discarded.
+Thus, tuples must be expanded before each stage of the engine's pipeline.
+
 
 \newcommand*{\boldtt}[1]{\fontfamily{pcr}\selectfont #1}
 
@@ -56,3 +71,5 @@ XID & Reg. Date & SSN & Year & Weekday & \ldots & Length & Strip Numbers & \ldot
 \caption{An example dataset showing outliers based on a histogram model. The rows detected as outliers are highlighted in red. The row with \texttt{XID=2} is flagged due to its ``Length'' and ``Strip Numbers'' expansions: as seen in the corresponding histograms, the values \texttt{8} and \texttt{<num>-<num>} are seen few enough times in the data that they are flagged as suspicious. The row with \texttt{XID=5} is also flagged as an outlier due to its incorrect registration date: indeed, the histogram analyzing the years shows that 1970 does not occur in the database frequently.}
 \label{tab:example}
 \end{table*}
+
+
