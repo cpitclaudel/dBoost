@@ -4,7 +4,7 @@
 
 ## Abstract
 
-Databases are prone to input errors such as by human users or faulty
+Databases are prone to input errors such as by human users or faulty 
 sensors. Automatic detection of outliers in the input data would allow
 these errors to be detected and database administrators to be notified
 when input data does not fit the typical data set. During our class
