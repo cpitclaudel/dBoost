@@ -8,13 +8,11 @@
   \label{fig:pipeline}
 \end{figure*}
 
+The overall design of the dBoost system can be seen in Figure~\ref{fig:pipeline}.
+The first step is to perform \emph{tuple expansion}, where additional semantically rich candidate features are added on to each tuple.
+Examples of features include the length of a string, the parity of an integer, or the range of dates an integer column can represent when it is interpreted as a Unix time stamp.
+This process is described in Section~\ref{sec:expansion}.
 
-We designed a framework built on the tuple expansion from Section~\ref{sec:expansion} that analyzes, models, and detects outliers.
-The whole system can be seen in Figure~\ref{fig:pipeline}.
-
-As a first step, tuples are read from the database and expanded using the methodology described in Section~\ref{sec:expansion}.
-A set of type-dependent features is extracted for each field. 
-These features express simple properties of the data, such as the length of a string, or the parity of an integer.
 
 These expanded tuples are then analyzed in order to obtain simple statistical information, and to detect soft functional dependencies between different fields. The expanded tuples are then used to train one of three data models (Gaussian, Mixtures, or Histograms), with the help of the statistics and correlation hints gathered at the previous stage.
 
@@ -25,7 +23,7 @@ From a high level view, our pipeline is implemented as a three-pass streaming al
 The different components of our system are summarized as follows and described in detail in the following sections:
 
 \begin{enumerate}
-\item Tuple expansion -- Tuples are expanded using knowledge about the database schema and field types.
+\item Tuple expansion -- Tuples are expanded using knowledge about the database schema and field types (Section~\ref{sec:expansion}).
 \item Statistical analysis -- The expanded data is analysed to gather basic statistics, along with correlation information. These statistics are used for modeling and outlier detection (Section~\ref{sec:statistical-analysis}).
 \item Data modeling -- We apply various machine-learning algorithms to build models of the data (Section~\ref{sec:model-creation}).
 \item Outlier detection -- Using the models built in the previous stage and user-provided sensitivity thresholds, we report outliers identified by the models trained during the previous stage (Section~\ref{sec:outlier-detection}).
