@@ -9,7 +9,7 @@ PYPLOTS_PNGS_RENDERED=$(PYPLOTS_PNGS:.png.py=.png)
 print-%:
 	@echo $* = $($*)
 
-all: bare_conf.pdf
+all: paper.pdf
 
 $(PYPLOTS_PDFS_RENDERED): %.pdf: %.pdf.py
 	$< $@
@@ -19,21 +19,21 @@ $(PYPLOTS_PNGS_RENDERED): %.png: %.png.py
 	$< $@
 	convert $@ -trim "$@"
 
-bare_conf.pdf: $(TEXFILES) $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
-	pdflatex -draftmode -shell-escape bare_conf.tex
-	bibtex bare_conf.aux
-	pdflatex -draftmode -shell-escape bare_conf.tex
-	pdflatex -shell-escape bare_conf.tex
+paper.pdf: $(TEXFILES) $(PYPLOTS_PDFS_RENDERED) $(PYPLOTS_PNGS_RENDERED)
+	pdflatex -draftmode -shell-escape paper.tex
+	bibtex paper.aux
+	pdflatex -draftmode -shell-escape paper.tex
+	pdflatex -shell-escape paper.tex
 
 paper-grayscale.pdf: paper.pdf
 	gs -sDEVICE=pdfwrite -sProcessColorModel=DeviceGray \
 	   -sColorConversionStrategy=Gray -dOverrideICC \
-	   -o "bare_conf-grayscale.pdf" -f "base_conf.pdf"
+	   -o "paper-grayscale.pdf" -f "paper.pdf"
 
 grayscale: paper-grayscale.pdf
 
-view: bare_conf.pdf
-	open bare_conf.pdf
+view: paper.pdf
+	open paper.pdf
 
 clean:
 	rm -fv *.pdf *.aux *.bbl *.blg *.log *.out $(PYPLOTS_PDFS_RENDERED)

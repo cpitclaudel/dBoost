@@ -1,9 +1,13 @@
 \subsection{Data modeling}
 \label{sec:model-creation}
 
-The current implementation of \dBoost/ contains three data modeling strategies. Two of them are relatively simple machine-learning based applications that handle mostly continuous numerical data well.
+The current implementation of \dBoost/ contains three data modeling strategies. The first two (Gaussians and mixture models) are standard statistical models that handle  continuous data well.
 They assume that data is distributed normally.
-The last one makes much weaker assumptions about its input, and is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. The following three subsections discuss the particulars of these three models; section~\ref{sec:partitioning} presents a way of extending models to deal with data that lends itself well to partitioning over a particular attribute.
+The third uses histograms, and makes weaker assumptions about its input.  It is best suited for studying discrete heterogeneous distributions produced by gathering human-input data.  Although histograms are widely used to capture statistics in databases, we a simple pruning heuristic to limit the number and size of histograms we have to construct for outlier detection purposes.
+
+Finally, we develop a novel extension of our models to partition data, generating different models different subsets of the data.
+
+The next four subsections describe these ideas in more detail.
 
 \begin{figure}
   \centering
@@ -15,17 +19,19 @@ The last one makes much weaker assumptions about its input, and is best suited f
   \label{fig:models}
 \end{figure}
 
+
 \subsubsection{Simple Gaussian Modeling}
 \label{sec:gaus_model}
-The univariate Gaussian model (Figure~\ref{fig:gaussian}) treats each value $x_i$ of the expanded tuples as random sample drawn from a normal distribution $\mathcal N(\mu_i, \sigma_i)$.
+Univariate Gaussians (Figure~\ref{fig:gaussian}) are a widely used statistical model fo data.  They treat each value $x_i$ of the expanded tuples as random sample drawn from a normal distribution $\mathcal N(\mu_i, \sigma_i)$.
 
 The model's parameters (a pair $(\mu, \sigma)$ for each numerical column) are computed as each column's mean and standard deviation. In the common case where the dataset has not significantly changed between the analysis and the modeling passes, the information obtained during the statistical analysis pass is sufficient to derive these parameters.
 
 Despite its simplicity, this model presents the attractive property of requiring extremely little memory -- on the order of the size of one expanded tuple.
 
+
 \subsubsection{Mixture Modeling}
 \label{sec:mixture_model}
-The multivariate Gaussian Mixture model (Figure~\ref{fig:mixture}) takes advantage of the correlation hints supplied by the statistical analysis pass to model sub-tuples of the expanded tuples as samples from multivariate Gaussian mixtures (GMMs), creating one model per group of correlated columns.
+Multivariate Gaussian Mixture models (Figure~\ref{fig:mixture}) are another standard statistical model.  They take advantage of the correlation hints supplied by the statistical analysis pass to model sub-tuples of the expanded tuples as samples from multivariate Gaussian mixtures (GMMs), creating one model per group of correlated columns.
 
 For example, if the statistical analysis phase outlines a pair of fields $(f_1, f_2)$ as good candidate for joint modeling, then the Mixture modeling strategy will learn a particular GMM to model this correlation. Pairs of values $(X_1, X_2)$ are here assumed to have been produced by random sampling off a distribution of the form
 \begin{align*}
@@ -61,7 +67,7 @@ The models presented above treat attributes and sets of correlated attributes as
 
 As an example, consider the case of an airline adjusting status levels for its frequent fliers, using the number of flights for each passenger as well as their status level. A non-partitioned analysis may not return any interesting information, but a partitioned analysis could single out passengers in lower status levels traveling significantly more than average, or passengers with higher status traveling rarely. This would work even if statuses were stored as textual data, with no indication of their relative rankings.
 
-The general approach, given a dataset and a pre-existing model, therefore consists in extracting sets of attributes based on correlation hints provided by earlier stages of the pipeline, and dividing each group of attributes between a single key (in the example, the status level) and one or more sub-population attributes (in the example, the number of flights). One instance of the selected model is then built for each value of the key. For example, if the statistical analysis phase highlights a correlation between columns $A$ (status levels) and $B$ (number of flights), and column $A$ contains values $a_1, \dots, a_n$ (\texttt{bronze}, \texttt{silver}, \texttt{gold}, \dots), then we distribute the pairs $(A, B)$ into $n$ partitions based on the value of $A$; values of $B$ in each of these partitions are then modeled independently (in the example, this yields a different model of flights count for each status level).
+The general approach, given a dataset and a pre-existing model, therefore consists of extracting sets of attributes based on correlation hints provided by earlier stages of the pipeline, and dividing each group of attributes between a single key (in the example, the status level) and one or more sub-population attributes (in the example, the number of flights). One instance of the selected model is then built for each value of the key. For example, if the statistical analysis phase highlights a correlation between columns $A$ (status levels) and $B$ (number of flights), and column $A$ contains values $a_1, \dots, a_n$ (\texttt{bronze}, \texttt{silver}, \texttt{gold}, \dots), then we distribute the pairs $(A, B)$ into $n$ partitions based on the value of $A$; values of $B$ in each of these partitions are then modeled independently (in the example, this yields a different model of flights count for each status level).
 
 This type of approach is useful when the distribution for an attribute or set of attributes is multi-modal. A high-level non-partitioned analysis will reveal values that fall in none of the classes; a partitioned approach, on the other hand, may more easily reveal discrepancies by suppressing interference between each class.
 
