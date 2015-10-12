@@ -1,7 +1,13 @@
 \subsection{Soft constraint specifications: Fizz-Buzz}
+
+\srm{The example needs to be rewritten in the language of the introduction -- make it clear what the records in the database are, and what the expanded fields we add are.  The rule in below is misleading because it is not clear that it is actually expanding the fields.  We should instead say something like ``our library includes expansions that check for the divisibility of numbers by integers, and these rules make it easy to detect outliers in this example''.
+}
+
 We start with an extremely simple example, highlighting how easy our system makes it to encode and check data integrity constraints. The Fizz-Buzz programming exercise is based on a children's game and frequently found in programming interviews. The synthetic dataset we generated obeys the following rules: for each record \(x, y\), $x$ is a number between 0 and 1000, and $y$ is ``Fizz'' if \(x \mod 3 = 0\), ``Buzz'' if \(x \mod 5 = 0\), ``FizzBuzz'' if \(x \mod 15 = 0\), and \(x\) otherwise. In our synthetic dataset we introduced three outliers: \texttt{(25, "Fizz")}, \texttt{(28, "Woof!")}, \texttt{(30, "Buzz")}. Each demonstrates a different error, namely swapping ``Fizz'' and ``Buzz'', producing entirely incorrect output, and failing to recognize that a number is divisible by both $3$ and $5$.
 
 A traditional way of checking that all tuples verify the production rule outlined above is to encode this rule itself as a database integrity constraint. This requires encoding the full complexity of the exercise in the rule, and would require manual adjustments if the rules were to change. Instead, a user might want to specify the bare minimum for the system to infer the rules; in this case, it is sufficient to add one extraction rule, mapping integers to two booleans denoting whether they are divisible by $3$ or $5$. Such a rule could be written like this:
+
+
 
 \begin{minted}{python3}
 @rule
