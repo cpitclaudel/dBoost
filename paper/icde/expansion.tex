@@ -32,11 +32,11 @@ Figure~\ref{fig:tuple-expansion} lists some of the rules our library provides fo
 \newcommand{\sigrule}[1]{\mbox{\texttt{\spaceskip=0.1em{#1}}}}
 
 \begin{figure}[h]
-  \newcommand{\largest}{strip numbers:}
+  \newcommand{\largest}{date, \ldots:}
   $\begin{stackedlines}
     \texttt{string:}\\
     \texttt{\parbox{\widthof{1418222134.325}}{"32-G414"}}
-  \end{stackedlines} \longrightarrow
+  \end{stackedlines} \rightarrow
   \begin{cases}
     % \text{id:} & \texttt{32-G414}\\
     \text{length:} & \texttt{7}\\
@@ -44,7 +44,7 @@ Figure~\ref{fig:tuple-expansion} lists some of the rules our library provides fo
     \text{uppercase:} & \texttt{True (1)}\\
     \text{lowercase:} & \texttt{False (0)}\\
     \text{email ok:} & \texttt{False (0)}\\
-    \text{strip numbers:} & \texttt{<num>-G<num>}\\
+    \text{stripped:} & \texttt{<num>-G<num>}\\
     \text{\parbox{\widthof{\largest}}{title case:}} & \texttt{True (1)}
   \end{cases}\hfill$
 % \end{figure}
@@ -52,7 +52,7 @@ Figure~\ref{fig:tuple-expansion} lists some of the rules our library provides fo
   $\begin{stackedlines}
     \texttt{int:}\\
     \texttt{\parbox{\widthof{1418222134.325}}{1418222134}}
-  \end{stackedlines} \longrightarrow
+  \end{stackedlines} \rightarrow
   \begin{cases}
     % \text{id:} & \texttt{1418222134}\\
     \text{date:} & \texttt{(2014,12,10)}\\
@@ -68,7 +68,7 @@ Figure~\ref{fig:tuple-expansion} lists some of the rules our library provides fo
    $\begin{stackedlines}
     \texttt{float:}\\
     \texttt{1418222134.325}
-  \end{stackedlines} \longrightarrow
+  \end{stackedlines} \rightarrow
   \begin{cases}
     % \text{id:} & \texttt{1418222134.325}\\
     \text{intpart:} & \texttt{1418222134}\\
