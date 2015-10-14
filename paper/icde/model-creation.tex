@@ -1,11 +1,10 @@
 \subsection{Data modeling}
 \label{sec:model-creation}
 
-The current implementation of \dBoost/ contains three data modeling strategies. The first two (Gaussians and mixture models) are standard statistical models that handle  continuous data well.
-They assume that data is distributed normally.
-The third uses histograms, and makes weaker assumptions about its input.  It is best suited for studying discrete heterogeneous distributions produced by gathering human-input data.  Although histograms are widely used to capture statistics in databases, we a simple pruning heuristic to limit the number and size of histograms we have to construct for outlier detection purposes.
+The current implementation of \dBoost/ contains three data modeling strategies. The first two (Gaussians and mixture models) are standard statistical models that handle continuous data well, but assumes that it follows a uni- or multi-modal Gaussian distribution.
+The third uses histograms, and makes weaker assumptions about its input. It is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. Although histograms are widely used to capture statistics in databases, we discuss novel decision criteria to detect outliers from histograms, and we present a simple pruning heuristic to limit the number and size of histograms that we construct for outlier detection purposes.
 
-Finally, we develop a novel extension of our models to partition data, generating different models different subsets of the data.
+In addition to uniformly modeling of entire datasets, dBoost is capable of automatically clustering data, generating different models for different subsets of the data. We call this approach \emph{meta-modeling}.
 
 The next four subsections describe these ideas in more detail.
 
@@ -18,7 +17,6 @@ The next four subsections describe these ideas in more detail.
   \caption{Simple visualization of the outlier detection strategy employed by each model. Possible outlier values are shown in red.}
   \label{fig:models}
 \end{figure}
-
 
 \subsubsection{Simple Gaussian Modeling}
 \label{sec:gaus_model}
