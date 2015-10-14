@@ -1,10 +1,10 @@
 \subsection{Data modeling}
 \label{sec:model-creation}
 
-The current implementation of \dBoost/ contains three data modeling strategies. The first two (Gaussians and mixture models) are standard statistical models that handle continuous data well, but assumes that it follows a uni- or multi-modal Gaussian distribution.
-The third uses histograms, and makes weaker assumptions about its input. It is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. Although histograms are widely used to capture statistics in databases, we discuss novel decision criteria to detect outliers from histograms, and we present a simple pruning heuristic to limit the number and size of histograms that we construct for outlier detection purposes.
+The current implementation of \dBoost/ contains three data modeling strategies. The first two (Gaussians and mixture models) are standard statistical models that handle continuous data well, but assume that it follows a uni- or multi-modal Gaussian distribution.
+The third uses histograms, and makes weaker assumptions about its input: it is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. Although histograms are widely used to capture statistics in databases, we present a simple pruning heuristic to limit the number and size of histograms that we construct for outlier detection purposes. Overall, dBoost modeling capabilities are rather basic: its strength is precisely that tuple expansion phase makes mathematically sophisticated analyses mostly useless in detecting outliers. \cpc{Does this read better than before?}
 
-In addition to uniformly modeling of entire datasets, dBoost is capable of automatically clustering data, generating different models for different subsets of the data. We call this approach \emph{meta-modeling}.
+In addition to uniformly modeling of entire datasets, dBoost is capable of automatically clustering data using expanded attributes, generating different models for different subsets of the data. We call this novel approach to outlier detection \emph{meta-modeling}.
 
 The next four subsections describe these ideas in more detail.
 
@@ -20,7 +20,7 @@ The next four subsections describe these ideas in more detail.
 
 \subsubsection{Simple Gaussian Modeling}
 \label{sec:gaus_model}
-Univariate Gaussians (Figure~\ref{fig:gaussian}) are a widely used statistical model fo data.  They treat each value $x_i$ of the expanded tuples as random sample drawn from a normal distribution $\mathcal N(\mu_i, \sigma_i)$.
+Univariate Gaussians (Figure~\ref{fig:gaussian}) are a widely used statistical model for data. They treat each value $x_i$ of the expanded tuples as random sample drawn from a normal distribution $\mathcal N(\mu_i, \sigma_i)$.
 
 The model's parameters (a pair $(\mu, \sigma)$ for each numerical column) are computed as each column's mean and standard deviation. In the common case where the dataset has not significantly changed between the analysis and the modeling passes, the information obtained during the statistical analysis pass is sufficient to derive these parameters.
 
@@ -38,7 +38,7 @@ For example, if the statistical analysis phase outlines a pair of fields $(f_1, 
 
 where $N$ is the number of individual components that the GMM comprises ($N$ is a user-defined value in our implementation, but abundant literature exists on the subject of choosing $N$~\cite{Schwartz1978}~\cite{Akaike1974}), and $\pi_j, \mu_j$ and $\Sigma_j$ are parameters of the GMM learned as part of the modeling pass~\cite{Dempster1977}.
 
-Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Still, most of the fields obtained after expanding each tuple are discarded after the relevant ones are extracted for learning purposes; in most cases we expect the set of values retained to be much smaller than the set of all attributes, thus limiting the memory usage. 
+Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Still, most of the fields obtained after expanding each tuple are discarded after the relevant ones are extracted for learning purposes; in most cases we expect the set of values retained to be much smaller than the set of all attributes, thus limiting the memory usage.
 
 In addition, when dealing with large amounts of data, it is possible -- and indeed, preferable -- to train the Mixture model on a randomly sampled subset of the data before running the full analysis. This approach is particularly relevant when using the Mixture model, but can be applied to all models to shorten the learning phase when dealing with very large datasets.
 

@@ -7,6 +7,8 @@ Given that databases can contain tables with tens or hundreds of columns, simply
 
 The inter-column correlations are also taken into account during modeling: if the statistical analysis phase detected a correlation between two columns $a$ and $b$, each tuple $t$ will be augmented by an additional field that contains the corresponding pair $(t_a, t_b)$. This field is treated as a single, multidimensional value, and is analyzed similarly to the other values by the models.
 
+As for statistical modeling, the heuristics that we employ for simple Gaussian and mixture modeling are not new; our contribution rests in the heuristics that we use for histograms (\ref{sec:outlier-detection-histograms}), and in the description of \emph{meta-modeling}.
+
 \subsubsection{Simple Gaussian Modeling}
 The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
 \begin{align}
@@ -18,7 +20,7 @@ where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as descr
 In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfy Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus reports only single-attribute outliers.
 
 \subsubsection{Mixture Modeling}
-In the Mixture model, the likelihood of each (possibly multidimensional) field is evaluated using the corresponding GMM. This model operates under the assumption that data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM. 
+In the Mixture model, the likelihood of each (possibly multidimensional) field is evaluated using the corresponding GMM\. This model operates under the assumption that data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM.
 
 This makes it possible to assign a Gaussian component to each tuple, and then flag as outliers the tuples that are not sufficiently well explained by their corresponding Gaussian (see~\cite{Roberts1999}). Given a tuple $t$ and its corresponding Gaussian $c$, this means rejecting $t$ if
 
@@ -31,11 +33,11 @@ where $\theta$ is a user-defined parameter between 0 and 1, and $d_0$ is the Mah
 As in the Gaussian Model, providing the user with a list of attributes that caused the row to be flagged as an outlier is simply a matter of tracking correlations that satisfied equation~\eqref{eqn:mixture-outlier}.
 
 \subsubsection{Histogram Modeling}
+\label{sec:outlier-detection-histograms}
 The histogram-based modeling strategy proceeds in two phases to detect outliers.
 
-First, after running through the learning phase, it decides for each histogram whether that histogram is ``peaked'' (i.e. showing a few strong modes) enough to be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar number of values, and are thus not useful for outlier detection. In practice, we use a simple statistical test to determine whether a histogram is sufficiently modal: if the number of elements that fall into the most populated (``top'') bins is less than some user-specified proportion, the histogram is discarded. Finding how many bins to include in the set of top bins is the most challenging part, and for this paper we explored two thresholding strategies (Figure~\ref{fig:peakiness}):
+First, after running through the learning phase, it decides for each histogram whether that histogram is ``peaked'' (i.e.\ showing a few strong modes) enough to be used to detect outliers. The aim of this phase is to discard histograms where most bins have a similar number of values, and are thus not useful for outlier detection. In practice, we use a simple statistical test to determine whether a histogram is sufficiently modal: if the number of elements that fall into the most populated (``top'') bins is less than some user-specified proportion, the histogram is discarded. Finding how many bins to include in the set of top bins is the most challenging part, and for this paper we explored two thresholding strategies (Figure~\ref{fig:peakiness}):
 
-\fxnote{Should we move this figure?}
 \begin{figure*}
   \centering
   \paddedgraphics{../../graphics/peakiness.pdf}
