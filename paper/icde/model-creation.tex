@@ -4,7 +4,7 @@
 The current implementation of \dBoost/ contains three data modeling strategies. 
 First, histograms provide a way to study discrete heterogeneous distributions. Although histograms are widely used to capture statistics in databases, we present a simple pruning heuristic to limit the number and size of histograms that we construct for outlier detection purposes.
 We also provide standard statistical Gaussians and mixture models that handle continuous data well, but assume that it follows a uni- or multi-modal Gaussian distribution.
-Overall, dBoost modeling capabilities are rather basic: its strength is precisely that tuple expansion phase makes mathematically sophisticated analyses mostly useless in detecting outliers. \cpc{Does this read better than before?}
+The effectiveness of these basic models comes from the rich information exposed by the expanded tuples, which allows them to be competitive with more complex models.
 
 In addition to uniformly modeling of entire datasets, dBoost is capable of automatically clustering data using expanded attributes, generating different models for different subsets of the data. We call this novel approach to outlier detection \emph{meta-modeling}.
 
