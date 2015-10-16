@@ -1,8 +1,8 @@
-\section{Implementation}
+\section{Data Modeling and Outlier Detection}
 \label{sec:implementation}
 
-FIXME Each tuple is extended with all of the possible expansions of all of its fields.
-These expanded tuples are fed into the statistical analyzer, which looks at the distribution of values in each expanded column and identifies tuples with expanded attribute values, or pairs of attribute values, that are outliers.
+Once a tuple is expanded, it is fed into a statistical analyzer which consolidates statistics on the data as well as correlations for use in the data models and subsequent outlier detection.
+This section provides details for each stage of this process.
 
 \input{statistical-analysis}
 \input{model-creation}

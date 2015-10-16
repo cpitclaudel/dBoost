@@ -9,29 +9,6 @@ The inter-column correlations are also taken into account during modeling: if th
 
 As for statistical modeling, the heuristics that we employ for simple Gaussian and mixture modeling are not new; our contribution rests in the heuristics that we use for histograms (\ref{sec:outlier-detection-histograms}), and in the description of \emph{meta-modeling}.
 
-\subsubsection{Simple Gaussian Modeling}
-The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
-\begin{align}
-  |v_a - \mu_a| \ge \theta \cdot \sigma_a
-  \label{eqn:gaussian-outlier}
-\end{align}
-where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
-
-In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfy Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus reports only single-attribute outliers.
-
-\subsubsection{Mixture Modeling}
-In the Mixture model, the likelihood of each (possibly multidimensional) field is evaluated using the corresponding GMM\. This model operates under the assumption that data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM.
-
-This makes it possible to assign a Gaussian component to each tuple, and then flag as outliers the tuples that are not sufficiently well explained by their corresponding Gaussian (see~\cite{Roberts1999}). Given a tuple $t$ and its corresponding Gaussian $c$, this means rejecting $t$ if
-
-\begin{align}
-  \pi_c \cdot \Pr(\textbf{dist}(t, \mu_c) > d_0)  \leq \theta
-  \label{eqn:mixture-outlier}
-\end{align}
-where $\theta$ is a user-defined parameter between 0 and 1, and $d_0$ is the Mahalanobis distance of $t$ to the Gaussian.
- 
-As in the Gaussian Model, providing the user with a list of attributes that caused the row to be flagged as an outlier is simply a matter of tracking correlations that satisfied equation~\eqref{eqn:mixture-outlier}.
-
 \subsubsection{Histogram Modeling}
 \label{sec:outlier-detection-histograms}
 The histogram-based modeling strategy proceeds in two phases to detect outliers.
@@ -60,6 +37,30 @@ h_a(x_a) \le \epsilon \sum_k h_a(k)
 where $h_a(x)$ designates the number of tuples with value $x$ for field $a$, and $\epsilon$ is a user-chosen sensitivity parameter.
 
 In this model, identifying and reporting the outlying attributes is simply a matter of remembering which values $x_a$ failed test \eqref{eqn:hist-outlier}.
+
+
+\subsubsection{Simple Gaussian Modeling}
+The simple Gaussian model measures how much each value differs from the mean computed in the preceding pass. Given a tolerance parameter $\theta$, a row is deemed an outlier if at least one of its attributes $a$ has a value $v_a$ such that
+\begin{align}
+  |v_a - \mu_a| \ge \theta \cdot \sigma_a
+  \label{eqn:gaussian-outlier}
+\end{align}
+where $\mu_a$ and $\sigma_a$ are the model's parameters for column $a$, as described in Section~\ref{sec:gaus_model}.
+
+In this model, detecting which values are responsible for the outlier flag is simply a matter of keeping track of which attributes satisfy Equation~\eqref{eqn:gaussian-outlier}. The simple Gaussian model does not take correlation hints into account, and thus reports only single-attribute outliers.
+
+\subsubsection{Mixture Modeling}
+In the Mixture model, the likelihood of each (possibly multidimensional) field is evaluated using the corresponding GMM\. This model operates under the assumption that data is accurately modeled by the chosen number of components in the GMM, and in particular that each non-outlying data point is well modeled by one of the Gaussians of the GMM.
+
+This makes it possible to assign a Gaussian component to each tuple, and then flag as outliers the tuples that are not sufficiently well explained by their corresponding Gaussian (see~\cite{Roberts1999}). Given a tuple $t$ and its corresponding Gaussian $c$, this means rejecting $t$ if
+
+\begin{align}
+  \pi_c \cdot \Pr(\textbf{dist}(t, \mu_c) > d_0)  \leq \theta
+  \label{eqn:mixture-outlier}
+\end{align}
+where $\theta$ is a user-defined parameter between 0 and 1, and $d_0$ is the Mahalanobis distance of $t$ to the Gaussian.
+ 
+As in the Gaussian Model, providing the user with a list of attributes that caused the row to be flagged as an outlier is simply a matter of tracking correlations that satisfied equation~\eqref{eqn:mixture-outlier}.
 
 \subsubsection{Partition-based modeling}
 In the partition-based case, outliers are detected by the underlying models. To classify a given expanded tuple, each group of correlated attributes is divided between a one-attribute key and a group sub-population attributes. This group of attributes is then passed to the underlying model corresponding to the given value of the key, and the whole original tuple is reported as an outlier if any of its groups of sub-population attributes is marked as such by the underlying models.

@@ -1,8 +1,10 @@
 \subsection{Data modeling}
 \label{sec:model-creation}
 
-The current implementation of \dBoost/ contains three data modeling strategies. The first two (Gaussians and mixture models) are standard statistical models that handle continuous data well, but assume that it follows a uni- or multi-modal Gaussian distribution.
-The third uses histograms, and makes weaker assumptions about its input: it is best suited for studying discrete heterogeneous distributions produced by gathering human-input data. Although histograms are widely used to capture statistics in databases, we present a simple pruning heuristic to limit the number and size of histograms that we construct for outlier detection purposes. Overall, dBoost modeling capabilities are rather basic: its strength is precisely that tuple expansion phase makes mathematically sophisticated analyses mostly useless in detecting outliers. \cpc{Does this read better than before?}
+The current implementation of \dBoost/ contains three data modeling strategies. 
+First, histograms provide a way to study discrete heterogeneous distributions. Although histograms are widely used to capture statistics in databases, we present a simple pruning heuristic to limit the number and size of histograms that we construct for outlier detection purposes.
+We also provide standard statistical Gaussians and mixture models that handle continuous data well, but assume that it follows a uni- or multi-modal Gaussian distribution.
+Overall, dBoost modeling capabilities are rather basic: its strength is precisely that tuple expansion phase makes mathematically sophisticated analyses mostly useless in detecting outliers. \cpc{Does this read better than before?}
 
 In addition to uniformly modeling of entire datasets, dBoost is capable of automatically clustering data using expanded attributes, generating different models for different subsets of the data. We call this novel approach to outlier detection \emph{meta-modeling}.
 
@@ -11,12 +13,24 @@ The next four subsections describe these ideas in more detail.
 \begin{figure}
   \centering
   \newcommand{\cramped}[3]{\subfloat[#2]{\includegraphics[width=.3\linewidth]{#1}\label{fig:#3}}}
+  \cramped{../../graphics/histograms-preview.pdf}{Histogram}{histogram}
   \cramped{../../graphics/gaussians-preview.pdf}{Gaussian}{gaussian}\hspace*{.01\linewidth}
   \cramped{../../graphics/mixtures-preview.png}{Mixture}{mixture}\hspace*{.01\linewidth}
-  \cramped{../../graphics/histograms-preview.pdf}{Histogram}{histogram}
   \caption{Simple visualization of the outlier detection strategy employed by each model. Possible outlier values are shown in red.}
   \label{fig:models}
 \end{figure}
+
+\subsubsection{Histogram-based Modeling}
+\label{sec:histograms}
+
+The histogram model (Figure~\ref{fig:histogram}) does not make any assumption about the data under study. Instead, it counts the occurrences of each unique value in each column of the expanded tuple and for each set of potentially correlated sub-tuples (as suggested by the analysis module). These counts, accumulated over the entire dataset, provide a \emph{de facto} distribution of the data in each field and set of correlated fields.
+This makes histograms a powerful model for non-numerical and heterogeneous data.
+
+%Described as above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. 
+To limit memory usage, and to speed up the modeling phase, we discard histograms as soon as they reach a certain size -- say, 16 bins. Discarding histograms when their number of bins reaches a fixed threshold is just one of a number of heuristics that could be implemented here; the idea is that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned (as an extreme example, the histogram of an attribute with no repeated values would only have one value per bin, and would not yield any insight about the data). With this discarding heuristic applied, histograms are quick to generate and extremely memory efficient.
+
+Histograms also have the valuable property of treating sets of fields (obtained via correlation analysis) and single fields in the exact same way, thus permitting to model single columns or groups of attributes indifferently. Finally, because they make no assumption about the data they manipulate (aside from the requirement that it be of small cardinality), histograms are able to accurately describe a broad class of discrete distributions.
+
 
 \subsubsection{Simple Gaussian Modeling}
 \label{sec:gaus_model}
@@ -41,22 +55,6 @@ where $N$ is the number of individual components that the GMM comprises ($N$ is 
 Unlike simple Gaussian models, the expectation maximization algorithm used in inferring the optimal model parameters for Gaussian mixtures does require retaining some data in memory. Still, most of the fields obtained after expanding each tuple are discarded after the relevant ones are extracted for learning purposes; in most cases we expect the set of values retained to be much smaller than the set of all attributes, thus limiting the memory usage.
 
 In addition, when dealing with large amounts of data, it is possible -- and indeed, preferable -- to train the Mixture model on a randomly sampled subset of the data before running the full analysis. This approach is particularly relevant when using the Mixture model, but can be applied to all models to shorten the learning phase when dealing with very large datasets.
-
-\subsubsection{Histogram-based Modeling}
-\label{sec:histograms}
-Simple Gaussian modeling and Gaussian Mixture modeling both offer good results for continuous numerical data such as the ones produced by sensors, but suffer from two limitations:
-
-\begin{itemize}
-\item They make strong assumptions about the distribution of the data under study
-\item They fail to capture patterns in discrete numerical data, non-numerical data, or heterogeneous data
-\end{itemize}
-
-Our last model (Figure~\ref{fig:histogram}) does not make any assumption about the data under study. Instead, it counts the occurrences of each unique value in each column of the expanded tuple and for each set of potentially correlated sub-tuples (as suggested by the analysis module). These counts, accumulated over the entire dataset, provide a \emph{de facto} distribution of the data in each field and set of correlated fields.
-
-%Described as above, the histogram modeling strategy is rather memory inefficient: it requires keeping track of each value of each expanded tuple that the model comes across. 
-To limit memory usage, and to speed up the modeling phase, we discard histograms as soon as they reach a certain size -- say, 16 bins. Discarding histograms when their number of bins reaches a fixed threshold is just one of a number of heuristics that could be implemented here; the idea is that a profusion of different values, all repeating infrequently, is unlikely to provide valuable insight as far as outlier detection is concerned (as an extreme example, the histogram of an attribute with no repeated values would only have one value per bin, and would not yield any insight about the data). With this discarding heuristic applied, histograms are quick to generate and extremely memory efficient.
-
-Histograms also have the valuable property of treating sets of fields (obtained via correlation analysis) and single fields in the exact same way, thus permitting to model single columns or groups of attributes indifferently. Finally, because they make no assumption about the data they manipulate (aside from the requirement that it be of small cardinality), histograms are able to accurately describe a broad class of discrete distributions.
 
 \subsubsection{Meta-modeling through attribute-based partitioning}
 \label{sec:partitioning}
