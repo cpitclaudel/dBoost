@@ -20,13 +20,13 @@ We designed our system to be both fast and memory efficient; it proceeds in thre
 
 In summary, this paper makes the following contributions:
 \begin{enumerate}
-\item We present tuple expansion, a novel method used to reconstruct structured and semantically rich information from raw data using a user-extensible library of type-dependent expansion rules.
-%, and we describe a library of broadly applicable expansion rules that have proven useful for flagging outliers in heterogeneous datasets.
-\item We find correlations in non-numerical data and use a novel attribute-based partitioning scheme to find outliers using an efficient histogram model.
-%We show that these expansions can be fed to both single and multi-variate models to accurately detect outliers without making strong assumptions about the original data\footnote{For example, we do not restrict the types used to store the data: we are able to find outliers in textual data}. In addition to typical Gaussian modeling strategies, we present useful criteria to detect outlying values in histograms, and a novel combination of attribute-based partitioning and modeling.
-%\item We show that tuple expansion rules can be used as a lightweight mechanism to express soft constraints between database columns, and flag rows violating these constraints.
-\item We integrate these techniques in an easy-to-use, user-extensible toolkit for outlier detection, \dBoost/, and evaluate its effectiveness using several synthetic and real-world datasets.
-%\item We demonstrate on several synthetic and real-world datasets (including numerical and non-numerical data and homo- and heterogeneous datasets) that simple, well-known statistical models are enough to detect many data inconsistencies once tuple expansion has been applied, whereas these inconsistencies would have remained hidden without tuple expansion.
+
+\item We present tuple expansion, a novel method that reconstructs structured and semantically rich information from raw data using a user-extensible library of type-dependent expansion rules.
+We also describe a library of broadly applicable expansion rules that have proven useful for flagging outliers in heterogeneous datasets.
+\item We show that these expansions can be fed to both single and multi-variate models to accurately detect outliers without making strong assumptions about the original data\footnote{For example, we do not restrict the types used to store the data: we are able to find outliers in textual data}. In addition to typical Gaussian modeling strategies, we present useful criteria to detect outlying values in histograms, and a novel combination of attribute-based partitioning and modeling.
+\item We show that tuple expansion rules can be used as a lightweight mechanism to express soft constraints between database columns, and flag rows violating these constraints.
+\item We integrate these techniques in an easy-to-use, user-extensible toolkit for outlier detection, \dBoost/, and demonstrate its effectiveness on several synthetic and real-world datasets (including numerical and non-numerical data and homo- and heterogeneous datasets).
+Specifically, we show that after tuple-expansion, well-known statistical models are enough to detect many data inconsistencies , whereas these inconsistencies would have remained hidden if expansion had not been applied.
 \end{enumerate}
 
 The rest of this paper is structured as follows: In Section~\ref{sec:overview} we present an overview of the \dBoost/ framework. We then detail our tuple expansion method in Section~\ref{sec:expansion}, before applying it to outlier detection in Section~\ref{sec:implementation}. We evaluate our tool on synthetic and real-world datasets in Section~\ref{sec:evaluation}, and we describe related work in Section~\ref{sec:related-work}. Finally, we conclude in Section~\ref{sec:conclusion}. % TODO \item We outline directions for future work in Section~\ref{sec:future-work}.
