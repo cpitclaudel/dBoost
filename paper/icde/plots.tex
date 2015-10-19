@@ -18,7 +18,8 @@
 % \plot{1}{lof-plots.pdf}{Local Outlier Factor for the $k=2$ nearest neighbors}{lof_2}
 % \plot{2}{lof-plots.pdf}{Local Outlier Factor for the $k=10$ nearest neighbors}{lof_10}
 
-\newcommand{\cramped}[3]{\subfloat[#2]{\includegraphics[page=#1]{../../graphics/3d-plots.pdf}\label{fig:#3}}}
+% \newcommand{\cramped}[3]{\subfloat[#2]{\includegraphics[page=#1,trim={0 5cm 0 0},clip]{../../graphics/3d-plots.pdf}\label{fig:#3}}}
+\newcommand{\cramped}[3]{\subfloat[~]{\includegraphics[page=#1,trim={0 5cm 0 0},clip,width=.23\textwidth]{../../graphics/3d-plots.pdf}\label{fig:#3}}}
 
 \begin{figure*}
   \centering
@@ -27,10 +28,8 @@
   \hspace{\fill}
   \cramped{2}{GMM, $n = 1$, $\theta=0.1$}{gmm1t1}
   \hspace{\fill}
-  \newline
-  \hspace*{\fill}
   \cramped{3}{GMM, $n = 2$, $\theta=0.05$}{gmm2t05}
-  \hspace*{\fill}
+  \hspace{\fill}
   \cramped{4}{Local Outlier Factor, $k = 2$}{lofk2}
   \hspace*{\fill}
   \caption{A comparison of various modeling approach on the Intel dataset. Red crosses indicate detected outliers. Figure~\ref{fig:gauss15} shows the results of simple uni-dimensional Gaussian modeling (Subsection~\ref{sec:gaus_model}). Figure~\ref{fig:gmm1t1} shows what happens when correlations are taken into account, using a multidimensional GMM with a single Gaussian (Subsection~\ref{sec:mixture_model}). Figure~\ref{fig:gmm2t05} shows the results of using two Gaussians instead of one to model the data. Note how the secondary data blobs, detected as outliers in the first two cases, are in the third case identified as valid data. Figure~\ref{fig:lofk2} shows the results of the Local Outlier Factor Algorithm on the same dataset.}
