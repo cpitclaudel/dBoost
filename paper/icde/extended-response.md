@@ -18,21 +18,13 @@ Indeed, thanks for pointing out this omission.
 
 The current system contains about 20 generally-applicable rules; they are found in https://github.com/cpitclaudel/dBoost/blob/master/dboost/features/__init__.py; we will make sure to add these details to the final version of the paper.
 
+> The evaluations on 4 datasets are more similar to case studies, which are good for understanding. The authors should also consider doing evaluation on some widely-adopted outlier detection datasets with existing ground-truth to give results that are more quantitative. Some other existing work should also be considered as baselines. Based on current evaluation results, it is unclear how much those expansion rules affected the results.
+
+The Intel lab data experiment provides a limited answer to this concern: expansion rules allowed simple models to perform as well as or better than the local outlier factor algorithm.
+
 > It is unclear which language and what kind of experiment environment are used. I checked the GitHub repository, and it seems to be Python. This kind of information should be mentioned in the paper.
 
-Indeed, this should be made clearer. The framework consists of about 1000 lines of Python 3 code. Here is the output of pylint on it:
-
-+----------+-------+------+
-|type      |number |%     |
-+==========+=======+======+
-|code      |978    |90.47 |
-+----------+-------+------+
-|docstring |28     |2.59  |
-+----------+-------+------+
-|comment   |36     |3.33  |
-+----------+-------+------+
-|empty     |39     |3.61  |
-+----------+-------+------+
+Indeed, this should be made clearer. The framework is implemented in Python 3.
 
 > Section IV B -- The section title should be "Data Modeling" instead of "Data modeling".
 
