@@ -11,4 +11,4 @@ We then use this procedure as the foundation of a new user-guided outlier detect
 
 ## Getting started
 
-After cloning the repository, run `./dboost-stdin.py -h` to show the documentation.
+After cloning the repository, run `./dboost-stdin.py -h` in the `dboost` directory to show the documentation.
